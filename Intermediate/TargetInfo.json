@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "Caves",
+			"Path": "..\\Source\\Caves.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "CavesEditor",
+			"Path": "..\\Source\\CavesEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
