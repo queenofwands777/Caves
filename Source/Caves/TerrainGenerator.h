@@ -26,6 +26,7 @@ public:
 	void CreateMap();
 	void FillMap();
 	void GenerateMap();
+	void SetTile(int x, int y, int terrain, int size);
 
 	const int MAP_WIDTH = 128;
 	const int MAP_HEIGHT = 128;
