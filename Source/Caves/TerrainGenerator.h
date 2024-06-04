@@ -28,9 +28,9 @@ public:
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
-	const int MAP_WIDTH = 128;
-	const int MAP_HEIGHT = 128;
-
+	const int MAP_WIDTH = 16;
+	const int MAP_HEIGHT = 16;
+	const int CURSOR_LIFETIME = 20;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))

@@ -38,7 +38,7 @@ void ATerrainGenerator::BeginPlay()
 void ATerrainGenerator::GenerateMap() {
 
     //figure out how to expose lifetime to unreal
-    int lifetime = 10000;
+    int lifetime = CURSOR_LIFETIME;
     int cursor_x = MAP_WIDTH/2;
     int cursor_y = MAP_HEIGHT/2;
 
@@ -62,7 +62,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
         //set tile
-        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 5);
+        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 3);
         
 
 
@@ -114,6 +114,14 @@ void ATerrainGenerator::CreateMap() {
     TileMapComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
     TileMapComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
     TileMapComponent->TileMap->MarkPackageDirty();
+
+    UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(TileMapComponent->TileMap, UPaperTileLayer::StaticClass());
+
+    if (TileLayer)
+    {
+        TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+        TileMapComponent->TileMap->TileLayers.Add(TileLayer);
+    }
 }
 
 void ATerrainGenerator::FillMap() {
