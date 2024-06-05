@@ -19,8 +19,22 @@ ATerrainGenerator::ATerrainGenerator()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-    CreateMap();
-    FillMap();
+
+    std::vector<UPaperTileMapComponent*> TerrainSlice;
+    for (int i = 0; i < LEVEL_WIDTH; i++) {
+        TerrainSlice.push_back(nullptr);
+    }
+    
+
+    for (int i = 0; i < LEVEL_HEIGHT; i++) {
+        TerrainMap.push_back(TerrainSlice);
+    }
+    
+
+
+
+    //CreateMap();
+    //FillMap();
 }
 
 // Called when the game starts or when spawned
@@ -28,10 +42,10 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-    FillMap();
+    //FillMap();
     GenerateMap();
-    TileMapComponent->RebuildCollision();
-    TileMapComponent->TileMap->RebuildCollision();
+    //TileMapComponent->RebuildCollision();
+    //TileMapComponent->TileMap->RebuildCollision();
    
 }
 
@@ -73,13 +87,17 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-
+    for (int i = 0; i < TerrainMapData.Num(); i++) {
+        UPaperTileMapComponent* target = TerrainMapData[i];
+        target->RebuildCollision();
+        target->TileMap->RebuildCollision();
+    }
 
 
 
 }
 
-void ATerrainGenerator::SetTile(int x, int y, int terrain, int size) {
+void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
 
     //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
     UPaperTileSet* TileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
@@ -91,56 +109,105 @@ void ATerrainGenerator::SetTile(int x, int y, int terrain, int size) {
     for (int xx = 0; xx < size; xx++) {
         for (int yy = 0; yy < size; yy++) {
 
-            int target_x = x + xx;
-            int target_y = y + yy;
+            int world_x = input_x + xx;
+            int world_y = input_y + yy;
 
-            TileMapComponent->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
-
-        }
-    }
-
-    
+            int target_x = world_x % MAP_WIDTH;
+            int target_y = world_x % MAP_HEIGHT;
 
 
-    
-}
+            int tilemap_x = (world_x - target_x)/LEVEL_WIDTH;
+            int tilemap_y = (world_y - target_y)/LEVEL_HEIGHT;
 
-void ATerrainGenerator::CreateMap() {
-    TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("TileMapComponent"));
-    TileMapComponent->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
-    RootComponent = TileMapComponent;
-    TileMapComponent->TileMap->SetCollisionThickness(10.0);
-    TileMapComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    TileMapComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    TileMapComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-    TileMapComponent->TileMap->MarkPackageDirty();
+            
 
-    UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(TileMapComponent->TileMap, UPaperTileLayer::StaticClass());
 
-    if (TileLayer)
-    {
-        TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
-        TileMapComponent->TileMap->TileLayers.Add(TileLayer);
-    }
-}
+            if (TerrainMap[tilemap_x][tilemap_y] == nullptr) {
+                UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>();
+                tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16); 
+                FVector placement(double(tilemap_x * MAP_WIDTH), double(tilemap_y * MAP_HEIGHT), 0.0);
+                tile->SetWorldLocation(placement);
+                
+                tile->TileMap->SetCollisionThickness(10.0);
+                tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+                tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+                tile->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 
-void ATerrainGenerator::FillMap() {
-    UPaperTileSet* TileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
-    if (TileSet)
-    {
-        for (int32 Y = 0; Y < MAP_HEIGHT; ++Y)
-        {
-            for (int32 X = 0; X < MAP_WIDTH; ++X)
-            {
-                SetTile(X, Y, TERRAIN::WALL, 1);
+                UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
+
+                if (TileLayer)
+                {
+                    TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+                    tile->TileMap->TileLayers.Add(TileLayer);
+                }
+
+                for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
+                    for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) { 
+                        TileInfo.PackedTileIndex = TERRAIN::WALL;
+                        tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
+                    }
+                }
+
+                tile->TileMap->MarkPackageDirty();
+                TerrainMapData.Add(tile);
+                TerrainMap[tilemap_x][tilemap_y] = tile;
+
+                if (TerrainMapData.Num() == 1) {
+                    RootComponent = tile;
+                }
+                
+                
             }
+
+            UPaperTileMapComponent* host_tile = TerrainMap[tilemap_x][tilemap_y];
+            host_tile->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
+
+
         }
     }
-    else {
 
-        UE_LOG(LogTemp, Warning, TEXT("Tile Set not found"));
-    }
+    
+
+
+    
 }
+
+//void ATerrainGenerator::CreateMap() {
+//    TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("TileMapComponent"));
+//    TileMapComponent->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
+//    RootComponent = TileMapComponent;
+//    TileMapComponent->TileMap->SetCollisionThickness(10.0);
+//    TileMapComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+//    TileMapComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+//    TileMapComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+//    TileMapComponent->TileMap->MarkPackageDirty();
+//
+//    UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(TileMapComponent->TileMap, UPaperTileLayer::StaticClass());
+//
+//    if (TileLayer)
+//    {
+//        TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+//        TileMapComponent->TileMap->TileLayers.Add(TileLayer);
+//    }
+//}
+
+//void ATerrainGenerator::FillMap() {
+//    UPaperTileSet* TileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
+//    if (TileSet)
+//    {
+//        for (int32 Y = 0; Y < MAP_HEIGHT; ++Y)
+//        {
+//            for (int32 X = 0; X < MAP_WIDTH; ++X)
+//            {
+//                SetTile(X, Y, TERRAIN::WALL, 1);
+//            }
+//        }
+//    }
+//    else {
+//
+//        UE_LOG(LogTemp, Warning, TEXT("Tile Set not found"));
+//    }
+//}
 
 
 

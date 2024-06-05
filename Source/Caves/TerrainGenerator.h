@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
+#include<vector>
 
 #include "TerrainGenerator.generated.h"
 
@@ -35,9 +36,12 @@ public:
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
 
-	TArray<TArray<UPaperTileMapComponent>> TileMaps;
+	
 
 private:
+	std::vector<std::vector<UPaperTileMapComponent*>> TerrainMap;
+
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
-	UPaperTileMapComponent* TileMapComponent;
+	TArray<UPaperTileMapComponent*> TerrainMapData;
 };
