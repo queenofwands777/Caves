@@ -109,7 +109,7 @@ void ATerrainGenerator::CreateMap() {
     TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("TileMapComponent"));
     TileMapComponent->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
     RootComponent = TileMapComponent;
-    TileMapComponent->TileMap->SetCollisionThickness(50.0);
+    TileMapComponent->TileMap->SetCollisionThickness(10.0);
     TileMapComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     TileMapComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
     TileMapComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);

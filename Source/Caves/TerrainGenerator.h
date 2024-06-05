@@ -28,9 +28,14 @@ public:
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
+	const int LEVEL_WIDTH = 32;
+	const int LEVEL_HEIGHT = 32;
+	const int CURSOR_LIFETIME = 20;
+
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
-	const int CURSOR_LIFETIME = 20;
+
+	TArray<TArray<UPaperTileMapComponent>> TileMaps;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
