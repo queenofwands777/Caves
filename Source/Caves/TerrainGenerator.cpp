@@ -7,13 +7,19 @@
 #include"PaperTileLayer.h"
 
 
-#define PRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+#define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
+
 
 enum TERRAIN {
     WALL = 17,
     FLOOR = 19
 };
 
+UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
+    int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+    return TerrainMapData[index];
+}
 
 
 // Sets default values
@@ -22,19 +28,12 @@ ATerrainGenerator::ATerrainGenerator()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
 
+    PRINT("constructing TerrainGenerator")
+
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
 
-    std::vector<UPaperTileMapComponent*> TerrainSlice;
-    for (int i = 0; i < LEVEL_WIDTH; i++) {
-        TerrainSlice.push_back(nullptr);
-    }
-    
+    TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
-    for (int i = 0; i < LEVEL_HEIGHT; i++) {
-        std::vector<UPaperTileMapComponent*> TempSlice = TerrainSlice;
-        TerrainMap.push_back(TempSlice);
-    }
-    
 
 
 
@@ -48,10 +47,12 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
+    PRINT("Beginning play")
     
+        
 
-
-    SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
+    //SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
+    //SetTile(126, 126, TERRAIN::FLOOR, 5);
 
     
     GenerateMap();
@@ -59,6 +60,8 @@ void ATerrainGenerator::BeginPlay()
 }
 
 void ATerrainGenerator::GenerateMap() {
+
+    PRINT("Generating Map")
 
     //figure out how to expose lifetime to unreal
     int lifetime = CURSOR_LIFETIME;
@@ -98,8 +101,11 @@ void ATerrainGenerator::GenerateMap() {
 
     for (int i = 0; i < TerrainMapData.Num(); i++) {
         UPaperTileMapComponent* target = TerrainMapData[i];
-        target->RebuildCollision();
-        target->TileMap->RebuildCollision();
+        if (target != nullptr) {
+            target->RebuildCollision();
+            target->TileMap->RebuildCollision();
+        }
+
     }
 
 
@@ -133,8 +139,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
             //has to be here
-            if (TerrainMap[tilemap_x][tilemap_y] == nullptr) {
-                PRINT("initializing tilemap")
+            if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
 
@@ -142,13 +147,15 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
 
-            UPaperTileMapComponent* host_tile = TerrainMap[tilemap_x][tilemap_y];
+            UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
             host_tile->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
         }
     }
 }
 
 void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
+
+    PRINT("Initializing tilemap")
 
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
@@ -157,20 +164,16 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
     UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
 
     tile->RegisterComponent();
-
-    if (TerrainMapData.Num() == 0) {
-        PRINT("setting root component")
-            RootComponent = tile;
-    }
-    else {
-        PRINT("attaching to root component")
-        tile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    }
+    tile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
 
-    tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
-    FVector placement(double(grid_x * MAP_WIDTH), double(grid_y * MAP_HEIGHT), 0.0);
+
+    tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+
+
+
+    FVector placement(double(grid_x * MAP_HEIGHT*TILE_HEIGHT), double(grid_y * MAP_WIDTH*TILE_HEIGHT), 0.0);
     tile->SetWorldLocation(placement);
 
     tile->TileMap->SetCollisionThickness(10.0);
@@ -195,49 +198,19 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     tile->TileMap->MarkPackageDirty();
 
-    TerrainMapData.Add(tile);
-    TerrainMap[grid_x][grid_y] = tile;
+    SetTileMap(grid_x, grid_y, tile);
 
 
 
 }
 
-//void ATerrainGenerator::CreateMap() {
-//    TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("TileMapComponent"));
-//    TileMapComponent->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
-//    RootComponent = TileMapComponent;
-//    TileMapComponent->TileMap->SetCollisionThickness(10.0);
-//    TileMapComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-//    TileMapComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-//    TileMapComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-//    TileMapComponent->TileMap->MarkPackageDirty();
-//
-//    UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(TileMapComponent->TileMap, UPaperTileLayer::StaticClass());
-//
-//    if (TileLayer)
-//    {
-//        TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
-//        TileMapComponent->TileMap->TileLayers.Add(TileLayer);
-//    }
-//}
 
-//void ATerrainGenerator::FillMap() {
-//    UPaperTileSet* TileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
-//    if (TileSet)
-//    {
-//        for (int32 Y = 0; Y < MAP_HEIGHT; ++Y)
-//        {
-//            for (int32 X = 0; X < MAP_WIDTH; ++X)
-//            {
-//                SetTile(X, Y, TERRAIN::WALL, 1);
-//            }
-//        }
-//    }
-//    else {
-//
-//        UE_LOG(LogTemp, Warning, TEXT("Tile Set not found"));
-//    }
-//}
+void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap) {
+    PRINT("setting tilemap")
+    int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+    TerrainMapData[index] = tilemap;
+
+}
 
 
 
