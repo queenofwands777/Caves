@@ -7,6 +7,8 @@
 #include"PaperTileLayer.h"
 
 
+#define PRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+
 enum TERRAIN {
     WALL = 17,
     FLOOR = 19
@@ -19,6 +21,8 @@ ATerrainGenerator::ATerrainGenerator()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
+
+    LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
 
     std::vector<UPaperTileMapComponent*> TerrainSlice;
     for (int i = 0; i < LEVEL_WIDTH; i++) {
@@ -33,19 +37,23 @@ ATerrainGenerator::ATerrainGenerator()
 
 
 
-    //CreateMap();
-    //FillMap();
+
 }
+
+
 
 // Called when the game starts or when spawned
 void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-    //FillMap();
+    
+
+
+    SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
+
+    
     GenerateMap();
-    //TileMapComponent->RebuildCollision();
-    //TileMapComponent->TileMap->RebuildCollision();
    
 }
 
@@ -76,7 +84,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
         //set tile
-        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 3);
+        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 5);
         
 
 
@@ -100,12 +108,14 @@ void ATerrainGenerator::GenerateMap() {
 void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
 
     //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
-    UPaperTileSet* TileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
     
+    
+
     FPaperTileInfo TileInfo;
-    TileInfo.TileSet = TileSet;
+    TileInfo.TileSet = *LevelTileSet;
     TileInfo.PackedTileIndex = terrain;
 
+    //set tiles according to brush size
     for (int xx = 0; xx < size; xx++) {
         for (int yy = 0; yy < size; yy++) {
 
@@ -113,63 +123,73 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
             int world_y = input_y + yy;
 
             int target_x = world_x % MAP_WIDTH;
-            int target_y = world_x % MAP_HEIGHT;
-
+            int target_y = world_y % MAP_HEIGHT;
 
             int tilemap_x = (world_x - target_x)/LEVEL_WIDTH;
             int tilemap_y = (world_y - target_y)/LEVEL_HEIGHT;
 
-            
-
-
             if (TerrainMap[tilemap_x][tilemap_y] == nullptr) {
-                UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>();
-                tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16); 
-                FVector placement(double(tilemap_x * MAP_WIDTH), double(tilemap_y * MAP_HEIGHT), 0.0);
-                tile->SetWorldLocation(placement);
-                
-                tile->TileMap->SetCollisionThickness(10.0);
-                tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-                tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-                tile->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-
-                UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
-
-                if (TileLayer)
-                {
-                    TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
-                    tile->TileMap->TileLayers.Add(TileLayer);
-                }
-
-                for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
-                    for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) { 
-                        TileInfo.PackedTileIndex = TERRAIN::WALL;
-                        tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
-                    }
-                }
-
-                tile->TileMap->MarkPackageDirty();
-                TerrainMapData.Add(tile);
-                TerrainMap[tilemap_x][tilemap_y] = tile;
-
-                if (TerrainMapData.Num() == 1) {
-                    RootComponent = tile;
-                }
-                
-                
+                PRINT("initializing tilemap")
+                InitializeTileMap(tilemap_x, tilemap_y);
             }
 
             UPaperTileMapComponent* host_tile = TerrainMap[tilemap_x][tilemap_y];
             host_tile->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
+        }
+    }
+}
+
+void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
+
+    FPaperTileInfo TileInfo;
+    TileInfo.TileSet = *LevelTileSet;
+    TileInfo.PackedTileIndex = TERRAIN::WALL;
+
+    UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
+
+    tile->RegisterComponent();
+
+    if (TerrainMapData.Num() == 0) {
+        PRINT("setting root component")
+            RootComponent = tile;
+    }
+    else {
+        tile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    }
 
 
+
+    tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, 16, 16);
+    FVector placement(double(grid_x * MAP_WIDTH), double(grid_y * MAP_HEIGHT), 0.0);
+    tile->SetWorldLocation(placement);
+
+    tile->TileMap->SetCollisionThickness(10.0);
+    tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    tile->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+
+    UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
+
+    if (TileLayer)
+    {
+        TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+        tile->TileMap->TileLayers.Add(TileLayer);
+    }
+
+    for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
+        for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
+            TileInfo.PackedTileIndex = TERRAIN::WALL;
+            tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
         }
     }
 
-    
+    tile->TileMap->MarkPackageDirty();
+
+    TerrainMapData.Add(tile);
+    TerrainMap[grid_x][grid_y] = tile;
 
 
-    
+
 }
 
 //void ATerrainGenerator::CreateMap() {

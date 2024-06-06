@@ -47,4 +47,9 @@
       <Filter>Source\Caves</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="util.h">
+      <Filter>Source\Caves</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
