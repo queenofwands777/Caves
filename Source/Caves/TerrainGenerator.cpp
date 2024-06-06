@@ -5,6 +5,11 @@
 #include "PaperTileSet.h"
 #include "PaperTileMap.h"
 #include"PaperTileLayer.h"
+#include "PaperCharacter.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerStart.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 #define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
@@ -21,6 +26,12 @@ UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
     return TerrainMapData[index];
 }
 
+void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap) {
+    PRINT("setting tilemap")
+        int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+    TerrainMapData[index] = tilemap;
+
+}
 
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
@@ -65,8 +76,8 @@ void ATerrainGenerator::GenerateMap() {
 
     //figure out how to expose lifetime to unreal
     int lifetime = CURSOR_LIFETIME;
-    int cursor_x = MAP_WIDTH/2;
-    int cursor_y = MAP_HEIGHT/2;
+    int cursor_x = 128;
+    int cursor_y = 128;
 
 
     while (lifetime > 0) {
@@ -78,7 +89,11 @@ void ATerrainGenerator::GenerateMap() {
         int add_x = FMath::RandRange(-1, 1);
         int add_y = FMath::RandRange(-1, 1);
 
+
         //path mode: move in a direction
+        //int add_x = 1;
+        //int add_y = 1;
+
 
 
 
@@ -88,7 +103,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
         //set tile
-        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 5);
+        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 4);
         
 
 
@@ -96,8 +111,14 @@ void ATerrainGenerator::GenerateMap() {
         lifetime--;
     }
     
+   /* FVector SpawnLocation(cursor_x, 0.0f, cursor_y );
+    FRotator SpawnRotation(0.0f, 0.0f, -90.0f);
+    UPlayer* NewPlayerCharacter = Cast<UPlayer>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), UPlayer::StaticClass(), FTransform(SpawnRotation, SpawnLocation)));*/
 
 
+    //USpringArmComponent* SpringArm = Cast<USpringArmComponent>(NewPlayerCharacter->GetRootComponent()->GetChildComponent(1));
+    //FRotator SpringarmRotation(0.0f, 0.0f, -90.0f);
+    //SpringArm->SetWorldRotation(SpringarmRotation);
 
     for (int i = 0; i < TerrainMapData.Num(); i++) {
         UPaperTileMapComponent* target = TerrainMapData[i];
@@ -114,10 +135,9 @@ void ATerrainGenerator::GenerateMap() {
 
 void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
 
-    //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
-    
-    
+    //input_x and input_y are in terms of the world coordinates on a tile level
 
+    //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
     TileInfo.PackedTileIndex = terrain;
@@ -126,19 +146,21 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     for (int xx = 0; xx < size; xx++) {
         for (int yy = 0; yy < size; yy++) {
 
+            //input coords plus brush placement
             int world_x = input_x + xx;
             int world_y = input_y + yy;
 
+            //how far into the target tilemap are we placing the tile
             int target_x = world_x % MAP_WIDTH;
             int target_y = world_y % MAP_HEIGHT;
 
-            int tilemap_x = (world_x - target_x)/LEVEL_WIDTH;
-            int tilemap_y = (world_y - target_y)/LEVEL_HEIGHT;
+            int tilemap_x = (world_x - target_x)/MAP_WIDTH;
+            int tilemap_y = (world_y - target_y)/MAP_HEIGHT;
 
 
 
 
-            //has to be here
+            //check if we have violated bounds. if so, do not initialize a new map.
             if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
@@ -148,7 +170,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
             UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
-            host_tile->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
+            host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y) -1, TileInfo);
         }
     }
 }
@@ -173,7 +195,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 
 
-    FVector placement(double(grid_x * MAP_HEIGHT*TILE_HEIGHT), double(grid_y * MAP_WIDTH*TILE_HEIGHT), 0.0);
+    FVector placement(double(grid_x * MAP_WIDTH*TILE_WIDTH), 0.0, double(grid_y * MAP_HEIGHT*TILE_HEIGHT));
     tile->SetWorldLocation(placement);
 
     tile->TileMap->SetCollisionThickness(10.0);
@@ -205,12 +227,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 }
 
 
-void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap) {
-    PRINT("setting tilemap")
-    int index = (grid_x * LEVEL_HEIGHT) + grid_y;
-    TerrainMapData[index] = tilemap;
 
-}
 
 
 
