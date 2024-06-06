@@ -31,7 +31,8 @@ ATerrainGenerator::ATerrainGenerator()
     
 
     for (int i = 0; i < LEVEL_HEIGHT; i++) {
-        TerrainMap.push_back(TerrainSlice);
+        std::vector<UPaperTileMapComponent*> TempSlice = TerrainSlice;
+        TerrainMap.push_back(TempSlice);
     }
     
 
@@ -128,10 +129,18 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
             int tilemap_x = (world_x - target_x)/LEVEL_WIDTH;
             int tilemap_y = (world_y - target_y)/LEVEL_HEIGHT;
 
+
+
+
+            //has to be here
             if (TerrainMap[tilemap_x][tilemap_y] == nullptr) {
                 PRINT("initializing tilemap")
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
+
+
+
+
 
             UPaperTileMapComponent* host_tile = TerrainMap[tilemap_x][tilemap_y];
             host_tile->TileMap->TileLayers[0]->SetCell(target_x, target_y, TileInfo);
@@ -154,6 +163,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
             RootComponent = tile;
     }
     else {
+        PRINT("attaching to root component")
         tile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
     }
 
