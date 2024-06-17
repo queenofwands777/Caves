@@ -123,8 +123,10 @@ void ATerrainGenerator::GenerateMap() {
     for (int i = 0; i < TerrainMapData.Num(); i++) {
         UPaperTileMapComponent* target = TerrainMapData[i];
         if (target != nullptr) {
+            //target->SetCollisionObjectType(ECC_EngineTraceChannel5);
             target->RebuildCollision();
             target->TileMap->RebuildCollision();
+            //target->MarkPackageDirty();
         }
 
     }
@@ -201,8 +203,8 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
     tile->TileMap->SetCollisionThickness(10.0);
     tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    tile->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-
+    //tile->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel5);
+    //tile->RebuildCollision();
     UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
 
     if (TileLayer)
@@ -219,6 +221,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
     }
 
     tile->TileMap->MarkPackageDirty();
+    tile->MarkPackageDirty();
 
     SetTileMap(grid_x, grid_y, tile);
 
