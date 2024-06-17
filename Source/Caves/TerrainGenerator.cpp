@@ -9,6 +9,7 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -61,6 +62,7 @@ void ATerrainGenerator::BeginPlay()
     PRINT("Beginning play")
     
         
+        
 
     //SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
     //SetTile(126, 126, TERRAIN::FLOOR, 5);
@@ -70,14 +72,19 @@ void ATerrainGenerator::BeginPlay()
    
 }
 
+
+
 void ATerrainGenerator::GenerateMap() {
 
     PRINT("Generating Map")
+    //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
+
 
     //figure out how to expose lifetime to unreal
     int lifetime = CURSOR_LIFETIME;
     int cursor_x = 128;
     int cursor_y = 128;
+
 
 
     while (lifetime > 0) {
@@ -106,6 +113,15 @@ void ATerrainGenerator::GenerateMap() {
         SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 4);
         
 
+
+        //place enemy
+        int encounter = FMath::RandRange(0, 100);
+        if (encounter > 98) {
+            FVector location;
+            location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
+            FRotator rotation = { 0,0,0 };
+            GetWorld()->SpawnActor<AActor>( Enemy, location, rotation);
+        }
 
 
         lifetime--;

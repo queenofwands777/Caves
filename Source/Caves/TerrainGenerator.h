@@ -51,4 +51,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
 	TArray<UPaperTileMapComponent*> TerrainMapData;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> Enemy;
 };
