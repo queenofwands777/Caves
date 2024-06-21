@@ -22,5 +22,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void InitSplatter();
+	void GenerateSplatter();
+	void PlaceSplatter();
 
+public:
+	int num_probes;
+	int max_angle;
+	int probe_lifetime;
+	int probe_variance;
+	FVector direction;
+	UTexture2D* splatter;
 };
