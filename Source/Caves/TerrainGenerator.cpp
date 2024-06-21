@@ -42,7 +42,7 @@ ATerrainGenerator::ATerrainGenerator()
 
     PRINT("constructing TerrainGenerator")
 
-    LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Terrain_TileSet"));
+    LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain_TileSet"));
 
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
