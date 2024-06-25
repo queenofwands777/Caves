@@ -94,9 +94,11 @@ void ABloodSplatter::InitSplatter() {
     
 
     // Ensure no compression and proper settings
-    //splatter_texture->MipGenSettings = TMGS_NoMipmaps;
+    splatter_texture->MipGenSettings = TMGS_NoMipmaps;
     splatter_texture->CompressionSettings = TC_EditorIcon;
     splatter_texture->SRGB = false;
+
+    splatter_texture->Filter = TF_Nearest;
     splatter_texture->AddToRoot();
     splatter_texture->UpdateResource();
 
@@ -107,14 +109,7 @@ void ABloodSplatter::InitSplatter() {
     // Initialize the texture data
     FMemory::Memset(Data, 0, Mip.BulkData.GetBulkDataSize());
 
-    // Fill the texture with the specified color
-    for (int32 y = 0; y < 32; y++)
-    {
-        for (int32 x = 0; x < 32; x++)
-        {
-            PlacePixel(x, y);
-        }
-    }
+
 
     // Unlock the texture
     Mip.BulkData.Unlock();
@@ -123,7 +118,7 @@ void ABloodSplatter::InitSplatter() {
 
 void ABloodSplatter::Splatter() {
     InitSplatter();
-    //GenerateSplatter();
+    GenerateSplatter();
     PlaceSplatter();
 }
 
@@ -180,12 +175,20 @@ void ABloodSplatter::PlaceSplatter() {
 
     // Create a new sprite
     FSpriteAssetInitParameters params = FSpriteAssetInitParameters();
-
+    params.Dimension = { 32,32 };
     params.SetTextureAndFill(splatter_texture);
 
+    
+
     UPaperSprite* NewSprite = NewObject<UPaperSprite>();
+    NewSprite->PostLoad();
 
     NewSprite->InitializeSprite(params);
+    NewSprite->RebuildRenderData();
+
+    NewSprite->MarkPackageDirty();
+
+    
 
     SpriteComponent->SetSprite(NewSprite);
 }
