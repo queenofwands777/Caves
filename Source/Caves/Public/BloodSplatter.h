@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PaperSpriteComponent.h"
+#include "PaperSprite.h"
+#include "PaperSpriteAtlas.h"
 #include "GameFramework/Actor.h"
 #include "BloodSplatter.generated.h"
 
@@ -14,6 +17,7 @@ class CAVES_API ABloodSplatter : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABloodSplatter();
+	ABloodSplatter(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector2d _direction, FVector2d _location);
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,12 +29,19 @@ public:
 	void InitSplatter();
 	void GenerateSplatter();
 	void PlaceSplatter();
+	void PlaceDot(int start_x, int start_y, int size);
+	void PlacePixel(int x, int y);
 
 public:
 	int num_probes;
-	int max_angle;
+	float max_angle;
 	int probe_lifetime;
-	int probe_variance;
-	FVector direction;
+	float probe_variance;
+	int probe_speed;
+	FVector2d direction;
+	FVector2d location;
 	UTexture2D* splatter;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite", meta = (AllowPrivateAccess = "true"))
+    UPaperSpriteComponent* SpriteComponent;
 };
