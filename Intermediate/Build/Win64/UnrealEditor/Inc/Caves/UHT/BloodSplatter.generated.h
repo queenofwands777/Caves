@@ -14,6 +14,11 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_BloodSplatter_generated_h
 
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execInitParams); \
+	DECLARE_FUNCTION(execSplatter);
+
+
 #define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesABloodSplatter(); \
@@ -39,6 +44,7 @@ public: \
 #define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
+	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
 	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_INCLASS_NO_PURE_DECLS \
 	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_15_ENHANCED_CONSTRUCTORS \
 private: \

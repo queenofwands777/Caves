@@ -9,10 +9,14 @@
 #include "RenderUtils.h"
 
 
-ABloodSplatter::ABloodSplatter(){}
+ABloodSplatter::ABloodSplatter(){
+    SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SpriteComponent"));
+    RootComponent = SpriteComponent;
+
+}
 
 // Sets default values
-ABloodSplatter::ABloodSplatter(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector2d _direction, FVector2d _location)
+void ABloodSplatter::InitParams(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -26,21 +30,19 @@ ABloodSplatter::ABloodSplatter(int _num_probes, float _max_angle, int _probe_lif
     location = _location;
 
 
-    SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SpriteComponent"));
-    RootComponent = SpriteComponent;
-
+    
     
 
 }
+
+
 
 // Called when the game starts or when spawned
 void ABloodSplatter::BeginPlay()
 {
 	Super::BeginPlay();
 
-    InitSplatter();
-	//GenerateSplatter();
-	PlaceSplatter();
+
 	
 }
 
@@ -63,7 +65,7 @@ void ABloodSplatter::PlaceDot(int start_x, int start_y, int size) {
 
 void ABloodSplatter::PlacePixel(int x, int y) {
 
-    FTexture2DMipMap& Mip = splatter->GetPlatformData()->Mips[0];
+    FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
 
@@ -79,7 +81,7 @@ void ABloodSplatter::PlacePixel(int x, int y) {
 
 
     Mip.BulkData.Unlock();
-    splatter->UpdateResource();
+    splatter_texture->UpdateResource();
 
 }
 
@@ -88,17 +90,18 @@ void ABloodSplatter::InitSplatter() {
     int Width = 32;
     int Height = 32;
 
-    splatter = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+    splatter_texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+    
 
     // Ensure no compression and proper settings
-    splatter->MipGenSettings = TMGS_NoMipmaps;
-    splatter->CompressionSettings = TC_EditorIcon;
-    splatter->SRGB = false;
-    splatter->AddToRoot();
-    splatter->UpdateResource();
+    //splatter_texture->MipGenSettings = TMGS_NoMipmaps;
+    splatter_texture->CompressionSettings = TC_EditorIcon;
+    splatter_texture->SRGB = false;
+    splatter_texture->AddToRoot();
+    splatter_texture->UpdateResource();
 
     // Lock the texture to be able to modify it
-    FTexture2DMipMap& Mip = splatter->GetPlatformData()->Mips[0];
+    FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
     // Initialize the texture data
@@ -115,7 +118,13 @@ void ABloodSplatter::InitSplatter() {
 
     // Unlock the texture
     Mip.BulkData.Unlock();
-    splatter->UpdateResource();
+    splatter_texture->UpdateResource();
+}
+
+void ABloodSplatter::Splatter() {
+    InitSplatter();
+    //GenerateSplatter();
+    PlaceSplatter();
 }
 
 void ABloodSplatter::GenerateSplatter() {
@@ -129,10 +138,10 @@ void ABloodSplatter::GenerateSplatter() {
         float probe_rotation = (i * (max_angle / num_probes)) - (max_angle / 2);
         float rotation_radians = FMath::DegreesToRadians(probe_rotation);
 
-        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-            (direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))};
+        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (direction[2] * FMath::Sin(rotation_radians)),
+            (direction[0] * FMath::Sin(rotation_radians)) + (direction[2] * FMath::Cos(rotation_radians))};
 
-        FVector2d probe_location = location;
+        FVector2d probe_location = { location[0], location[2]};
         for (int ii = 0; ii < probe_lifetime; ii++) {
 
             probe_location[0] += (probe_direction[0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
@@ -172,7 +181,7 @@ void ABloodSplatter::PlaceSplatter() {
     // Create a new sprite
     FSpriteAssetInitParameters params = FSpriteAssetInitParameters();
 
-    params.SetTextureAndFill(splatter);
+    params.SetTextureAndFill(splatter_texture);
 
     UPaperSprite* NewSprite = NewObject<UPaperSprite>();
 

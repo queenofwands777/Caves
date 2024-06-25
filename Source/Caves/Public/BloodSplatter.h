@@ -17,7 +17,6 @@ class CAVES_API ABloodSplatter : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABloodSplatter();
-	ABloodSplatter(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector2d _direction, FVector2d _location);
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,18 +28,41 @@ public:
 	void InitSplatter();
 	void GenerateSplatter();
 	void PlaceSplatter();
+
+	UFUNCTION(BlueprintCallable, Category = "Splatter")
+	void Splatter();
+
 	void PlaceDot(int start_x, int start_y, int size);
 	void PlacePixel(int x, int y);
 
+	UFUNCTION(BlueprintCallable, Category = "Initialization")
+	void InitParams(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
+
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int num_probes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	float max_angle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int probe_lifetime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	float probe_variance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int probe_speed;
-	FVector2d direction;
-	FVector2d location;
-	UTexture2D* splatter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
+	FVector direction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
+	FVector location;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
+	UTexture2D* splatter_texture;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite", meta = (AllowPrivateAccess = "true"))
     UPaperSpriteComponent* SpriteComponent;
