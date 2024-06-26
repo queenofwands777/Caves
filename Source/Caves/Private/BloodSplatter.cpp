@@ -12,6 +12,10 @@
 ABloodSplatter::ABloodSplatter(){
     SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SpriteComponent"));
     RootComponent = SpriteComponent;
+    this->SetActorEnableCollision(false);
+    
+
+
 }
 
 // Sets default values
@@ -58,12 +62,12 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data) {
 
     // Calculate the pixel location
 
-    if ( ((y >= 32) || (x >= 32)) || ((y <0) || (x <0)) ) {
-        GEngine->AddOnScreenDebugMessage(-1,5.0,FColor::Red, TEXT("pixel placement out of bounds"));
+    if ( ((y >= texture_height) || (x >= texture_width)) || ((y <0) || (x <0)) ) {
+        GEngine->AddOnScreenDebugMessage(-1,5.0,FColor::Red, FString::Printf(TEXT("X:%d, Y:%d is out of bounds"), x, y));
         return;
     }
 
-    int32 PixelIndex = ((y * 32) + x);
+    int32 PixelIndex = ((y * texture_width) + x);
     uint8* Ptr = (uint8*)Data + PixelIndex * 4;
 
     // Set the pixel color
@@ -82,16 +86,10 @@ void ABloodSplatter::Splatter() {
 
 //initialize the texture to be printed on
 void ABloodSplatter::InitSplatter() {
-    int32 Width = 32;
-    int32 Height = 32;
-    int32 ILayers = 1;
-    int32 ISlices = 1;
-    int32 IMips = 0;
-    const uint8 IData = 16;
-    ETextureSourceFormat texture = ETextureSourceFormat::TSF_BGRA8;
+;
 
-    splatter_texture = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
-    splatter_texture->Source.Init(Width, Height, 1, 0, ETextureSourceFormat::TSF_BGRA8);
+    splatter_texture = UTexture2D::CreateTransient(texture_width, texture_height, PF_B8G8R8A8);
+    splatter_texture->Source.Init(texture_width, texture_height, 1, 0, ETextureSourceFormat::TSF_BGRA8);
     
     // Ensure no compression and proper settings
     splatter_texture->MipGenSettings = TMGS_NoMipmaps;
@@ -118,9 +116,9 @@ void ABloodSplatter::InitSplatter() {
 
 void ABloodSplatter::GenerateSplatter() {
 
-    int num_small_dots = 1;
-    int num_medium_dots = 0;
-    int num_large_dots = 0;
+    int num_small_dots = 3;
+    int num_medium_dots = 2;
+    int num_large_dots = 1;
 
     FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
@@ -130,10 +128,13 @@ void ABloodSplatter::GenerateSplatter() {
         float probe_rotation = (i * (max_angle / num_probes)) - (max_angle / 2);
         float rotation_radians = FMath::DegreesToRadians(probe_rotation);
 
-        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (direction[2] * FMath::Sin(rotation_radians)),
-            (direction[0] * FMath::Sin(rotation_radians)) + (direction[2] * FMath::Cos(rotation_radians))};
+        //FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (direction[2] * FMath::Sin(rotation_radians)),
+        //    (direction[0] * FMath::Sin(rotation_radians)) + (direction[2] * FMath::Cos(rotation_radians))};
 
-        FVector2d probe_location = { location[0], location[2]};
+        FVector2d probe_direction = { FMath::Cos(rotation_radians) -  FMath::Sin(rotation_radians),
+            FMath::Sin(rotation_radians) + FMath::Cos(rotation_radians) };
+
+        FVector2d probe_location = {0, 0};
         for (int ii = 0; ii < probe_lifetime; ii++) {
 
             probe_location[0] += (probe_direction[0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
@@ -142,22 +143,22 @@ void ABloodSplatter::GenerateSplatter() {
 
             //make large dots
             for (int l = 0; l < num_large_dots; l++) {
-                FVector2d placement = {FMath::FRandRange(-3.0f,3.0f),FMath::FRandRange(-3.0f,3.0f)};
-                PlaceDot(placement[0], placement[1], 7, Data);
+                FVector2d placement = {FMath::FRandRange(-3.0f,3.0f),FMath::FRandRange(-1.0f,1.0f)};
+                PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 3, Data);
             }
 
             //make medium dots
             for (int m = 0; m < num_medium_dots; m++) {
-                FVector2d placement = { FMath::FRandRange(-5.0f,5.0f),FMath::FRandRange(-5.0f,5.0f) };
+                FVector2d placement = { FMath::FRandRange(-5.0f,5.0f),FMath::FRandRange(-3.0f,3.0f) };
 
-                PlaceDot(placement[0], placement[1], 5, Data);
+                PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 2, Data);
             }
 
             //make small dots
             for (int s = 0; s < num_small_dots; s++) {
-                FVector2d placement = { FMath::FRandRange(-7.0f,7.0f),FMath::FRandRange(-7.0f,7.0f) };
+                FVector2d placement = { FMath::FRandRange(-5.0f,5.0f),FMath::FRandRange(-5.0f,5.0f) };
 
-                PlaceDot(placement[0], placement[1], 1, Data);
+                PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 1, Data);
             }
 
         }
@@ -175,20 +176,23 @@ void ABloodSplatter::PlaceSplatter() {
     FSpriteAssetInitParameters params;
     params.SetTextureAndFill(splatter_texture);
     params.SetPixelsPerUnrealUnit(1);
-    params.Dimension = { 32,32 };
+    params.Dimension = { texture_width,texture_height };
     params.Offset = { 0,0 };
 
     UPaperSprite* NewSprite = NewObject<UPaperSprite>();
+    
+
     NewSprite->InitializeSprite(params);
 
-    NewSprite->GetSourceUV() = {0,0};
-    NewSprite->GetSourceSize() = { 32,32 };
+    //NewSprite->GetSourceUV() = {0,0};
+    //NewSprite->GetSourceSize() = { texture_width,texture_height };
 
     NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, {0,0});
     NewSprite->RebuildRenderData();
   
     SpriteComponent->SetSprite(NewSprite);
     SpriteComponent->MarkRenderStateDirty();
+    SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
     
 }
 

@@ -39,6 +39,9 @@ public:
 	void InitParams(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
 
 public:
+	int texture_width = 128;
+	int texture_height = 128;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int num_probes = 0;
 
