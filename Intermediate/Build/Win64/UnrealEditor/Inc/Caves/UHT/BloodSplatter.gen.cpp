@@ -25,6 +25,7 @@ struct Z_Construct_UFunction_ABloodSplatter_InitParams_Statics
 	struct BloodSplatter_eventInitParams_Parms
 	{
 		int32 _num_probes;
+		int32 _blood_quantity;
 		float _max_angle;
 		int32 _probe_lifetime;
 		int32 _probe_variance;
@@ -39,6 +40,7 @@ struct Z_Construct_UFunction_ABloodSplatter_InitParams_Statics
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FIntPropertyParams NewProp__num_probes;
+	static const UECodeGen_Private::FIntPropertyParams NewProp__blood_quantity;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp__max_angle;
 	static const UECodeGen_Private::FIntPropertyParams NewProp__probe_lifetime;
 	static const UECodeGen_Private::FIntPropertyParams NewProp__probe_variance;
@@ -49,6 +51,7 @@ struct Z_Construct_UFunction_ABloodSplatter_InitParams_Statics
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__num_probes = { "_num_probes", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _num_probes), METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__blood_quantity = { "_blood_quantity", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _blood_quantity), METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__max_angle = { "_max_angle", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _max_angle), METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__probe_lifetime = { "_probe_lifetime", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _probe_lifetime), METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__probe_variance = { "_probe_variance", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _probe_variance), METADATA_PARAMS(0, nullptr) };
@@ -57,6 +60,7 @@ const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABloodSplat
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__location = { "_location", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventInitParams_Parms, _location), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__num_probes,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__blood_quantity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__max_angle,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__probe_lifetime,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_InitParams_Statics::NewProp__probe_variance,
@@ -79,6 +83,7 @@ UFunction* Z_Construct_UFunction_ABloodSplatter_InitParams()
 DEFINE_FUNCTION(ABloodSplatter::execInitParams)
 {
 	P_GET_PROPERTY(FIntProperty,Z_Param__num_probes);
+	P_GET_PROPERTY(FIntProperty,Z_Param__blood_quantity);
 	P_GET_PROPERTY(FFloatProperty,Z_Param__max_angle);
 	P_GET_PROPERTY(FIntProperty,Z_Param__probe_lifetime);
 	P_GET_PROPERTY(FIntProperty,Z_Param__probe_variance);
@@ -87,7 +92,7 @@ DEFINE_FUNCTION(ABloodSplatter::execInitParams)
 	P_GET_STRUCT(FVector,Z_Param__location);
 	P_FINISH;
 	P_NATIVE_BEGIN;
-	P_THIS->InitParams(Z_Param__num_probes,Z_Param__max_angle,Z_Param__probe_lifetime,Z_Param__probe_variance,Z_Param__probe_speed,Z_Param__direction,Z_Param__location);
+	P_THIS->InitParams(Z_Param__num_probes,Z_Param__blood_quantity,Z_Param__max_angle,Z_Param__probe_lifetime,Z_Param__probe_variance,Z_Param__probe_speed,Z_Param__direction,Z_Param__location);
 	P_NATIVE_END;
 }
 // End Class ABloodSplatter Function InitParams
@@ -148,6 +153,10 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 		{ "Category", "Initialization" },
 		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_blood_quantity_MetaData[] = {
+		{ "Category", "Initialization" },
+		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_max_angle_MetaData[] = {
 		{ "Category", "Initialization" },
 		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
@@ -185,6 +194,7 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FIntPropertyParams NewProp_num_probes;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_blood_quantity;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_max_angle;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_probe_lifetime;
 	static const UECodeGen_Private::FFloatPropertyParams NewProp_probe_variance;
@@ -196,7 +206,7 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_ABloodSplatter_InitParams, "InitParams" }, // 137495068
+		{ &Z_Construct_UFunction_ABloodSplatter_InitParams, "InitParams" }, // 3087062601
 		{ &Z_Construct_UFunction_ABloodSplatter_Splatter, "Splatter" }, // 3270687124
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
@@ -206,6 +216,7 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_num_probes = { "num_probes", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, num_probes), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_num_probes_MetaData), NewProp_num_probes_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_blood_quantity = { "blood_quantity", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, blood_quantity), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_blood_quantity_MetaData), NewProp_blood_quantity_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_max_angle = { "max_angle", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, max_angle), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_max_angle_MetaData), NewProp_max_angle_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_probe_lifetime = { "probe_lifetime", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, probe_lifetime), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_probe_lifetime_MetaData), NewProp_probe_lifetime_MetaData) };
 const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_probe_variance = { "probe_variance", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, probe_variance), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_probe_variance_MetaData), NewProp_probe_variance_MetaData) };
@@ -216,6 +227,7 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABloodSplatter
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_SpriteComponent = { "SpriteComponent", nullptr, (EPropertyFlags)0x00100000000a001d, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, SpriteComponent), Z_Construct_UClass_UPaperSpriteComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SpriteComponent_MetaData), NewProp_SpriteComponent_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABloodSplatter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_num_probes,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_blood_quantity,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_max_angle,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_probe_lifetime,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_probe_variance,
@@ -266,10 +278,10 @@ ABloodSplatter::~ABloodSplatter() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 2111638554U) },
+		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 10397951U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_1978776742(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_3373313009(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

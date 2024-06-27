@@ -19,7 +19,7 @@ ABloodSplatter::ABloodSplatter(){
 }
 
 // Sets default values
-void ABloodSplatter::InitParams(int _num_probes, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
+void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -31,6 +31,7 @@ void ABloodSplatter::InitParams(int _num_probes, float _max_angle, int _probe_li
     probe_speed = _probe_speed;
     direction = _direction;
     location = _location;
+    blood_quantity = _blood_quantity;
 
 }
 
@@ -116,9 +117,9 @@ void ABloodSplatter::InitSplatter() {
 
 void ABloodSplatter::GenerateSplatter() {
 
-    int num_small_dots = 3;
-    int num_medium_dots = 2;
-    int num_large_dots = 1;
+    int num_small_dots = 3 * blood_quantity;
+    int num_medium_dots = 2 * blood_quantity;
+    int num_large_dots = 1 * blood_quantity;
 
     FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
@@ -134,7 +135,7 @@ void ABloodSplatter::GenerateSplatter() {
         FVector2d probe_direction = { FMath::Cos(rotation_radians) -  FMath::Sin(rotation_radians),
             FMath::Sin(rotation_radians) + FMath::Cos(rotation_radians) };
 
-        FVector2d probe_location = {0, 0};
+        FVector2d probe_location = {float(texture_width/2), float(texture_height/2)};
         for (int ii = 0; ii < probe_lifetime; ii++) {
 
             probe_location[0] += (probe_direction[0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
@@ -143,20 +144,20 @@ void ABloodSplatter::GenerateSplatter() {
 
             //make large dots
             for (int l = 0; l < num_large_dots; l++) {
-                FVector2d placement = {FMath::FRandRange(-3.0f,3.0f),FMath::FRandRange(-1.0f,1.0f)};
+                FVector2d placement = {FMath::FRandRange(-1.0f * probe_variance,1.0f * probe_variance),FMath::FRandRange(-1.0f * probe_variance,1.0f * probe_variance)};
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 3, Data);
             }
 
             //make medium dots
             for (int m = 0; m < num_medium_dots; m++) {
-                FVector2d placement = { FMath::FRandRange(-5.0f,5.0f),FMath::FRandRange(-3.0f,3.0f) };
+                FVector2d placement = { FMath::FRandRange(-2.0*probe_variance,2.0f * probe_variance),FMath::FRandRange(-2.0f * probe_variance,2.0f * probe_variance) };
 
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 2, Data);
             }
 
             //make small dots
             for (int s = 0; s < num_small_dots; s++) {
-                FVector2d placement = { FMath::FRandRange(-5.0f,5.0f),FMath::FRandRange(-5.0f,5.0f) };
+                FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance,3.0f * probe_variance),FMath::FRandRange(-3.0f * probe_variance,3.0f * probe_variance) };
 
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 1, Data);
             }
