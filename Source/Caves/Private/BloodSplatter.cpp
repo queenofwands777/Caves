@@ -129,11 +129,11 @@ void ABloodSplatter::GenerateSplatter() {
         float probe_rotation = (i * (max_angle / num_probes)) - (max_angle / 2);
         float rotation_radians = FMath::DegreesToRadians(probe_rotation);
 
-        //FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (direction[2] * FMath::Sin(rotation_radians)),
-        //    (direction[0] * FMath::Sin(rotation_radians)) + (direction[2] * FMath::Cos(rotation_radians))};
+        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[2] * FMath::Sin(rotation_radians)),
+            (direction[0] * FMath::Sin(rotation_radians)) + (-direction[2] * FMath::Cos(rotation_radians))};
 
-        FVector2d probe_direction = { FMath::Cos(rotation_radians) -  FMath::Sin(rotation_radians),
-            FMath::Sin(rotation_radians) + FMath::Cos(rotation_radians) };
+        //FVector2d probe_direction = { FMath::Cos(rotation_radians) -  FMath::Sin(rotation_radians),
+        //    FMath::Sin(rotation_radians) + FMath::Cos(rotation_radians) };
 
         FVector2d probe_location = {float(texture_width/2), float(texture_height/2)};
         for (int ii = 0; ii < probe_lifetime; ii++) {
