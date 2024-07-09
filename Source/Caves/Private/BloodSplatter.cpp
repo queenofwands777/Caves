@@ -144,20 +144,20 @@ void ABloodSplatter::GenerateSplatter() {
 
             //make large dots
             for (int l = 0; l < num_large_dots; l++) {
-                FVector2d placement = {FMath::FRandRange(-1.0f * probe_variance,1.0f * probe_variance),FMath::FRandRange(-1.0f * probe_variance,1.0f * probe_variance)};
+                FVector2d placement = {FMath::FRandRange(-1.0f * probe_variance -ii,1.0f * probe_variance + ii),FMath::FRandRange(-1.0f * probe_variance -ii,1.0f * probe_variance + ii)};
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 3, Data);
             }
 
             //make medium dots
             for (int m = 0; m < num_medium_dots; m++) {
-                FVector2d placement = { FMath::FRandRange(-2.0*probe_variance,2.0f * probe_variance),FMath::FRandRange(-2.0f * probe_variance,2.0f * probe_variance) };
+                FVector2d placement = { FMath::FRandRange(-2.0*probe_variance -ii,2.0f * probe_variance+ii),FMath::FRandRange(-2.0f * probe_variance-ii,2.0f * probe_variance+ii) };
 
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 2, Data);
             }
 
             //make small dots
             for (int s = 0; s < num_small_dots; s++) {
-                FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance,3.0f * probe_variance),FMath::FRandRange(-3.0f * probe_variance,3.0f * probe_variance) };
+                FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance-ii,3.0f * probe_variance+ii),FMath::FRandRange(-3.0f * probe_variance-ii,3.0f * probe_variance+ii) };
 
                 PlaceDot(probe_location[0] + placement[0], probe_location[1] + placement[1], 1, Data);
             }
