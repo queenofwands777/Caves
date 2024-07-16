@@ -120,7 +120,7 @@ void ATerrainGenerator::GenerateMap() {
             FVector location;
             location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
             FRotator rotation = { 0,0,0 };
-            GetWorld()->SpawnActor<AActor>( Enemy, location, rotation);
+            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,4)], location, rotation);
         }
 
 
