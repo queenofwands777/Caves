@@ -18,8 +18,8 @@
 
 
 enum TERRAIN {
-    WALL = 17,
-    FLOOR = 19
+    WALL = 19,
+    FLOOR = 17
 };
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
@@ -42,7 +42,7 @@ ATerrainGenerator::ATerrainGenerator()
 
     PRINT("constructing TerrainGenerator")
 
-    LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain_TileSet"));
+    LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
 
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
