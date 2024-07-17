@@ -120,7 +120,7 @@ void ATerrainGenerator::GenerateMap() {
             FVector location;
             location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
             FRotator rotation = { 0,0,0 };
-            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,4)], location, rotation);
+            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
         }
 
 
@@ -179,11 +179,29 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
             //check if we have violated bounds. if so, do not initialize a new map.
+            
+
             if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
 
 
+            if ((target_x == 0)||(target_x == MAP_WIDTH-1)||(target_y == 0)||(target_y == MAP_HEIGHT-1)) {
+
+                for (int i = -1; i <= 1; i++) {
+                    for (int ii = -1; ii <= 1; ii++) {
+                        if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
+                            InitializeTileMap(tilemap_x + i, tilemap_y + ii);
+                        }
+                    }
+                }
+
+
+
+
+            }
+
+            
 
 
 

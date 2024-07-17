@@ -29,8 +29,8 @@ public:
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
-	const int LEVEL_WIDTH = 32;
-	const int LEVEL_HEIGHT = 32;
+	const int LEVEL_WIDTH = 128;
+	const int LEVEL_HEIGHT = 128;
 	const int CURSOR_LIFETIME = 1000;
 
 	const int MAP_WIDTH = 16;
