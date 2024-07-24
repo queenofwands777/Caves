@@ -28,6 +28,7 @@ public:
 	void InitSplatter();
 	void GenerateSplatter();
 	void PlaceSplatter();
+	void PlaceFrame(int frame);
 
 	UFUNCTION(BlueprintCallable, Category = "Splatter")
 	void Splatter();
@@ -36,11 +37,13 @@ public:
 	void PlacePixel(int x, int y, void* Data);
 
 	UFUNCTION(BlueprintCallable, Category = "Initialization")
-	void InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
+	void InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
 
 public:
 	int texture_width = 512;
 	int texture_height = 512;
+
+	int frame_timer = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int num_probes = 0;
@@ -53,6 +56,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int probe_lifetime = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
+	int num_frames = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	float probe_variance = 0;
@@ -69,6 +75,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
 	UTexture2D* splatter_texture = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
+	TArray<UPaperSprite*> splatter_frames = {};
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite", meta = (AllowPrivateAccess = "true"))
     UPaperSpriteComponent* SpriteComponent = nullptr;

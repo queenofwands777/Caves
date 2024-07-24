@@ -18,8 +18,8 @@
 
 
 enum TERRAIN {
-    WALL = 19,
-    FLOOR = 17
+    WALL = 0,
+    FLOOR = 1
 };
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
