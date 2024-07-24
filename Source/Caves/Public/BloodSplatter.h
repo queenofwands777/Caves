@@ -43,6 +43,9 @@ public:
 	int texture_width = 512;
 	int texture_height = 512;
 
+	TArray<FVector2d> probe_locations;
+	TArray<FVector2d> probe_directions;
+
 	int frame_timer = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")

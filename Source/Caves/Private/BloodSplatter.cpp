@@ -135,8 +135,7 @@ void ABloodSplatter::GenerateSplatter() {
 
 
     //initialize probes
-    TArray<FVector2d> probe_locations;
-    TArray<FVector2d> probe_directions;
+  
 
     for (int i = 0; i < num_probes; i++) {
 
