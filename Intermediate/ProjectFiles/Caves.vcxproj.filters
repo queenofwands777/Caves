@@ -51,12 +51,18 @@
     <Filter Include="Source\Caves\Private">
       <UniqueIdentifier>{3AEC3C97-9ACA-398C-9674-A96C04A4E1DA}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="..\..\Source\Caves\Private\BeccaUtil.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <Filter Include="Source\Caves\Public">
       <UniqueIdentifier>{71277794-0059-3576-BCF5-A300C439FB03}</UniqueIdentifier>
     </Filter>
+    <ClInclude Include="..\..\Source\Caves\Public\BeccaUtil.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
