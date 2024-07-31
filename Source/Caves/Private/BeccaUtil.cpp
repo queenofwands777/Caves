@@ -3,6 +3,7 @@
 
 #include "BeccaUtil.h"
 
-void UBeccaUtil::HelloBlueprint() {
+int UBeccaUtil::HelloBlueprint() {
+	return 69;
 	
 }

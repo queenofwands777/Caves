@@ -15,6 +15,6 @@ class CAVES_API UBeccaUtil : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 	UFUNCTION(BlueprintCallable, Category = "MyFunctions")
-	void HelloBlueprint();
+	int HelloBlueprint();
 	
 };
