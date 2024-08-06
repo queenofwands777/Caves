@@ -66,6 +66,19 @@ ATerrainGenerator::ATerrainGenerator()
 
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
 
+    static ConstructorHelpers::FClassFinder<AActor> EnemyDemon(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Demon"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
+
+    Enemies.Add(EnemyDemon.Class);
+    Enemies.Add(EnemyHellhound.Class);
+    Enemies.Add(EnemyImp.Class);
+    Enemies.Add(EnemyShade.Class);
+
+
+
+
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
 
@@ -158,7 +171,7 @@ void ATerrainGenerator::GenerateMap() {
             FVector location;
             location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
             FRotator rotation = { 0,0,0 };
-            //GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
+            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
         }
 
 
