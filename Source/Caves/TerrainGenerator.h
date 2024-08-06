@@ -17,6 +17,7 @@ class CAVES_API ATerrainGenerator : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATerrainGenerator();
+	//ATerrainGenerator(int _floor);
 
 protected:
 
@@ -38,6 +39,12 @@ public:
 
 	const int TILE_WIDTH = 16;
 	const int TILE_HEIGHT = 16;
+
+	int floor_material;
+	int wall_material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int floor = 0;
 
 	UPaperTileSet* LevelTileSet;
 	

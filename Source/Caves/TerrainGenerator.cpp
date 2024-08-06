@@ -18,8 +18,24 @@
 
 
 enum TERRAIN {
-    WALL = 0,
-    FLOOR = 1
+    STONE_WALL_0 = 0,
+    STONE_WALL_1 = 2,
+    STONE_WALL_2 = 4,
+    STONE_FLOOR_0 = 1,
+    STONE_FLOOR_1 = 3,
+    STONE_FLOOR_2 = 5,
+    FIRE_WALL_0 = 19,
+    FIRE_WALL_1 = 20,
+    FIRE_WALL_2 = 21,
+    FIRE_FLOOR_0 = 16,
+    FIRE_FLOOR_1 = 17,
+    FIRE_FLOOR_2 = 18,
+    ICE_WALL_0 = 35,
+    ICE_WALL_1 = 36,
+    ICE_WALL_2 = 37,
+    ICE_FLOOR_0 = 32,
+    ICE_FLOOR_1 = 33,
+    ICE_FLOOR_2 = 34,
 };
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
@@ -34,6 +50,8 @@ void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponen
 
 }
 
+//ATerrainGenerator::ATerrainGenerator(){}
+
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
@@ -41,6 +59,10 @@ ATerrainGenerator::ATerrainGenerator()
     PrimaryActorTick.bCanEverTick = false;
 
     PRINT("constructing TerrainGenerator")
+
+        //floor = _floor;
+
+
 
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
 
@@ -59,9 +81,25 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-    PRINT("Beginning play")
+    PRINT("Beginning play");
+   
+
+    switch (floor) {
+    case 0: 
+        floor_material = TERRAIN::STONE_FLOOR_0;
+        wall_material = TERRAIN::STONE_WALL_1;
+        break;
+    case 1:
+        floor_material = TERRAIN::FIRE_FLOOR_0;
+        wall_material = TERRAIN::FIRE_WALL_1;
+        break;
+    case 2:
+        floor_material = TERRAIN::ICE_FLOOR_0;
+        wall_material = TERRAIN::ICE_WALL_1;
+        break;
+    default: break;
+    }
     
-        
         
 
     //SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
@@ -110,7 +148,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
         //set tile
-        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 4);
+        SetTile(cursor_x, cursor_y, floor_material, 4);
         
 
 
@@ -120,7 +158,7 @@ void ATerrainGenerator::GenerateMap() {
             FVector location;
             location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
             FRotator rotation = { 0,0,0 };
-            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
+            //GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
         }
 
 
@@ -217,7 +255,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
-    TileInfo.PackedTileIndex = TERRAIN::WALL;
+    TileInfo.PackedTileIndex = wall_material;
 
     UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
 
@@ -249,7 +287,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
         for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
-            TileInfo.PackedTileIndex = TERRAIN::WALL;
+            TileInfo.PackedTileIndex = wall_material;
             tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
         }
     }
@@ -262,11 +300,6 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 
 }
-
-
-
-
-
 
 // Called every frame
 void ATerrainGenerator::Tick(float DeltaTime)
