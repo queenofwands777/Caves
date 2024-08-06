@@ -136,34 +136,34 @@ void ATerrainGenerator::GenerateMap() {
     int cursor_x = 128;
     int cursor_y = 128;
 
-
+    float heading = 0;
 
     while (lifetime > 0) {
 
         //move
-       
-
-        //clear mode: random x and y added
-        int add_x = FMath::RandRange(-1, 1);
-        int add_y = FMath::RandRange(-1, 1);
 
 
-        //path mode: move in a direction
-        //int add_x = 1;
-        //int add_y = 1;
+        heading += FMath::RandRange(-90, 90);
+        float rotation_radians = FMath::DegreesToRadians(heading);
+        FVector2d probe_direction = { (1 * FMath::Cos(rotation_radians)) - (-1 * FMath::Sin(rotation_radians)),
+            (1 * FMath::Sin(rotation_radians)) + (-1 * FMath::Cos(rotation_radians)) };
 
 
 
 
-        cursor_x += add_x;
-        cursor_y += add_y;
+
+
+        cursor_x += probe_direction[0];
+        cursor_y += probe_direction[1];
 
 
 
         //set tile
         SetTile(cursor_x, cursor_y, floor_material, 4);
-        
-
+        int room = FMath::RandRange(0, 100);
+        if (room > 98) {
+            SetTile(cursor_x, cursor_y, floor_material, 20);
+        }
 
         //place enemy
         int encounter = FMath::RandRange(0, 100);
