@@ -30,9 +30,9 @@ public:
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
-	const int LEVEL_WIDTH = 256;
-	const int LEVEL_HEIGHT = 256;
-	const int CURSOR_LIFETIME = 100;
+	const int LEVEL_WIDTH = 1024;
+	const int LEVEL_HEIGHT = 1024;
+	const int CURSOR_LIFETIME = 500;
 
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
@@ -60,4 +60,6 @@ public:
 	TArray<UPaperTileMapComponent*> TerrainMapData;
 
 	TArray<TSubclassOf<AActor>> Enemies;
+	TArray<TSubclassOf<AActor>> Objects;
+	TSubclassOf<AActor> Player ;
 };

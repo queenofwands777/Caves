@@ -63,9 +63,10 @@ ATerrainGenerator::ATerrainGenerator()
         //floor = _floor;
 
 
-
+    //load tileset
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
 
+    //load enemies
     static ConstructorHelpers::FClassFinder<AActor> EnemyDemon(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Demon"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
@@ -75,6 +76,15 @@ ATerrainGenerator::ATerrainGenerator()
     Enemies.Add(EnemyHellhound.Class);
     Enemies.Add(EnemyImp.Class);
     Enemies.Add(EnemyShade.Class);
+
+    //load objects
+    static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
+    Objects.Add(Portal.Class);
+
+
+    //load player
+    static ConstructorHelpers::FClassFinder<AActor> PlayerPawn(TEXT("/Game/Blueprints/Entities/player"));
+    Player = PlayerPawn.Class;
 
 
 
@@ -128,13 +138,25 @@ void ATerrainGenerator::BeginPlay()
 void ATerrainGenerator::GenerateMap() {
 
     PRINT("Generating Map")
-    //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
+        //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
 
 
-    //figure out how to expose lifetime to unreal
-    int lifetime = CURSOR_LIFETIME;
-    int cursor_x = 128;
-    int cursor_y = 128;
+        int lifetime = CURSOR_LIFETIME;
+    int cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
+    int cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+
+
+    //create spawn area
+    SetTile(cursor_x, cursor_y, floor_material, 16);
+    FVector spawn_location = { float(cursor_x * TILE_WIDTH + (8 * TILE_WIDTH)), 2, float(cursor_y * TILE_HEIGHT - (8 * TILE_HEIGHT)) };
+    FRotator spawn_rotation = { 0,0,0 };
+    GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
+
+    FVector portal_location = { float(spawn_location[0] + (4 * TILE_WIDTH)), 2, float(spawn_location[2] + (4 * TILE_WIDTH))};
+    GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
+
+
+
 
     float heading = 0;
 
