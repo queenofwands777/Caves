@@ -62,8 +62,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     TileInfo.PackedTileIndex = terrain;
 
     //set tiles according to brush size
-    for (int xx = 0; xx < size; xx++) {
-        for (int yy = 0; yy < size; yy++) {
+    for (int xx = -size/2; xx < size/2; xx++) {
+        for (int yy = -size/2; yy < size/2; yy++) {
 
             //input coords plus brush placement
             int world_x = input_x + xx;
@@ -76,16 +76,10 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
             int tilemap_x = (world_x - target_x) / MAP_WIDTH;
             int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
 
-
-
-
             //check if we have violated bounds. if so, do not initialize a new map.
-
-
             if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
-
 
             if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
 
@@ -96,15 +90,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
                         }
                     }
                 }
-
-
-
-
             }
-
-
-
-
 
             UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
             host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
@@ -112,18 +98,12 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     }
 }
 
-//ATerrainGenerator::ATerrainGenerator(){}
 
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
-
-    PRINT("constructing TerrainGenerator")
-
-        //floor = _floor;
-
 
     //load tileset
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
@@ -141,22 +121,17 @@ ATerrainGenerator::ATerrainGenerator()
 
     //load objects
     static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
+    static ConstructorHelpers::FClassFinder<AActor> Chest(TEXT("/Game/Blueprints/Pickups/Chest"));
+
     Objects.Add(Portal.Class);
+    Objects.Add(Chest.Class);
 
 
     //load player
     static ConstructorHelpers::FClassFinder<AActor> PlayerPawn(TEXT("/Game/Blueprints/Entities/player"));
     Player = PlayerPawn.Class;
 
-
-
-
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
-
-
-
-
-
 }
 
 
@@ -165,10 +140,7 @@ ATerrainGenerator::ATerrainGenerator()
 void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
-
-    PRINT("Beginning play");
    
-
     switch (floor) {
     case 0: 
         floor_material = TERRAIN::STONE_FLOOR_0;
@@ -182,15 +154,12 @@ void ATerrainGenerator::BeginPlay()
         floor_material = TERRAIN::ICE_FLOOR_0;
         wall_material = TERRAIN::ICE_WALL_1;
         break;
-    default: break;
+    default: 
+        floor_material = TERRAIN::STONE_FLOOR_0;
+        wall_material = TERRAIN::STONE_WALL_1; 
+        break;
     }
-    
         
-
-    //SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
-    //SetTile(126, 126, TERRAIN::FLOOR, 5);
-
-    
     GenerateMap();
    
 }
@@ -202,6 +171,14 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
         SetTile(x, y, floor_material, 5);
 
     }
+    int Chest = FMath::RandRange(0, 100);
+    if (Chest >50) {
+        FVector location;
+        location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
+        FRotator rotation = { 0,0,0 };
+        GetWorld()->SpawnActor<AActor>(Objects[1], location, rotation);
+    }
+    
 }
 
 struct GeneratorProbe {
@@ -301,7 +278,7 @@ void ATerrainGenerator::GenerateMap() {
 
     //create spawn area
     SetTile(cursor_x, cursor_y, floor_material, 8);
-    FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (6*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(8*TILE_HEIGHT) };
+    FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(16*TILE_HEIGHT) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
 
@@ -366,7 +343,7 @@ void ATerrainGenerator::GenerateMap() {
 
     MakeRoom(cursor_x, cursor_y);
 
-    FVector portal_location = { float(cursor_x * TILE_WIDTH) + (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+    FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
     GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
