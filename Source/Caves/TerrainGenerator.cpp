@@ -142,13 +142,13 @@ void ATerrainGenerator::GenerateMap() {
 
 
         int lifetime = CURSOR_LIFETIME;
-    int cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
-    int cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+    float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
+    float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
 
     //create spawn area
     SetTile(cursor_x, cursor_y, floor_material, 16);
-    FVector spawn_location = { float(cursor_x * TILE_WIDTH + (8 * TILE_WIDTH)), 2, float(cursor_y * TILE_HEIGHT - (8 * TILE_HEIGHT)) };
+    FVector spawn_location = { float(cursor_x * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT ) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
 
@@ -158,19 +158,19 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-    float heading = 0;
+    float heading = FMath::RandRange(-360,360);
+    FVector2d direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
 
     while (lifetime > 0) {
 
         //move
 
 
-        heading += FMath::RandRange(-90, 90);
+        heading += FMath::RandRange(-20, 20);
         float rotation_radians = FMath::DegreesToRadians(heading);
-        FVector2d probe_direction = { (1 * FMath::Cos(rotation_radians)) - (-1 * FMath::Sin(rotation_radians)),
-            (1 * FMath::Sin(rotation_radians)) + (-1 * FMath::Cos(rotation_radians)) };
-
-
+        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
+            (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
+        //probe_direction.Normalize();
 
 
 
@@ -182,9 +182,17 @@ void ATerrainGenerator::GenerateMap() {
 
         //set tile
         SetTile(cursor_x, cursor_y, floor_material, 4);
+
+
         int room = FMath::RandRange(0, 100);
         if (room > 98) {
-            SetTile(cursor_x, cursor_y, floor_material, 20);
+            for (int i = 0; i < 5; i++) {
+                cursor_x += FMath::RandRange(-1, 1);
+                cursor_y += FMath::RandRange(-1, 1);
+                SetTile(cursor_x, cursor_y, floor_material, 16);
+
+            }
+            
         }
 
         //place enemy
