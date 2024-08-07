@@ -195,6 +195,14 @@ void ATerrainGenerator::BeginPlay()
    
 }
 
+void ATerrainGenerator::MakeRoom(int x, int y) {
+    for (int i = 0; i < 6; i++) {
+        x += FMath::RandRange(-1, 1);
+        y += FMath::RandRange(-1, 1);
+        SetTile(x, y, floor_material, 5);
+
+    }
+}
 
 struct GeneratorProbe {
 public:
@@ -235,22 +243,21 @@ public:
             //set tile
             parent->SetTile(cursor_x, cursor_y, parent->floor_material, 4);
 
+            //generate offshoot
+            int offshoot = FMath::RandRange(0, 100);
+            if (offshoot > 98) {
+                GeneratorProbe new_offshoot = GeneratorProbe(lifetime/2, cursor_x, cursor_y, heading + (FMath::RandRange(45, 90) * ((FMath::RandBool() * 2) - 1)), parent);
+            }
 
             //generate room
             int room = FMath::RandRange(0, 100);
             if (room > 98) {
-                for (int i = 0; i < 5; i++) {
-                    cursor_x += FMath::RandRange(-1, 1);
-                    cursor_y += FMath::RandRange(-1, 1);
-                    parent->SetTile(cursor_x, cursor_y, parent->floor_material, 8);
-
-                }
-
+                parent->MakeRoom(cursor_x, cursor_y);
             }
 
             //place enemy
             int encounter = FMath::RandRange(0, 100);
-            if (encounter > 98) {
+            if (encounter > 95) {
                 FVector location;
                 location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
                 FRotator rotation = { 0,0,0 };
@@ -332,24 +339,19 @@ void ATerrainGenerator::GenerateMap() {
         //generate offshoot
         int offshoot = FMath::RandRange(0, 100);
         if (offshoot > 96) {
-            GeneratorProbe new_offshoot = GeneratorProbe(20, cursor_x, cursor_y, heading + (FMath::RandRange(45,90)*((FMath::RandBool()*2)-1)), this);
+            GeneratorProbe new_offshoot = GeneratorProbe(lifetime/2, cursor_x, cursor_y, heading + (FMath::RandRange(45,90)*((FMath::RandBool()*2)-1)), this);
         }
 
         //generate room
         int room = FMath::RandRange(0, 100);
         if (room > 98) {
-            for (int i = 0; i < 5; i++) {
-                cursor_x += FMath::RandRange(-1, 1);
-                cursor_y += FMath::RandRange(-1, 1);
-                SetTile(cursor_x, cursor_y, floor_material, 8);
-
-            }
+            MakeRoom(cursor_x, cursor_y);
             
         }
 
         //place enemy
         int encounter = FMath::RandRange(0, 100);
-        if (encounter > 98) {
+        if (encounter > 95) {
             FVector location;
             location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
             FRotator rotation = { 0,0,0 };
@@ -362,12 +364,7 @@ void ATerrainGenerator::GenerateMap() {
     //END COPY
     
 
-    for (int i = 0; i < 5; i++) {
-        cursor_x += FMath::RandRange(-1, 1);
-        cursor_y += FMath::RandRange(-1, 1);
-        SetTile(cursor_x, cursor_y, floor_material, 8);
-
-    }
+    MakeRoom(cursor_x, cursor_y);
 
     FVector portal_location = { float(cursor_x * TILE_WIDTH) + (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
     GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
