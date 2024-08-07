@@ -17,6 +17,7 @@
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 
+
 enum TERRAIN {
     STONE_WALL_0 = 0,
     STONE_WALL_1 = 2,
@@ -48,6 +49,67 @@ void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponen
         int index = (grid_x * LEVEL_HEIGHT) + grid_y;
     TerrainMapData[index] = tilemap;
 
+}
+
+
+void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
+
+    //input_x and input_y are in terms of the world coordinates on a tile level
+
+    //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
+    FPaperTileInfo TileInfo;
+    TileInfo.TileSet = *LevelTileSet;
+    TileInfo.PackedTileIndex = terrain;
+
+    //set tiles according to brush size
+    for (int xx = 0; xx < size; xx++) {
+        for (int yy = 0; yy < size; yy++) {
+
+            //input coords plus brush placement
+            int world_x = input_x + xx;
+            int world_y = input_y + yy;
+
+            //how far into the target tilemap are we placing the tile
+            int target_x = world_x % MAP_WIDTH;
+            int target_y = world_y % MAP_HEIGHT;
+
+            int tilemap_x = (world_x - target_x) / MAP_WIDTH;
+            int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
+
+
+
+
+            //check if we have violated bounds. if so, do not initialize a new map.
+
+
+            if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
+                InitializeTileMap(tilemap_x, tilemap_y);
+            }
+
+
+            if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
+
+                for (int i = -1; i <= 1; i++) {
+                    for (int ii = -1; ii <= 1; ii++) {
+                        if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
+                            InitializeTileMap(tilemap_x + i, tilemap_y + ii);
+                        }
+                    }
+                }
+
+
+
+
+            }
+
+
+
+
+
+            UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
+            host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+        }
+    }
 }
 
 //ATerrainGenerator::ATerrainGenerator(){}
@@ -134,62 +196,152 @@ void ATerrainGenerator::BeginPlay()
 }
 
 
+struct GeneratorProbe {
+public:
+    GeneratorProbe(int _lifetime, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
+        lifetime = _lifetime;
+        cursor_x = _cursor_x;
+        cursor_y = _cursor_y;
+        heading = _heading;
+        parent = _parent;
+
+        direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
+        Generate();
+    }
+
+public:
+    int lifetime;
+    float cursor_x;
+    float cursor_y;
+    float heading;
+    FVector2d direction;
+    ATerrainGenerator* parent;
+
+public:
+
+    void Generate() {
+        while (lifetime > 0) {
+
+            //move
+            heading += FMath::RandRange(-20, 20);
+            float rotation_radians = FMath::DegreesToRadians(heading);
+            FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
+                (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
+            //probe_direction.Normalize();
+
+            cursor_x += probe_direction[0];
+            cursor_y += probe_direction[1];
+
+            //set tile
+            parent->SetTile(cursor_x, cursor_y, parent->floor_material, 4);
+
+
+            //generate room
+            int room = FMath::RandRange(0, 100);
+            if (room > 98) {
+                for (int i = 0; i < 5; i++) {
+                    cursor_x += FMath::RandRange(-1, 1);
+                    cursor_y += FMath::RandRange(-1, 1);
+                    parent->SetTile(cursor_x, cursor_y, parent->floor_material, 8);
+
+                }
+
+            }
+
+            //place enemy
+            int encounter = FMath::RandRange(0, 100);
+            if (encounter > 98) {
+                FVector location;
+                location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
+                FRotator rotation = { 0,0,0 };
+                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 3)], location, rotation);
+            }
+
+
+            lifetime--;
+        }
+        for (int i = 0; i < 5; i++) {
+            cursor_x += FMath::RandRange(-1, 1);
+            cursor_y += FMath::RandRange(-1, 1);
+            parent->SetTile(cursor_x, cursor_y, parent->floor_material, 8);
+
+        }
+    }
+};
+
 
 void ATerrainGenerator::GenerateMap() {
 
-    PRINT("Generating Map")
+    PRINT("Generating Map");
         //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
 
 
-        int lifetime = CURSOR_LIFETIME;
+    //COPY FOR OBJECT
+    int lifetime = CURSOR_LIFETIME;
     float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
     float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+    //END COPY
+
+
+
+
+
+
+
+
+
 
 
     //create spawn area
-    SetTile(cursor_x, cursor_y, floor_material, 16);
-    FVector spawn_location = { float(cursor_x * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT ) };
+    SetTile(cursor_x, cursor_y, floor_material, 8);
+    FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (6*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(8*TILE_HEIGHT) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
 
-    FVector portal_location = { float(spawn_location[0] + (4 * TILE_WIDTH)), 2, float(spawn_location[2] + (4 * TILE_WIDTH))};
-    GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
 
 
+
+
+
+
+
+
+
+
+    //COPY FOR OBJECT
     float heading = FMath::RandRange(-360,360);
     FVector2d direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
 
     while (lifetime > 0) {
 
         //move
-
-
         heading += FMath::RandRange(-20, 20);
         float rotation_radians = FMath::DegreesToRadians(heading);
         FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
             (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
         //probe_direction.Normalize();
 
-
-
-
         cursor_x += probe_direction[0];
         cursor_y += probe_direction[1];
-
-
 
         //set tile
         SetTile(cursor_x, cursor_y, floor_material, 4);
 
+        //generate offshoot
+        int offshoot = FMath::RandRange(0, 100);
+        if (offshoot > 96) {
+            GeneratorProbe new_offshoot = GeneratorProbe(20, cursor_x, cursor_y, heading + (FMath::RandRange(45,90)*((FMath::RandBool()*2)-1)), this);
+        }
 
+        //generate room
         int room = FMath::RandRange(0, 100);
         if (room > 98) {
             for (int i = 0; i < 5; i++) {
                 cursor_x += FMath::RandRange(-1, 1);
                 cursor_y += FMath::RandRange(-1, 1);
-                SetTile(cursor_x, cursor_y, floor_material, 16);
+                SetTile(cursor_x, cursor_y, floor_material, 8);
 
             }
             
@@ -207,15 +359,24 @@ void ATerrainGenerator::GenerateMap() {
 
         lifetime--;
     }
+    //END COPY
     
-   /* FVector SpawnLocation(cursor_x, 0.0f, cursor_y );
-    FRotator SpawnRotation(0.0f, 0.0f, -90.0f);
-    UPlayer* NewPlayerCharacter = Cast<UPlayer>(UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), UPlayer::StaticClass(), FTransform(SpawnRotation, SpawnLocation)));*/
+
+    for (int i = 0; i < 5; i++) {
+        cursor_x += FMath::RandRange(-1, 1);
+        cursor_y += FMath::RandRange(-1, 1);
+        SetTile(cursor_x, cursor_y, floor_material, 8);
+
+    }
+
+    FVector portal_location = { float(cursor_x * TILE_WIDTH) + (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+    GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
-    //USpringArmComponent* SpringArm = Cast<USpringArmComponent>(NewPlayerCharacter->GetRootComponent()->GetChildComponent(1));
-    //FRotator SpringarmRotation(0.0f, 0.0f, -90.0f);
-    //SpringArm->SetWorldRotation(SpringarmRotation);
+
+
+
+
 
     for (int i = 0; i < TerrainMapData.Num(); i++) {
         UPaperTileMapComponent* target = TerrainMapData[i];
@@ -232,65 +393,6 @@ void ATerrainGenerator::GenerateMap() {
 
 }
 
-void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
-
-    //input_x and input_y are in terms of the world coordinates on a tile level
-
-    //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
-    FPaperTileInfo TileInfo;
-    TileInfo.TileSet = *LevelTileSet;
-    TileInfo.PackedTileIndex = terrain;
-
-    //set tiles according to brush size
-    for (int xx = 0; xx < size; xx++) {
-        for (int yy = 0; yy < size; yy++) {
-
-            //input coords plus brush placement
-            int world_x = input_x + xx;
-            int world_y = input_y + yy;
-
-            //how far into the target tilemap are we placing the tile
-            int target_x = world_x % MAP_WIDTH;
-            int target_y = world_y % MAP_HEIGHT;
-
-            int tilemap_x = (world_x - target_x)/MAP_WIDTH;
-            int tilemap_y = (world_y - target_y)/MAP_HEIGHT;
-
-
-
-
-            //check if we have violated bounds. if so, do not initialize a new map.
-            
-
-            if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
-                InitializeTileMap(tilemap_x, tilemap_y);
-            }
-
-
-            if ((target_x == 0)||(target_x == MAP_WIDTH-1)||(target_y == 0)||(target_y == MAP_HEIGHT-1)) {
-
-                for (int i = -1; i <= 1; i++) {
-                    for (int ii = -1; ii <= 1; ii++) {
-                        if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
-                            InitializeTileMap(tilemap_x + i, tilemap_y + ii);
-                        }
-                    }
-                }
-
-
-
-
-            }
-
-            
-
-
-
-            UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
-            host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y) -1, TileInfo);
-        }
-    }
-}
 
 void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 

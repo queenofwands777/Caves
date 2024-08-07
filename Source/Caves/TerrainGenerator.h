@@ -25,14 +25,12 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-	void CreateMap();
-	void FillMap();
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
 	const int LEVEL_WIDTH = 1024;
 	const int LEVEL_HEIGHT = 1024;
-	const int CURSOR_LIFETIME = 500;
+	const int CURSOR_LIFETIME = 50;
 
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
