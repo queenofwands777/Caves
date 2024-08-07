@@ -17,6 +17,7 @@ class CAVES_API ATerrainGenerator : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATerrainGenerator();
+	//ATerrainGenerator(int _floor);
 
 protected:
 
@@ -29,15 +30,21 @@ public:
 	void GenerateMap();
 	void SetTile(int x, int y, int terrain, int size);
 
-	const int LEVEL_WIDTH = 128;
-	const int LEVEL_HEIGHT = 128;
-	const int CURSOR_LIFETIME = 1000;
+	const int LEVEL_WIDTH = 1024;
+	const int LEVEL_HEIGHT = 1024;
+	const int CURSOR_LIFETIME = 500;
 
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
 
 	const int TILE_WIDTH = 16;
 	const int TILE_HEIGHT = 16;
+
+	int floor_material;
+	int wall_material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int floor = 0;
 
 	UPaperTileSet* LevelTileSet;
 	
@@ -52,6 +59,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
 	TArray<UPaperTileMapComponent*> TerrainMapData;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TArray<TSubclassOf<AActor>> Enemies;
+	TArray<TSubclassOf<AActor>> Objects;
+	TSubclassOf<AActor> Player ;
 };

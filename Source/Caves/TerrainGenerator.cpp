@@ -18,8 +18,24 @@
 
 
 enum TERRAIN {
-    WALL = 0,
-    FLOOR = 1
+    STONE_WALL_0 = 0,
+    STONE_WALL_1 = 2,
+    STONE_WALL_2 = 4,
+    STONE_FLOOR_0 = 1,
+    STONE_FLOOR_1 = 3,
+    STONE_FLOOR_2 = 5,
+    FIRE_WALL_0 = 19,
+    FIRE_WALL_1 = 20,
+    FIRE_WALL_2 = 21,
+    FIRE_FLOOR_0 = 16,
+    FIRE_FLOOR_1 = 17,
+    FIRE_FLOOR_2 = 18,
+    ICE_WALL_0 = 35,
+    ICE_WALL_1 = 36,
+    ICE_WALL_2 = 37,
+    ICE_FLOOR_0 = 32,
+    ICE_FLOOR_1 = 33,
+    ICE_FLOOR_2 = 34,
 };
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
@@ -34,6 +50,8 @@ void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponen
 
 }
 
+//ATerrainGenerator::ATerrainGenerator(){}
+
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
@@ -42,7 +60,34 @@ ATerrainGenerator::ATerrainGenerator()
 
     PRINT("constructing TerrainGenerator")
 
+        //floor = _floor;
+
+
+    //load tileset
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
+
+    //load enemies
+    static ConstructorHelpers::FClassFinder<AActor> EnemyDemon(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Demon"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
+
+    Enemies.Add(EnemyDemon.Class);
+    Enemies.Add(EnemyHellhound.Class);
+    Enemies.Add(EnemyImp.Class);
+    Enemies.Add(EnemyShade.Class);
+
+    //load objects
+    static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
+    Objects.Add(Portal.Class);
+
+
+    //load player
+    static ConstructorHelpers::FClassFinder<AActor> PlayerPawn(TEXT("/Game/Blueprints/Entities/player"));
+    Player = PlayerPawn.Class;
+
+
+
 
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
@@ -59,9 +104,25 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-    PRINT("Beginning play")
+    PRINT("Beginning play");
+   
+
+    switch (floor) {
+    case 0: 
+        floor_material = TERRAIN::STONE_FLOOR_0;
+        wall_material = TERRAIN::STONE_WALL_1;
+        break;
+    case 1:
+        floor_material = TERRAIN::FIRE_FLOOR_0;
+        wall_material = TERRAIN::FIRE_WALL_1;
+        break;
+    case 2:
+        floor_material = TERRAIN::ICE_FLOOR_0;
+        wall_material = TERRAIN::ICE_WALL_1;
+        break;
+    default: break;
+    }
     
-        
         
 
     //SetTile(MAP_WIDTH / 2, MAP_HEIGHT / 2, TERRAIN::FLOOR, 5);
@@ -77,42 +138,62 @@ void ATerrainGenerator::BeginPlay()
 void ATerrainGenerator::GenerateMap() {
 
     PRINT("Generating Map")
-    //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
+        //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
 
 
-    //figure out how to expose lifetime to unreal
-    int lifetime = CURSOR_LIFETIME;
-    int cursor_x = 128;
-    int cursor_y = 128;
+        int lifetime = CURSOR_LIFETIME;
+    float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
+    float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
 
+    //create spawn area
+    SetTile(cursor_x, cursor_y, floor_material, 16);
+    FVector spawn_location = { float(cursor_x * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT ) };
+    FRotator spawn_rotation = { 0,0,0 };
+    GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
+
+    FVector portal_location = { float(spawn_location[0] + (4 * TILE_WIDTH)), 2, float(spawn_location[2] + (4 * TILE_WIDTH))};
+    GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
+
+
+
+
+    float heading = FMath::RandRange(-360,360);
+    FVector2d direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
 
     while (lifetime > 0) {
 
         //move
-       
-
-        //clear mode: random x and y added
-        int add_x = FMath::RandRange(-1, 1);
-        int add_y = FMath::RandRange(-1, 1);
 
 
-        //path mode: move in a direction
-        //int add_x = 1;
-        //int add_y = 1;
+        heading += FMath::RandRange(-20, 20);
+        float rotation_radians = FMath::DegreesToRadians(heading);
+        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
+            (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
+        //probe_direction.Normalize();
 
 
 
 
-        cursor_x += add_x;
-        cursor_y += add_y;
+        cursor_x += probe_direction[0];
+        cursor_y += probe_direction[1];
 
 
 
         //set tile
-        SetTile(cursor_x, cursor_y, TERRAIN::FLOOR, 4);
-        
+        SetTile(cursor_x, cursor_y, floor_material, 4);
 
+
+        int room = FMath::RandRange(0, 100);
+        if (room > 98) {
+            for (int i = 0; i < 5; i++) {
+                cursor_x += FMath::RandRange(-1, 1);
+                cursor_y += FMath::RandRange(-1, 1);
+                SetTile(cursor_x, cursor_y, floor_material, 16);
+
+            }
+            
+        }
 
         //place enemy
         int encounter = FMath::RandRange(0, 100);
@@ -217,7 +298,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
-    TileInfo.PackedTileIndex = TERRAIN::WALL;
+    TileInfo.PackedTileIndex = wall_material;
 
     UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
 
@@ -249,7 +330,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
         for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
-            TileInfo.PackedTileIndex = TERRAIN::WALL;
+            TileInfo.PackedTileIndex = wall_material;
             tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
         }
     }
@@ -262,11 +343,6 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 
 }
-
-
-
-
-
 
 // Called every frame
 void ATerrainGenerator::Tick(float DeltaTime)

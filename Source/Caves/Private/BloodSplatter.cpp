@@ -52,7 +52,7 @@ void ABloodSplatter::Tick(float DeltaTime)
 
     if (frame_timer < num_frames) {
         //update texture in level
-        //PlaceFrame(frame_timer);
+        PlaceFrame(frame_timer);
         frame_timer++;
     }
 
@@ -198,7 +198,7 @@ void ABloodSplatter::GenerateSplatter() {
         Mip.BulkData.Unlock();
         splatter_texture->UpdateResource();
 
-
+        
         //HERE IS THE PROBLEM!! I want to add a copy of the current state of the texture to the list of frames. OR, print the texture as it currently is into the level, and make the whole thing
         //generate based on the tick.
 
