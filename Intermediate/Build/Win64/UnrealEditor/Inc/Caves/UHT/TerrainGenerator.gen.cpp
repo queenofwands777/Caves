@@ -101,14 +101,19 @@ ATerrainGenerator::~ATerrainGenerator() {}
 // End Class ATerrainGenerator
 
 // Begin Registration
-struct Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_TerrainGenerator_h_Statics
+struct Z_CompiledInDeferFile_FID_Users_Theo_source_repos_queenofwands777_Caves_Source_Caves_TerrainGenerator_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
 		{ Z_Construct_UClass_ATerrainGenerator, ATerrainGenerator::StaticClass, TEXT("ATerrainGenerator"), &Z_Registration_Info_UClass_ATerrainGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ATerrainGenerator), 1774317737U) },
 	};
 };
+<<<<<<< HEAD
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Theo_source_repos_queenofwands777_Caves_Source_Caves_TerrainGenerator_h_1638375096(TEXT("/Script/Caves"),
+	Z_CompiledInDeferFile_FID_Users_Theo_source_repos_queenofwands777_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_Theo_source_repos_queenofwands777_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo),
+=======
 static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_TerrainGenerator_h_127419066(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo),
+>>>>>>> df9fd8e054792d65148fe1385758fe45f1bc8a7e
 	nullptr, 0,
 	nullptr, 0);
 // End Registration
