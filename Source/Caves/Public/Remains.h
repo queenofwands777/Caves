@@ -18,6 +18,8 @@ public:
 	// Sets default values for this actor's properties
 	ARemains();
 	void Generate();
+	TSubclassOf<AActor> shard;
+
 
 protected:
 	// Called when the game starts or when spawned

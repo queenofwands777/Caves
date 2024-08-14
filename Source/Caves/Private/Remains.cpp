@@ -88,11 +88,14 @@ ARemains::ARemains()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	static ConstructorHelpers::FClassFinder<AActor> RemainShard(TEXT("/Game/Blueprints/Effects/RemainShard"));
+	shard = RemainShard.Class;
+
 }
 
 void ARemains::Generate() {
 
-	static ConstructorHelpers::FClassFinder<AActor> RemainShard(TEXT("/Game/Blueprints/Effects/RemainShard"));
 
 	//have 16x16 matrix
 	std::vector<std::vector<int>> Mask;
@@ -172,7 +175,7 @@ void ARemains::Generate() {
 
 	//create RemainShard for each generated texture, assign Texture to sprite
 	for (int i = 0; i < NUM_SHARDS; i++) {
-		TSubclassOf<AActor> shard = RemainShard.Class;
+		
 		FVector location;
 		location = GetActorLocation();
 		FRotator rotation = { 0,0,0 };
