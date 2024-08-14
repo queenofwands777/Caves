@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PaperSpriteComponent.h"
+#include "PaperSprite.h"
+#include "PaperSpriteAtlas.h"
 #include "GameFramework/Actor.h"
 #include "Remains.generated.h"
 

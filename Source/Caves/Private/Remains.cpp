@@ -4,6 +4,12 @@
 #include "Remains.h"
 #include<vector>
 
+#include "Engine/Texture2D.h"
+#include "Engine/Texture2DDynamic.h"
+
+#include "Runtime/Engine/Public/TextureResource.h"
+#include "RenderUtils.h"
+
 
 
 
@@ -67,7 +73,6 @@ public:
 		//set pixel
 		if (((y >= MATRIX_SIZE) || (x >= MATRIX_SIZE)) || ((y < 0) || (x < 0))) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString::Printf(TEXT("X:%d, Y:%d is out of bounds"), x, y));
-			return;
 		}
 
 		int32 PixelIndex = ((y * MATRIX_SIZE) + x);
@@ -87,6 +92,7 @@ ARemains::ARemains()
 
 void ARemains::Generate() {
 
+	static ConstructorHelpers::FClassFinder<AActor> RemainShard(TEXT("/Game/Blueprints/Effects/RemainShard"));
 
 	//have 16x16 matrix
 	std::vector<std::vector<int>> Mask;
@@ -100,6 +106,14 @@ void ARemains::Generate() {
 
 	//seed matrix with as many arbitrary numbers as desired chunks
 		//get random x and y distance from center
+	for (int i = 0; i < NUM_SHARDS; i++) {
+		int center_x = MATRIX_SIZE / 2;
+		int center_y = MATRIX_SIZE / 2;
+		int x_offset = FMath::RandRange(-center_x/2, center_x/2);
+		int y_offset = FMath::RandRange(-center_y/2, center_y/2);
+		Mask[center_x + x_offset][center_y+y_offset] = i;
+	}
+
 
 	//run CA
 	bool incomplete = true;
@@ -157,6 +171,37 @@ void ARemains::Generate() {
 
 
 	//create RemainShard for each generated texture, assign Texture to sprite
+	for (int i = 0; i < NUM_SHARDS; i++) {
+		TSubclassOf<AActor> shard = RemainShard.Class;
+		FVector location;
+		location = GetActorLocation();
+		FRotator rotation = { 0,0,0 };
+
+		AActor* shard_actor = GetWorld()->SpawnActor<AActor>(shard, location, rotation);
+
+		UPaperSpriteComponent* sprite = shard_actor->GetComponentByClass<UPaperSpriteComponent>();
+
+		FSpriteAssetInitParameters params;
+		params.SetTextureAndFill(texture_shards[i].texture);
+		params.SetPixelsPerUnrealUnit(1);
+		params.Dimension = { MATRIX_SIZE,MATRIX_SIZE };
+		params.Offset = { 0,0 };
+
+		UPaperSprite* NewSprite = NewObject<UPaperSprite>();
+
+
+		NewSprite->InitializeSprite(params);
+
+		//NewSprite->GetSourceUV() = {0,0};
+		//NewSprite->GetSourceSize() = { texture_width,texture_height };
+
+		NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, { 0,0 });
+		NewSprite->RebuildRenderData();
+
+		sprite->SetSprite(NewSprite);
+		sprite->MarkRenderStateDirty();
+		sprite->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	}
 
 }
 
@@ -166,6 +211,7 @@ void ARemains::Generate() {
 void ARemains::BeginPlay()
 {
 	Super::BeginPlay();
+	Generate();
 	
 }
 
