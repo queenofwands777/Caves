@@ -122,9 +122,13 @@ ATerrainGenerator::ATerrainGenerator()
     //load objects
     static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
     static ConstructorHelpers::FClassFinder<AActor> Chest(TEXT("/Game/Blueprints/Pickups/Chest"));
+    static ConstructorHelpers::FClassFinder<AActor> Altar(TEXT("/Game/Blueprints/Level/Altar"));
+    static ConstructorHelpers::FClassFinder<AActor> RoomMarker(TEXT("/Game/Blueprints/Level/RoomMarker"));
 
     Objects.Add(Portal.Class);
     Objects.Add(Chest.Class);
+    Objects.Add(Altar.Class);
+    Objects.Add(RoomMarker.Class);
 
 
     //load player
