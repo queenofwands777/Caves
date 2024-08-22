@@ -15,7 +15,6 @@ ABloodSplatter::ABloodSplatter(){
     this->SetActorEnableCollision(false);
     
 
-
 }
 
 // Sets default values
@@ -58,17 +57,17 @@ void ABloodSplatter::Tick(float DeltaTime)
 
 }
 
-void ABloodSplatter::PlaceDot(int start_x, int start_y, int size, void* Data) {
+void ABloodSplatter::PlaceDot(int start_x, int start_y, int size, void* Data, int variance) {
 
 
     for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++){
-            PlacePixel(start_x + x, start_y + y, Data);
+            PlacePixel(start_x + x, start_y + y, Data, variance);
         }
     }
 }
 
-void ABloodSplatter::PlacePixel(int x, int y, void* Data) {
+void ABloodSplatter::PlacePixel(int x, int y, void* Data, int variance) {
 
     // Calculate the pixel location
 
@@ -83,7 +82,7 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data) {
     // Set the pixel color
     Ptr[0] = 0;
     Ptr[1] = 0;
-    Ptr[2] = 180;
+    Ptr[2] = 170 + variance;
     Ptr[3] = 255;
 
 }
@@ -164,25 +163,6 @@ void ABloodSplatter::GenerateSplatter() {
                 probe_locations[probe][0] += (probe_directions[probe][0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
                 probe_locations[probe][1] += (probe_directions[probe][1] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
 
-                //make large dots
-                for (int l = 0; l < num_large_dots; l++) {
-                    FVector2d placement = { FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step),FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step) };
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data);
-                }
-
-                //make medium dots
-                for (int m = 0; m < num_medium_dots; m++) {
-                    FVector2d placement = { FMath::FRandRange(-2.0 * probe_variance - step,2.0f * probe_variance + step),FMath::FRandRange(-2.0f * probe_variance - step,2.0f * probe_variance + step) };
-
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data);
-                }
-
-                //make small dots
-                for (int s = 0; s < num_small_dots; s++) {
-                    FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step),FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step) };
-
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data);
-                }
 
 
                 //perform raytrace. if collision detected, break out of the loop
@@ -190,7 +170,7 @@ void ABloodSplatter::GenerateSplatter() {
 
                 FHitResult HitResult;
                 FVector Start = location;  // The starting point of your splatter
-                FVector End = { probe_locations[probe][0] + location[0] - (texture_width/2), location[1], -(probe_locations[probe][1] - (texture_height/2)) + location[2]};  // The current probe's location
+                FVector End = { probe_locations[probe][0] + location[0] - (texture_width / 2), location[1], -(probe_locations[probe][1] - (texture_height / 2)) + location[2] };  // The current probe's location
                 FCollisionQueryParams TraceParams(FName(TEXT("BloodSplatterTrace")), true);
 
                 // Perform the line trace
@@ -208,8 +188,34 @@ void ABloodSplatter::GenerateSplatter() {
                     //break;
                     probe_directions[probe][0] = 0;
                     probe_directions[probe][1] = 0;
-
                 }
+
+
+
+
+
+                //make large dots
+                for (int l = 0; l < num_large_dots; l++) {
+                    FVector2d placement = { FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step),FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step) };
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data,FMath::RandRange(-40,40));
+                }
+
+                //make medium dots
+                for (int m = 0; m < num_medium_dots; m++) {
+                    FVector2d placement = { FMath::FRandRange(-2.0 * probe_variance - step,2.0f * probe_variance + step),FMath::FRandRange(-2.0f * probe_variance - step,2.0f * probe_variance + step) };
+
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data, FMath::RandRange(-40,40));
+                }
+
+                //make small dots
+                for (int s = 0; s < num_small_dots; s++) {
+                    FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step),FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step) };
+
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data, FMath::RandRange(-40,40));
+                }
+
+
+
 
 
 
@@ -274,6 +280,12 @@ void ABloodSplatter::PlaceSplatter() {
     NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, {0,0});
     NewSprite->RebuildRenderData();
   
+
+    UMaterialInterface* BloodMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Assets/Materials/BloodMaterial.BloodMaterial"));
+    UMaterialInstanceDynamic* BloodMaterialInstance = UMaterialInstanceDynamic::Create(BloodMaterial, this);
+    
+    SpriteComponent->SetTranslucentSortPriority(FMath::RandRange(0,5000));
+    SpriteComponent->SetMaterial(0, BloodMaterialInstance);
     SpriteComponent->SetSprite(NewSprite);
     SpriteComponent->MarkRenderStateDirty();
     SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);

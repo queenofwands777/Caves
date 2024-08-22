@@ -314,7 +314,7 @@ void ATerrainGenerator::GenerateMap() {
     GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
-    int num_chests = 7;
+    int num_chests = 3;
     int num_altars = 1;
 
     while (num_chests+num_altars > rooms.size()) {
