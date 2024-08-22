@@ -16,8 +16,6 @@
 #define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
-
-
 enum TERRAIN {
     STONE_WALL_0 = 0,
     STONE_WALL_1 = 2,
@@ -50,7 +48,6 @@ void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponen
     TerrainMapData[index] = tilemap;
 
 }
-
 
 void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
 
@@ -98,7 +95,6 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     }
 }
 
-
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
@@ -138,7 +134,18 @@ ATerrainGenerator::ATerrainGenerator()
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 }
 
+enum ENEMIES {
+    Demon = 0,
+    Hellhound = 1,
+    Imp = 2,
+    Shade = 3
+};
 
+enum OBJECTS {
+    Portal = 0,
+    Chest = 1,
+    Altar = 2
+};
 
 // Called when the game starts or when spawned
 void ATerrainGenerator::BeginPlay()
@@ -172,16 +179,15 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
     for (int i = 0; i < 6; i++) {
         x += FMath::RandRange(-1, 1);
         y += FMath::RandRange(-1, 1);
-        SetTile(x, y, floor_material, 5);
+        SetTile(x, y, floor_material, 8);
 
     }
-    int Chest = FMath::RandRange(0, 100);
-    if (Chest >50) {
-        FVector location;
-        location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
-        FRotator rotation = { 0,0,0 };
-        GetWorld()->SpawnActor<AActor>(Objects[1], location, rotation);
-    }
+
+    //spawn marker
+    FVector marker_location;
+    marker_location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
+    RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
+    rooms.push_back(marker);
     
 }
 
@@ -194,7 +200,8 @@ public:
         heading = _heading;
         parent = _parent;
 
-        direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
+        direction = {1, 0};
+
         Generate();
     }
 
@@ -212,27 +219,31 @@ public:
         while (lifetime > 0) {
 
             //move
-            heading += FMath::RandRange(-20, 20);
+            heading += FMath::RandRange(-10, 10);
             float rotation_radians = FMath::DegreesToRadians(heading);
-            FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
-                (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
-            //probe_direction.Normalize();
 
-            cursor_x += probe_direction[0];
-            cursor_y += probe_direction[1];
+            FVector2D new_direction = { 
+                (direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
+                (direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
+            };
+
+            //direction = new_direction;
+
+            cursor_x += new_direction[0];
+            cursor_y += new_direction[1];
 
             //set tile
             parent->SetTile(cursor_x, cursor_y, parent->floor_material, 4);
 
             //generate offshoot
-            int offshoot = FMath::RandRange(0, 100);
-            if (offshoot > 98) {
-                GeneratorProbe new_offshoot = GeneratorProbe(lifetime/2, cursor_x, cursor_y, heading + (FMath::RandRange(45, 90) * ((FMath::RandBool() * 2) - 1)), parent);
+            int offshoot = FMath::RandRange(0, 1000);
+            if ((offshoot > 960)&&(lifetime > parent->CURSOR_LIFETIME/5)) {
+                GeneratorProbe new_offshoot = GeneratorProbe(lifetime/2, cursor_x, cursor_y, heading + (FMath::RandRange(45, 135) * ((FMath::RandBool() * 2) - 1)), parent);
             }
-
+            
             //generate room
-            int room = FMath::RandRange(0, 100);
-            if (room > 98) {
+            int room = FMath::RandRange(0, 1000);
+            if ((room > 990) && (lifetime > parent->CURSOR_LIFETIME / 5)) {
                 parent->MakeRoom(cursor_x, cursor_y);
             }
 
@@ -248,12 +259,7 @@ public:
 
             lifetime--;
         }
-        for (int i = 0; i < 5; i++) {
-            cursor_x += FMath::RandRange(-1, 1);
-            cursor_y += FMath::RandRange(-1, 1);
-            parent->SetTile(cursor_x, cursor_y, parent->floor_material, 8);
-
-        }
+        parent->MakeRoom(cursor_x, cursor_y);
     }
 };
 
@@ -261,114 +267,79 @@ public:
 void ATerrainGenerator::GenerateMap() {
 
     PRINT("Generating Map");
-        //static ConstructorHelpers::FClassFinder<AActor> EnemyBlueprint(TEXT("/Game/Caves/Content/Blueprints/enemy.uasset"));
 
-
-    //COPY FOR OBJECT
-    int lifetime = CURSOR_LIFETIME;
+    //set start location
     float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
     float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
-    //END COPY
-
-
-
-
-
-
-
-
-
-
-
+    
     //create spawn area
     SetTile(cursor_x, cursor_y, floor_material, 8);
     FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(16*TILE_HEIGHT) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //COPY FOR OBJECT
-    float heading = FMath::RandRange(-360,360);
-    FVector2d direction = { FMath::Cos(FMath::DegreesToRadians(heading)), FMath::Sin(FMath::DegreesToRadians(heading)) };
-
-    while (lifetime > 0) {
-
-        //move
-        heading += FMath::RandRange(-20, 20);
-        float rotation_radians = FMath::DegreesToRadians(heading);
-        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[1] * FMath::Sin(rotation_radians)),
-            (direction[0] * FMath::Sin(rotation_radians)) + (-direction[1] * FMath::Cos(rotation_radians)) };
-        //probe_direction.Normalize();
-
-        cursor_x += probe_direction[0];
-        cursor_y += probe_direction[1];
-
-        //set tile
-        SetTile(cursor_x, cursor_y, floor_material, 4);
-
-        //generate offshoot
-        int offshoot = FMath::RandRange(0, 100);
-        if (offshoot > 96) {
-            GeneratorProbe new_offshoot = GeneratorProbe(lifetime/2, cursor_x, cursor_y, heading + (FMath::RandRange(45,90)*((FMath::RandBool()*2)-1)), this);
-        }
-
-        //generate room
-        int room = FMath::RandRange(0, 100);
-        if (room > 98) {
-            MakeRoom(cursor_x, cursor_y);
-            
-        }
-
-        //place enemy
-        int encounter = FMath::RandRange(0, 100);
-        if (encounter > 95) {
-            FVector location;
-            location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16*15))};
-            FRotator rotation = { 0,0,0 };
-            GetWorld()->SpawnActor<AActor>( Enemies[FMath::RandRange(0,3)], location, rotation);
-        }
-
-
-        lifetime--;
-    }
-    //END COPY
-    
-
-    MakeRoom(cursor_x, cursor_y);
-
     FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
     GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
+    int num_chests = 7;
+    int num_altars = 1;
 
+    while (num_chests+num_altars > rooms.size()) {
+        float heading = FMath::RandRange(0, 360);
+        GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, cursor_x, cursor_y, heading, this);
+    }
 
+    for (int i = 0; i < num_altars; i++) {
+        int num_rooms = rooms.size();
+        if (num_rooms > 0) {
+            int rand_room = FMath::RandRange(0, num_rooms - 1);
+            float room_x = rooms[rand_room].x;
+            float room_y = rooms[rand_room].y;
+            float offset_x = FMath::FRandRange(-5.0, 5.0);
+            float offset_y = FMath::FRandRange(-5.0, 5.0);
+            float spawn_x = room_x + offset_x;
+            float spawn_y = room_y + offset_y;
 
-
-
-    for (int i = 0; i < TerrainMapData.Num(); i++) {
-        UPaperTileMapComponent* target = TerrainMapData[i];
-        if (target != nullptr) {
-            //target->SetCollisionObjectType(ECC_EngineTraceChannel5);
-            target->RebuildCollision();
-            target->TileMap->RebuildCollision();
-            //target->MarkPackageDirty();
+            FVector chest_location;
+            chest_location = { spawn_x, 2.0, spawn_y };
+            FRotator rotation = { 0,0,0 };
+            GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Altar], chest_location, rotation);
+            rooms.erase(rooms.begin() + rand_room);
         }
 
     }
 
+    for (int i = 0; i < num_chests; i++) {
+        int num_rooms = rooms.size();
+        if (num_rooms > 0) {
+            int rand_room = FMath::RandRange(0, num_rooms-1);
+            float room_x = rooms[rand_room].x;
+            float room_y = rooms[rand_room].y;
+            float offset_x = FMath::FRandRange(-5.0, 5.0);
+            float offset_y = FMath::FRandRange(-5.0, 5.0);
+            float spawn_x = room_x + offset_x;
+            float spawn_y = room_y + offset_y;
+
+            FVector chest_location;
+            chest_location = { spawn_x, 2.0, spawn_y };
+            FRotator rotation = { 0,0,0 };
+            GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Chest], chest_location, rotation);
+            rooms.erase(rooms.begin() + rand_room);
+        }
+    }
 
 
+
+
+
+    //rebuild terrain map
+    for (int i = 0; i < TerrainMapData.Num(); i++) {
+        UPaperTileMapComponent* target = TerrainMapData[i];
+        if (target != nullptr) {
+            target->RebuildCollision();
+            target->TileMap->RebuildCollision();
+        }
+    }
 }
 
 

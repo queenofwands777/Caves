@@ -2,6 +2,18 @@
 
 #pragma once
 
+
+struct RoomMarker {
+	float x;
+	float y;
+
+	RoomMarker(float _x, float _y) {
+		x = _x;
+		y = _y;
+	}
+};
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
@@ -17,7 +29,6 @@ class CAVES_API ATerrainGenerator : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATerrainGenerator();
-	//ATerrainGenerator(int _floor);
 
 protected:
 
@@ -31,7 +42,7 @@ public:
 
 	const int LEVEL_WIDTH = 1024;
 	const int LEVEL_HEIGHT = 1024;
-	const int CURSOR_LIFETIME = 100;
+	const int CURSOR_LIFETIME = 60;
 
 	const int MAP_WIDTH = 16;
 	const int MAP_HEIGHT = 16;
@@ -46,6 +57,7 @@ public:
 	int floor = 0;
 
 	UPaperTileSet* LevelTileSet;
+	std::vector<RoomMarker> rooms;
 	
 
 public:
@@ -62,3 +74,5 @@ public:
 	TArray<TSubclassOf<AActor>> Objects;
 	TSubclassOf<AActor> Player ;
 };
+
+
