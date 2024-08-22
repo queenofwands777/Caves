@@ -135,15 +135,15 @@ void ABloodSplatter::GenerateSplatter() {
 
 
     //initialize probes
-  
-
     for (int i = 0; i < num_probes; i++) {
 
         //calculate and apply local rotation (spread)
         float probe_rotation = (i * (max_angle / num_probes)) - (max_angle / 2);
         float rotation_radians = FMath::DegreesToRadians(probe_rotation);
-        FVector2d probe_direction = { (direction[0] * FMath::Cos(rotation_radians)) - (-direction[2] * FMath::Sin(rotation_radians)),
-            (direction[0] * FMath::Sin(rotation_radians)) + (-direction[2] * FMath::Cos(rotation_radians)) };
+        FVector2d probe_direction = {
+                (direction[0] * FMath::Cos(rotation_radians)) - (direction[2] * FMath::Sin(rotation_radians)),
+                (direction[0] * FMath::Sin(rotation_radians)) + (direction[2] * FMath::Cos(rotation_radians))
+        };
 
         //set origin
         FVector2d probe_location = { float(texture_width / 2), float(texture_height / 2) };
@@ -154,21 +154,15 @@ void ABloodSplatter::GenerateSplatter() {
     }
 
 
+    //move probes
     for (int snapshot = 0; snapshot < num_frames; snapshot++) {
 
-
-
         for (int probe = 0; probe < num_probes; probe++) {
-
-
-
-
 
             for (int step = probe_lifetime * snapshot; step < probe_lifetime + (probe_lifetime * snapshot); step++) {
 
                 probe_locations[probe][0] += (probe_directions[probe][0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
                 probe_locations[probe][1] += (probe_directions[probe][1] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
-
 
                 //make large dots
                 for (int l = 0; l < num_large_dots; l++) {
@@ -190,7 +184,36 @@ void ABloodSplatter::GenerateSplatter() {
                     PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data);
                 }
 
-            } //end probe lifetime
+
+                //perform raytrace. if collision detected, break out of the loop
+
+
+                FHitResult HitResult;
+                FVector Start = location;  // The starting point of your splatter
+                FVector End = { probe_locations[probe][0] + location[0] - (texture_width/2), location[1], -(probe_locations[probe][1] - (texture_height/2)) + location[2]};  // The current probe's location
+                FCollisionQueryParams TraceParams(FName(TEXT("BloodSplatterTrace")), true);
+
+                // Perform the line trace
+                bool bHit = GetWorld()->LineTraceSingleByChannel(
+                    HitResult,
+                    Start,
+                    End,
+                    ECC_GameTraceChannel1,  // You can choose the appropriate collision channel
+                    TraceParams
+                );
+
+
+                if (HitResult.bBlockingHit) {
+                    //DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Green, false, 100, 0, 1);
+                    //break;
+                    probe_directions[probe][0] = 0;
+                    probe_directions[probe][1] = 0;
+
+                }
+
+
+
+            } //end step
 
         } //end probe
 
@@ -246,11 +269,7 @@ void ABloodSplatter::PlaceSplatter() {
 
     UPaperSprite* NewSprite = NewObject<UPaperSprite>();
     
-
     NewSprite->InitializeSprite(params);
-
-    //NewSprite->GetSourceUV() = {0,0};
-    //NewSprite->GetSourceSize() = { texture_width,texture_height };
 
     NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, {0,0});
     NewSprite->RebuildRenderData();

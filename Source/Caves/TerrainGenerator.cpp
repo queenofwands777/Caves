@@ -23,12 +23,14 @@ enum TERRAIN {
     STONE_FLOOR_0 = 1,
     STONE_FLOOR_1 = 3,
     STONE_FLOOR_2 = 5,
+
     FIRE_WALL_0 = 19,
     FIRE_WALL_1 = 20,
     FIRE_WALL_2 = 21,
     FIRE_FLOOR_0 = 16,
     FIRE_FLOOR_1 = 17,
     FIRE_FLOOR_2 = 18,
+
     ICE_WALL_0 = 35,
     ICE_WALL_1 = 36,
     ICE_WALL_2 = 37,
@@ -36,6 +38,22 @@ enum TERRAIN {
     ICE_FLOOR_1 = 33,
     ICE_FLOOR_2 = 34,
 };
+
+namespace LEVEL {
+
+    const int TILES[3][2][3] = {
+
+        { { TERRAIN::STONE_WALL_0,TERRAIN::STONE_WALL_1,TERRAIN::STONE_WALL_2 },
+        {TERRAIN::STONE_FLOOR_0,TERRAIN::STONE_FLOOR_1,TERRAIN::STONE_FLOOR_2} },
+
+        { { TERRAIN::FIRE_WALL_0,TERRAIN::FIRE_WALL_1,TERRAIN::FIRE_WALL_2}, 
+        { TERRAIN::FIRE_FLOOR_0,TERRAIN::FIRE_FLOOR_1,TERRAIN::FIRE_FLOOR_2 }},
+
+        { { TERRAIN::ICE_WALL_0,TERRAIN::ICE_WALL_1,TERRAIN::ICE_WALL_2 }, 
+        { TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2 } }
+
+    };
+} 
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
     int index = (grid_x * LEVEL_HEIGHT) + grid_y;
@@ -53,10 +71,25 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
     //input_x and input_y are in terms of the world coordinates on a tile level
 
+
+
+
+
+
+
+
     //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
     TileInfo.PackedTileIndex = terrain;
+
+
+
+
+
+
+
+
 
     //set tiles according to brush size
     for (int xx = -size/2; xx < size/2; xx++) {
