@@ -26,7 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void InitSplatter();
-	void GenerateSplatter();
+	void GenerateSplatter(int snapshot);
 	void PlaceSplatter();
 	void PlaceFrame(int frame);
 
@@ -47,6 +47,8 @@ public:
 	TArray<FVector2d> probe_directions;
 
 	int frame_timer = 0;
+
+	int frame_rate_timer = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	int num_probes = 0;

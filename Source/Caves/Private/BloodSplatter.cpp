@@ -10,6 +10,8 @@
 
 
 ABloodSplatter::ABloodSplatter(){
+    PrimaryActorTick.bCanEverTick = true;
+
     SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SpriteComponent"));
     RootComponent = SpriteComponent;
     this->SetActorEnableCollision(false);
@@ -21,7 +23,7 @@ ABloodSplatter::ABloodSplatter(){
 void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	
 
     num_probes = _num_probes;
     max_angle = _max_angle;
@@ -46,13 +48,15 @@ void ABloodSplatter::BeginPlay()
 void ABloodSplatter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-
+    
+    if (frame_rate_timer < 1) {
+        frame_rate_timer++;
+    } else
     if (frame_timer < num_frames) {
         //update texture in level
-        PlaceFrame(frame_timer);
+        GenerateSplatter(frame_timer);
         frame_timer++;
+        frame_rate_timer = 0;
     }
 
 }
@@ -89,8 +93,8 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data, int variance) {
 
 void ABloodSplatter::Splatter() {
     InitSplatter();
-    GenerateSplatter();
-    PlaceSplatter();
+    //GenerateSplatter(1);
+    //PlaceSplatter();
 }
 
 //initialize the texture to be printed on
@@ -119,17 +123,17 @@ void ABloodSplatter::InitSplatter() {
     // Unlock the texture
     Mip.BulkData.Unlock();
     splatter_texture->UpdateResource();
-}
 
-void ABloodSplatter::GenerateSplatter() {
+    //call once
+    UMaterialInterface* BloodMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Assets/Materials/BloodMaterial.BloodMaterial"));
+    UMaterialInstanceDynamic* BloodMaterialInstance = UMaterialInstanceDynamic::Create(BloodMaterial, this);
 
+    //call once
+    SpriteComponent->SetTranslucentSortPriority(FMath::RandRange(0, 5000));
+    SpriteComponent->SetMaterial(0, BloodMaterialInstance);
 
-    int num_small_dots = 3 * blood_quantity;
-    int num_medium_dots = 2 * blood_quantity;
-    int num_large_dots = 1 * blood_quantity;
-
-    FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
-    void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+    //call once
+    SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
 
 
@@ -153,8 +157,27 @@ void ABloodSplatter::GenerateSplatter() {
     }
 
 
+
+
+}
+
+void ABloodSplatter::GenerateSplatter(int snapshot) {
+
+
+    int num_small_dots = 3 * blood_quantity;
+    int num_medium_dots = 2 * blood_quantity;
+    int num_large_dots = 1 * blood_quantity;
+
+    FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
+    void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+
+
+
+
+
+
     //move probes
-    for (int snapshot = 0; snapshot < num_frames; snapshot++) {
+    
 
         for (int probe = 0; probe < num_probes; probe++) {
 
@@ -230,12 +253,13 @@ void ABloodSplatter::GenerateSplatter() {
         
         //HERE IS THE PROBLEM!! I want to add a copy of the current state of the texture to the list of frames. OR, print the texture as it currently is into the level, and make the whole thing
         //generate based on the tick.
+        PlaceSplatter();
 
 
         Mip.BulkData.Lock(LOCK_READ_WRITE);
 
 
-    } //end snapshot
+
 
     Mip.BulkData.Unlock();
     splatter_texture->UpdateResource();
@@ -266,7 +290,6 @@ void ABloodSplatter::PlaceFrame(int frame) {
 
 void ABloodSplatter::PlaceSplatter() {
 
-    // Create a new sprite
     FSpriteAssetInitParameters params;
     params.SetTextureAndFill(splatter_texture);
     params.SetPixelsPerUnrealUnit(1);
@@ -274,21 +297,12 @@ void ABloodSplatter::PlaceSplatter() {
     params.Offset = { 0,0 };
 
     UPaperSprite* NewSprite = NewObject<UPaperSprite>();
-    
     NewSprite->InitializeSprite(params);
-
     NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, {0,0});
     NewSprite->RebuildRenderData();
   
-
-    UMaterialInterface* BloodMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Assets/Materials/BloodMaterial.BloodMaterial"));
-    UMaterialInstanceDynamic* BloodMaterialInstance = UMaterialInstanceDynamic::Create(BloodMaterial, this);
-    
-    SpriteComponent->SetTranslucentSortPriority(FMath::RandRange(0,5000));
-    SpriteComponent->SetMaterial(0, BloodMaterialInstance);
+    //call on tick
     SpriteComponent->SetSprite(NewSprite);
     SpriteComponent->MarkRenderStateDirty();
-    SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-    
 }
 
