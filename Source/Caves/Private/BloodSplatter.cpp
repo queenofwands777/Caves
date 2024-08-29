@@ -14,7 +14,7 @@ ABloodSplatter::ABloodSplatter(){
 
     SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SpriteComponent"));
     RootComponent = SpriteComponent;
-    this->SetActorEnableCollision(false);
+    this->SetActorEnableCollision(true);
     
 
 }
@@ -42,6 +42,7 @@ void ABloodSplatter::BeginPlay()
 {
 	Super::BeginPlay();
 
+
 }
 
 // Called every frame
@@ -55,8 +56,84 @@ void ABloodSplatter::Tick(float DeltaTime)
     if (frame_timer < num_frames) {
         //update texture in level
         GenerateSplatter(frame_timer);
+
+
+
+
         frame_timer++;
         frame_rate_timer = 0;
+    }
+
+    //consider putting a flag up to skip this after the first time
+    if (frame_timer == num_frames) {
+
+        SpriteComponent->GetSprite()->RebuildCollisionData();
+
+        TArray<FVector2D> Points = {{0, 0}};
+        for (int i = 0; i < probe_locations.Num(); i++) {
+            Points.Add(probe_locations[i]);
+        }
+
+        if (Points.Num() < 3) {
+            Points.Add({ Points[1][0] + FMath::FRandRange(-1.0,1.0),Points[1][1] + FMath::FRandRange(-1.0,1.0) });
+        }
+
+
+
+
+
+
+
+
+
+        TArray<FVector> Vertices;
+        Vertices.Add({0, 0, 0});
+        for (int i = 1; i < Points.Num(); i++)
+        {
+            const FVector2D& Point = Points[i];
+            Vertices.Add({(Point[0] - float(texture_width / 2)), 0, -(Point[1] - float(texture_height / 2) )}); // Z is 0 for a 2D collision plane
+            //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Cyan, TEXT("point added to vertices:"));
+            //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Cyan, Vertices[i].ToString());
+        }
+
+        UPaperSprite* Sprite = SpriteComponent->GetSprite();
+        Sprite->BodySetup->AggGeom.EmptyElements();
+        // Create a new convex collision element
+        FKConvexElem NewConvex;
+        NewConvex.VertexData = Vertices;
+        NewConvex.UpdateElemBox(); // Update the bounding box based on vertices
+        // Add the convex element to the BodySetup
+        
+        Sprite->BodySetup->InvalidatePhysicsData();
+        Sprite->BodySetup->AggGeom.ConvexElems.Add(NewConvex);
+        // Update the physics state
+        Sprite->BodySetup->CreatePhysicsMeshes();
+        //Sprite->RebuildCollisionData();
+        SpriteComponent->SetSprite(Sprite);
+        SpriteComponent->RecreatePhysicsState();
+        SpriteComponent->MarkRenderStateDirty();
+        //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("searching for hull..."));
+        //for (int i = 0; i < SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems.Num(); i++) {
+        //    GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("found convex hull"));
+        //    for (int ii = 0; ii < SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems[i].VertexData.Num(); ii++) {
+        //        GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("found vertex"));
+        //        GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems[i].VertexData[ii].ToString());
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+        frame_timer++;
+
     }
 
 }
@@ -133,7 +210,12 @@ void ABloodSplatter::InitSplatter() {
     SpriteComponent->SetMaterial(0, BloodMaterialInstance);
 
     //call once
+    //SpriteComponent->GetCollisionShape();
+    SpriteComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    SpriteComponent->SetCollisionProfileName(TEXT("OverlapAll"));
+    SpriteComponent->SetCollisionObjectType(ECC_WorldDynamic);
     SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+    SpriteComponent->SetGenerateOverlapEvents(true);
 
 
 
@@ -256,6 +338,7 @@ void ABloodSplatter::GenerateSplatter(int snapshot) {
         PlaceSplatter();
 
 
+
         Mip.BulkData.Lock(LOCK_READ_WRITE);
 
 
@@ -300,9 +383,13 @@ void ABloodSplatter::PlaceSplatter() {
     NewSprite->InitializeSprite(params);
     NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, {0,0});
     NewSprite->RebuildRenderData();
-  
-    //call on tick
+
+    NewSprite->BodySetup->AggGeom.EmptyElements();
+    NewSprite->BodySetup->InvalidatePhysicsData();
+    NewSprite->BodySetup->CreatePhysicsMeshes();
     SpriteComponent->SetSprite(NewSprite);
+    SpriteComponent->RecreatePhysicsState();
     SpriteComponent->MarkRenderStateDirty();
+  
 }
 

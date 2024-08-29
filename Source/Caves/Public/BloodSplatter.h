@@ -3,9 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/CollisionProfile.h"
+#include "PhysicsEngine/BodySetup.h"
 #include "PaperSpriteComponent.h"
+#include "DrawDebugHelpers.h"
 #include "PaperSprite.h"
 #include "PaperSpriteAtlas.h"
+//#include "Components/ConvexComponent.h"
 #include "GameFramework/Actor.h"
 #include "BloodSplatter.generated.h"
 
@@ -40,8 +44,8 @@ public:
 	void InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
 
 public:
-	int texture_width = 512;
-	int texture_height = 512;
+	int texture_width = 256;
+	int texture_height = 256;
 
 	TArray<FVector2d> probe_locations;
 	TArray<FVector2d> probe_directions;
