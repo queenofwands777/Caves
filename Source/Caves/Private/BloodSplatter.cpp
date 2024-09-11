@@ -163,7 +163,7 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data, int variance) {
     // Set the pixel color
     Ptr[0] = 0;
     Ptr[1] = 0;
-    Ptr[2] = 170 + variance;
+    Ptr[2] = 160 + variance;
     Ptr[3] = 255;
 
 }
@@ -302,21 +302,21 @@ void ABloodSplatter::GenerateSplatter(int snapshot) {
                 //make large dots
                 for (int l = 0; l < num_large_dots; l++) {
                     FVector2d placement = { FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step),FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step) };
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data,FMath::RandRange(-40,40));
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data,FMath::RandRange(-80,80));
                 }
 
                 //make medium dots
                 for (int m = 0; m < num_medium_dots; m++) {
                     FVector2d placement = { FMath::FRandRange(-2.0 * probe_variance - step,2.0f * probe_variance + step),FMath::FRandRange(-2.0f * probe_variance - step,2.0f * probe_variance + step) };
 
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data, FMath::RandRange(-40,40));
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data, FMath::RandRange(-80,80));
                 }
 
                 //make small dots
                 for (int s = 0; s < num_small_dots; s++) {
                     FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step),FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step) };
 
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data, FMath::RandRange(-40,40));
+                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data, FMath::RandRange(-80,80));
                 }
 
 
