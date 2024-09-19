@@ -4,6 +4,8 @@
 #include "BloodSplatter.h"
 #include "Engine/Texture2D.h"
 #include "Engine/Texture2DDynamic.h"
+#include "DrawDebugHelpers.h"
+#include "PhysicsEngine/ConvexElem.h"
 
 #include "Runtime/Engine/Public/TextureResource.h"
 #include "RenderUtils.h"
@@ -80,56 +82,42 @@ void ABloodSplatter::Tick(float DeltaTime)
 
 
 
-
-
-
-
-
-
         TArray<FVector> Vertices;
         Vertices.Add({0, 0, 0});
         for (int i = 1; i < Points.Num(); i++)
         {
             const FVector2D& Point = Points[i];
-            Vertices.Add({(Point[0] - float(texture_width / 2)), 0, -(Point[1] - float(texture_height / 2) )}); // Z is 0 for a 2D collision plane
-            //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Cyan, TEXT("point added to vertices:"));
-            //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Cyan, Vertices[i].ToString());
+            Vertices.Add({(Point[0] - float(texture_width / 2)), 0, -(Point[1] - float(texture_height / 2) )}); 
         }
 
         UPaperSprite* Sprite = SpriteComponent->GetSprite();
         Sprite->BodySetup->AggGeom.EmptyElements();
-        // Create a new convex collision element
+
         FKConvexElem NewConvex;
         NewConvex.VertexData = Vertices;
-        NewConvex.UpdateElemBox(); // Update the bounding box based on vertices
-        // Add the convex element to the BodySetup
-        
-        Sprite->BodySetup->InvalidatePhysicsData();
-        Sprite->BodySetup->AggGeom.ConvexElems.Add(NewConvex);
-        // Update the physics state
-        Sprite->BodySetup->CreatePhysicsMeshes();
-        //Sprite->RebuildCollisionData();
-        SpriteComponent->SetSprite(Sprite);
-        SpriteComponent->RecreatePhysicsState();
-        SpriteComponent->MarkRenderStateDirty();
-        //GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("searching for hull..."));
-        //for (int i = 0; i < SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems.Num(); i++) {
-        //    GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("found convex hull"));
-        //    for (int ii = 0; ii < SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems[i].VertexData.Num(); ii++) {
-        //        GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, TEXT("found vertex"));
-        //        GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, SpriteComponent->GetSprite()->BodySetup->AggGeom.ConvexElems[i].VertexData[ii].ToString());
-        //    }
+        NewConvex.UpdateElemBox();
+
+
+        //render hitbox here
+        //for (int32 i = 0; i < Vertices.Num(); ++i)
+        //{
+        //    // Get the current vertex and the next one (wrap around at the end)
+        //    FVector Start = Vertices[i] + this->GetActorLocation();
+        //    FVector End = Vertices[(i + 1) % Vertices.Num()] + this->GetActorLocation();
+
+        //    // Draw a line between the two vertices
+        //    DrawDebugLine(GetWorld(), Start, End, FColor::Green, true, -1.f, 0, 1.f); // Thickness = 5.f
         //}
 
 
+        
+        Sprite->BodySetup->InvalidatePhysicsData();
+        Sprite->BodySetup->AggGeom.ConvexElems.Add(NewConvex);
 
-
-
-
-
-
-
-
+        Sprite->BodySetup->CreatePhysicsMeshes();
+        SpriteComponent->SetSprite(Sprite);
+        SpriteComponent->RecreatePhysicsState();
+        SpriteComponent->MarkRenderStateDirty();
 
 
         frame_timer++;

@@ -17,6 +17,7 @@
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 enum TERRAIN {
+    VOID = 6,
     STONE_WALL_0 = 0,
     STONE_WALL_1 = 2,
     STONE_WALL_2 = 4,
@@ -81,7 +82,6 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     //probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
     FPaperTileInfo TileInfo;
     TileInfo.TileSet = *LevelTileSet;
-    TileInfo.PackedTileIndex = terrain;
 
 
 
@@ -95,6 +95,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
     for (int xx = -size/2; xx < size/2; xx++) {
         for (int yy = -size/2; yy < size/2; yy++) {
 
+            TileInfo.PackedTileIndex = terrain;
+
             //input coords plus brush placement
             int world_x = input_x + xx;
             int world_y = input_y + yy;
@@ -106,11 +108,12 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
             int tilemap_x = (world_x - target_x) / MAP_WIDTH;
             int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
 
-            //check if we have violated bounds. if so, do not initialize a new map.
+            //check if the target tilemap is initialized. if not, initialize a new tilemap.
             if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
                 InitializeTileMap(tilemap_x, tilemap_y);
             }
 
+            //check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
             if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
 
                 for (int i = -1; i <= 1; i++) {
@@ -122,8 +125,79 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
                 }
             }
 
+            //set the tile
             UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
             host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+
+
+
+            TileInfo.PackedTileIndex = wall_material;
+            //set surrounding tiles to wall, if they are void
+            for (int mod_x = -1; mod_x <= 1; mod_x++) {
+                for (int mod_y = -1; mod_y <= 1; mod_y++) {
+
+                    int neighbor_x = target_x + mod_x;
+                    int neighbor_y = MAP_WIDTH - (target_y)-1 - mod_y;
+                    //int neighbor_y = MAP_WIDTH - (target_y) + mod_y;
+                    //int neighbor_y = target_y + mod_y;
+
+
+
+
+
+                    if ((neighbor_x < MAP_WIDTH)&&(neighbor_y < MAP_HEIGHT)&&(neighbor_x >= 0)&&(neighbor_y >= 0)) {
+                        FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
+                        if (neighbor_cell.PackedTileIndex == TERRAIN::VOID) {
+                            host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
+                        }
+                    }
+
+
+
+                    else {
+                        int x_over_violation = neighbor_x >= MAP_WIDTH;
+                        int x_under_violation = neighbor_x < 0;
+                        int y_over_violation = neighbor_y >= MAP_HEIGHT;
+                        int y_under_violation = neighbor_y < 0;
+
+                        int nudge_x = 0 - x_under_violation + x_over_violation;
+                        int nudge_y = 0 + y_under_violation - y_over_violation;
+
+
+
+
+
+
+
+                        int relative_x = ((MAP_WIDTH) * x_under_violation) + neighbor_x + (-MAP_WIDTH * x_over_violation);
+                        int relative_y = ((MAP_HEIGHT) * y_under_violation) + neighbor_y + (-MAP_HEIGHT * y_over_violation);
+
+                        UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
+                        FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
+
+                        if (neighbor_cell.PackedTileIndex == TERRAIN::VOID) {
+                            target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
+                        }
+
+
+
+
+
+
+
+
+                    }
+
+                }
+            }
+
+
+
+
+
+
+
+
         }
     }
 }
@@ -414,7 +488,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
         for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
-            TileInfo.PackedTileIndex = wall_material;
+            TileInfo.PackedTileIndex = TERRAIN::VOID;
             tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
         }
     }
