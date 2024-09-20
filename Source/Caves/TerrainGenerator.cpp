@@ -138,8 +138,6 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
                     int neighbor_x = target_x + mod_x;
                     int neighbor_y = MAP_WIDTH - (target_y)-1 - mod_y;
-                    //int neighbor_y = MAP_WIDTH - (target_y) + mod_y;
-                    //int neighbor_y = target_y + mod_y;
 
 
 

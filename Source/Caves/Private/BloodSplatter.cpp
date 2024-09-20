@@ -104,7 +104,6 @@ void ABloodSplatter::Tick(float DeltaTime)
         //    // Get the current vertex and the next one (wrap around at the end)
         //    FVector Start = Vertices[i] + this->GetActorLocation();
         //    FVector End = Vertices[(i + 1) % Vertices.Num()] + this->GetActorLocation();
-
         //    // Draw a line between the two vertices
         //    DrawDebugLine(GetWorld(), Start, End, FColor::Green, true, -1.f, 0, 1.f); // Thickness = 5.f
         //}
