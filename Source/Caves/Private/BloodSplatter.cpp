@@ -157,8 +157,6 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data, int variance) {
 
 void ABloodSplatter::Splatter() {
     InitSplatter();
-    //GenerateSplatter(1);
-    //PlaceSplatter();
 }
 
 //initialize the texture to be printed on
@@ -248,115 +246,85 @@ void ABloodSplatter::GenerateSplatter(int snapshot) {
     //move probes
     
 
-        for (int probe = 0; probe < num_probes; probe++) {
+    for (int probe = 0; probe < num_probes; probe++) {
 
-            for (int step = probe_lifetime * snapshot; step < probe_lifetime + (probe_lifetime * snapshot); step++) {
+        for (int step = probe_lifetime * snapshot; step < probe_lifetime + (probe_lifetime * snapshot); step++) {
 
-                probe_locations[probe][0] += (probe_directions[probe][0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
-                probe_locations[probe][1] += (probe_directions[probe][1] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
-
-
-
-                //perform raytrace. if collision detected, break out of the loop
-
-
-                FHitResult HitResult;
-                FVector Start = location;  // The starting point of your splatter
-                FVector End = { probe_locations[probe][0] + location[0] - (texture_width / 2), location[1], -(probe_locations[probe][1] - (texture_height / 2)) + location[2] };  // The current probe's location
-                FCollisionQueryParams TraceParams(FName(TEXT("BloodSplatterTrace")), true);
-
-                // Perform the line trace
-                bool bHit = GetWorld()->LineTraceSingleByChannel(
-                    HitResult,
-                    Start,
-                    End,
-                    ECC_GameTraceChannel1,  // You can choose the appropriate collision channel
-                    TraceParams
-                );
-
-
-                if (HitResult.bBlockingHit) {
-                    //DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Green, false, 100, 0, 1);
-                    //break;
-                    probe_directions[probe][0] = 0;
-                    probe_directions[probe][1] = 0;
-                }
+            probe_locations[probe][0] += (probe_directions[probe][0] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
+            probe_locations[probe][1] += (probe_directions[probe][1] * probe_speed) + FMath::FRandRange(-probe_variance, probe_variance);
 
 
 
+            //perform raytrace. if collision detected, break out of the loop
 
 
-                //make large dots
-                for (int l = 0; l < num_large_dots; l++) {
-                    FVector2d placement = { FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step),FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step) };
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data,FMath::RandRange(-80,80));
-                }
+            FHitResult HitResult;
+            FVector Start = location;  // The starting point of your splatter
+            FVector End = { probe_locations[probe][0] + location[0] - (texture_width / 2), location[1], -(probe_locations[probe][1] - (texture_height / 2)) + location[2] };  // The current probe's location
+            FCollisionQueryParams TraceParams(FName(TEXT("BloodSplatterTrace")), true);
 
-                //make medium dots
-                for (int m = 0; m < num_medium_dots; m++) {
-                    FVector2d placement = { FMath::FRandRange(-2.0 * probe_variance - step,2.0f * probe_variance + step),FMath::FRandRange(-2.0f * probe_variance - step,2.0f * probe_variance + step) };
+            // Perform the line trace
+            bool bHit = GetWorld()->LineTraceSingleByChannel(
+                HitResult,
+                Start,
+                End,
+                ECC_GameTraceChannel1,  // You can choose the appropriate collision channel
+                TraceParams
+            );
 
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data, FMath::RandRange(-80,80));
-                }
 
-                //make small dots
-                for (int s = 0; s < num_small_dots; s++) {
-                    FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step),FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step) };
-
-                    PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data, FMath::RandRange(-80,80));
-                }
+            if (HitResult.bBlockingHit) {
+                //DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Green, false, 100, 0, 1);
+                //break;
+                probe_directions[probe][0] = 0;
+                probe_directions[probe][1] = 0;
+            }
 
 
 
 
 
+            //make large dots
+            for (int l = 0; l < num_large_dots; l++) {
+                FVector2d placement = { FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step),FMath::FRandRange(-1.0f * probe_variance - step,1.0f * probe_variance + step) };
+                PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 3, Data,FMath::RandRange(-80,80));
+            }
 
-            } //end step
+            //make medium dots
+            for (int m = 0; m < num_medium_dots; m++) {
+                FVector2d placement = { FMath::FRandRange(-2.0 * probe_variance - step,2.0f * probe_variance + step),FMath::FRandRange(-2.0f * probe_variance - step,2.0f * probe_variance + step) };
 
-        } //end probe
+                PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 2, Data, FMath::RandRange(-80,80));
+            }
 
+            //make small dots
+            for (int s = 0; s < num_small_dots; s++) {
+                FVector2d placement = { FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step),FMath::FRandRange(-3.0f * probe_variance - step,3.0f * probe_variance + step) };
 
-        Mip.BulkData.Unlock();
-        splatter_texture->UpdateResource();
-
-        
-        //HERE IS THE PROBLEM!! I want to add a copy of the current state of the texture to the list of frames. OR, print the texture as it currently is into the level, and make the whole thing
-        //generate based on the tick.
-        PlaceSplatter();
-
-
-
-        Mip.BulkData.Lock(LOCK_READ_WRITE);
+                PlaceDot(probe_locations[probe][0] + placement[0], probe_locations[probe][1] + placement[1], 1, Data, FMath::RandRange(-80,80));
+            }
 
 
 
+
+
+
+        } //end step
+
+    } //end probe
+
+
+    Mip.BulkData.Unlock();
+    splatter_texture->UpdateResource();
+
+    PlaceSplatter();
+
+    Mip.BulkData.Lock(LOCK_READ_WRITE);
 
     Mip.BulkData.Unlock();
     splatter_texture->UpdateResource();
 }
 
-void ABloodSplatter::PlaceFrame(int frame) {
-
-    // Create a new sprite
-    //FSpriteAssetInitParameters params;
-    //params.SetTextureAndFill(splatter_frames[frame]);
-    //params.SetPixelsPerUnrealUnit(1);
-    //params.Dimension = { texture_width,texture_height };
-    //params.Offset = { 0,0 };
-
-    //UPaperSprite* NewSprite = NewObject<UPaperSprite>();
-
-
-    //NewSprite->InitializeSprite(params);
-
-    //NewSprite->SetPivotMode(ESpritePivotMode::Center_Center, { 0,0 });
-    //NewSprite->RebuildRenderData();
-
-    //SpriteComponent->SetSprite(NewSprite);
-    //SpriteComponent->MarkRenderStateDirty();
-    //SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-
-}
 
 void ABloodSplatter::PlaceSplatter() {
 

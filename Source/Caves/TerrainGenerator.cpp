@@ -214,11 +214,13 @@ ATerrainGenerator::ATerrainGenerator()
     static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemyWalker(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Walker"));
 
     Enemies.Add(EnemyDemon.Class);
     Enemies.Add(EnemyHellhound.Class);
     Enemies.Add(EnemyImp.Class);
     Enemies.Add(EnemyShade.Class);
+    Enemies.Add(EnemyWalker.Class);
 
     //load objects
     static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
@@ -243,7 +245,8 @@ enum ENEMIES {
     Demon = 0,
     Hellhound = 1,
     Imp = 2,
-    Shade = 3
+    Shade = 3,
+    Walker = 4,
 };
 
 enum OBJECTS {
@@ -358,7 +361,7 @@ public:
                 FVector location;
                 location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
                 FRotator rotation = { 0,0,0 };
-                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 3)], location, rotation);
+                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 4)], location, rotation);
             }
 
 

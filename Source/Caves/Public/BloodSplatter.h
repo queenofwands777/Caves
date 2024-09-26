@@ -32,7 +32,6 @@ public:
 	void InitSplatter();
 	void GenerateSplatter(int snapshot);
 	void PlaceSplatter();
-	void PlaceFrame(int frame);
 
 	UFUNCTION(BlueprintCallable, Category = "Splatter")
 	void Splatter();
@@ -84,9 +83,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
 	UTexture2D* splatter_texture = nullptr;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
-	TArray<UPaperSprite*> splatter_frames = {};
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite", meta = (AllowPrivateAccess = "true"))
     UPaperSpriteComponent* SpriteComponent = nullptr;

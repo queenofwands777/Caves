@@ -15,7 +15,6 @@ CAVES_API UClass* Z_Construct_UClass_ABloodSplatter_NoRegister();
 COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_UTexture2D_NoRegister();
-PAPER2D_API UClass* Z_Construct_UClass_UPaperSprite_NoRegister();
 PAPER2D_API UClass* Z_Construct_UClass_UPaperSpriteComponent_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Caves();
 // End Cross Module References
@@ -196,11 +195,6 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 		{ "Category", "Texture" },
 		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
 	};
-	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_splatter_frames_MetaData[] = {
-		{ "AllowPrivateAccess", "true" },
-		{ "Category", "Texture" },
-		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
-	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SpriteComponent_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "Sprite" },
@@ -218,8 +212,6 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 	static const UECodeGen_Private::FStructPropertyParams NewProp_direction;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_location;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_splatter_texture;
-	static const UECodeGen_Private::FObjectPropertyParams NewProp_splatter_frames_Inner;
-	static const UECodeGen_Private::FArrayPropertyParams NewProp_splatter_frames;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_SpriteComponent;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
@@ -243,8 +235,6 @@ const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ABloodSplatter_St
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_direction = { "direction", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, direction), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_direction_MetaData), NewProp_direction_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_location = { "location", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, location), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_location_MetaData), NewProp_location_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_texture = { "splatter_texture", nullptr, (EPropertyFlags)0x0010000000020015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, splatter_texture), Z_Construct_UClass_UTexture2D_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_splatter_texture_MetaData), NewProp_splatter_texture_MetaData) };
-const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_frames_Inner = { "splatter_frames", nullptr, (EPropertyFlags)0x0000000000020000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UPaperSprite_NoRegister, METADATA_PARAMS(0, nullptr) };
-const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_frames = { "splatter_frames", nullptr, (EPropertyFlags)0x0010000000020015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, splatter_frames), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_splatter_frames_MetaData), NewProp_splatter_frames_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ABloodSplatter_Statics::NewProp_SpriteComponent = { "SpriteComponent", nullptr, (EPropertyFlags)0x00100000000a001d, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ABloodSplatter, SpriteComponent), Z_Construct_UClass_UPaperSpriteComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SpriteComponent_MetaData), NewProp_SpriteComponent_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABloodSplatter_Statics::PropPointers[] = {
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_num_probes,
@@ -257,8 +247,6 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ABloodSpl
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_direction,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_location,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_texture,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_frames_Inner,
-	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_splatter_frames,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ABloodSplatter_Statics::NewProp_SpriteComponent,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_ABloodSplatter_Statics::PropPointers) < 2048);
@@ -302,10 +290,10 @@ ABloodSplatter::~ABloodSplatter() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 2057021692U) },
+		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 2497830769U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_875734620(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_3701294493(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
