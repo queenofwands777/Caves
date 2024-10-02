@@ -309,51 +309,51 @@ void ATerrainGenerator::BeginPlay()
     switch (floor) {
     case 0: 
         floor_material = TERRAIN::STONE_FLOOR_0;
-        wall_material = TERRAIN::STONE_WALL_1;
+        wall_material = TERRAIN::STONE_WALL_0;
         void_material = TERRAIN::LVL1_VOID;
         break;
     case 1:
         floor_material = TERRAIN::FIRE_FLOOR_0;
-        wall_material = TERRAIN::FIRE_WALL_1;
+        wall_material = TERRAIN::FIRE_WALL_0;
         void_material = TERRAIN::LVL2_VOID;
 
         break;
     case 2:
         floor_material = TERRAIN::ICE_FLOOR_0;
-        wall_material = TERRAIN::ICE_WALL_1;
+        wall_material = TERRAIN::ICE_WALL_0;
         void_material = TERRAIN::LVL3_VOID;
 
         break;
     case 3:
         floor_material = TERRAIN::LVL4_FLOOR_0;
-        wall_material = TERRAIN::LVL4_WALL_1;
+        wall_material = TERRAIN::LVL4_WALL_0;
         void_material = TERRAIN::LVL4_VOID;
 
         break;
 
     case 4:
         floor_material = TERRAIN::LVL5_FLOOR_0;
-        wall_material = TERRAIN::LVL5_WALL_1;
+        wall_material = TERRAIN::LVL5_WALL_0;
         void_material = TERRAIN::LVL5_VOID;
 
         break;
 
     case 5:
         floor_material = TERRAIN::LVL6_FLOOR_0;
-        wall_material = TERRAIN::LVL6_WALL_1;
+        wall_material = TERRAIN::LVL6_WALL_0;
         void_material = TERRAIN::LVL6_VOID;
 
         break;
     case 6:
         floor_material = TERRAIN::LVL7_FLOOR_0;
-        wall_material = TERRAIN::LVL7_WALL_1;
+        wall_material = TERRAIN::LVL7_WALL_0;
         void_material = TERRAIN::LVL7_VOID;
 
         break;
     default: 
-        floor_material = TERRAIN::LVL4_FLOOR_0;
-        wall_material = TERRAIN::LVL4_WALL_1;
-        void_material = TERRAIN::LVL4_VOID;
+        floor_material = TERRAIN::LVL5_FLOOR_0;
+        wall_material = TERRAIN::LVL5_WALL_0;
+        void_material = TERRAIN::LVL5_VOID;
         break;
     }
         
@@ -555,8 +555,6 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
     tile->TileMap->SetCollisionThickness(10.0);
     tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    //tile->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel5);
-    //tile->RebuildCollision();
     UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
 
     if (TileLayer)
