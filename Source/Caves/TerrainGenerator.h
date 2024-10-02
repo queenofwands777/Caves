@@ -52,6 +52,7 @@ public:
 
 	int floor_material;
 	int wall_material;
+	int void_material;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int floor = 0;

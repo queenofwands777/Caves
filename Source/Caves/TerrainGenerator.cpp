@@ -17,7 +17,7 @@
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 enum TERRAIN {
-    VOID = 6,
+    LVL1_VOID = 6,
     STONE_WALL_0 = 0,
     STONE_WALL_1 = 2,
     STONE_WALL_2 = 4,
@@ -25,6 +25,7 @@ enum TERRAIN {
     STONE_FLOOR_1 = 3,
     STONE_FLOOR_2 = 5,
 
+    LVL2_VOID = 22,
     FIRE_WALL_0 = 19,
     FIRE_WALL_1 = 20,
     FIRE_WALL_2 = 21,
@@ -32,17 +33,50 @@ enum TERRAIN {
     FIRE_FLOOR_1 = 17,
     FIRE_FLOOR_2 = 18,
 
+    LVL3_VOID = 38,
     ICE_WALL_0 = 35,
     ICE_WALL_1 = 36,
     ICE_WALL_2 = 37,
     ICE_FLOOR_0 = 32,
     ICE_FLOOR_1 = 33,
     ICE_FLOOR_2 = 34,
+
+    LVL4_VOID = 54,
+    LVL4_WALL_0 = 51,
+    LVL4_WALL_1 = 52,
+    LVL4_WALL_2 = 53,
+    LVL4_FLOOR_0 = 48,
+    LVL4_FLOOR_1 = 49,
+    LVL4_FLOOR_2 = 50,
+
+    LVL5_VOID = 70,
+    LVL5_WALL_0 = 67,
+    LVL5_WALL_1 = 68,
+    LVL5_WALL_2 = 69,
+    LVL5_FLOOR_0 = 64,
+    LVL5_FLOOR_1 = 65,
+    LVL5_FLOOR_2 = 66,
+
+    LVL6_VOID = 86,
+    LVL6_WALL_0 = 83,
+    LVL6_WALL_1 = 84,
+    LVL6_WALL_2 = 85,
+    LVL6_FLOOR_0 = 80,
+    LVL6_FLOOR_1 = 81,
+    LVL6_FLOOR_2 = 82,
+
+    LVL7_VOID = 102,
+    LVL7_WALL_0 = 99,
+    LVL7_WALL_1 = 100,
+    LVL7_WALL_2 = 101,
+    LVL7_FLOOR_0 = 96,
+    LVL7_FLOOR_1 = 97,
+    LVL7_FLOOR_2 = 98,
 };
 
 namespace LEVEL {
 
-    const int TILES[3][2][3] = {
+    const int TILES[7][2][3] = {
 
         { { TERRAIN::STONE_WALL_0,TERRAIN::STONE_WALL_1,TERRAIN::STONE_WALL_2 },
         {TERRAIN::STONE_FLOOR_0,TERRAIN::STONE_FLOOR_1,TERRAIN::STONE_FLOOR_2} },
@@ -51,7 +85,19 @@ namespace LEVEL {
         { TERRAIN::FIRE_FLOOR_0,TERRAIN::FIRE_FLOOR_1,TERRAIN::FIRE_FLOOR_2 }},
 
         { { TERRAIN::ICE_WALL_0,TERRAIN::ICE_WALL_1,TERRAIN::ICE_WALL_2 }, 
-        { TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2 } }
+        { TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2 } },
+
+        { { TERRAIN::LVL4_WALL_0,TERRAIN::LVL4_WALL_1,TERRAIN::LVL4_WALL_2 },
+        { TERRAIN::LVL4_FLOOR_0,TERRAIN::LVL4_FLOOR_1,TERRAIN::LVL4_FLOOR_2 } },
+
+        { { TERRAIN::LVL5_WALL_0,TERRAIN::LVL5_WALL_1,TERRAIN::LVL5_WALL_2 },
+        { TERRAIN::LVL5_FLOOR_0,TERRAIN::LVL5_FLOOR_1,TERRAIN::LVL5_FLOOR_2 } },
+
+        { { TERRAIN::LVL6_WALL_0,TERRAIN::LVL6_WALL_1,TERRAIN::LVL6_WALL_2 },
+        { TERRAIN::LVL6_FLOOR_0,TERRAIN::LVL6_FLOOR_1,TERRAIN::LVL6_FLOOR_2 } },
+
+        { { TERRAIN::LVL7_WALL_0,TERRAIN::LVL7_WALL_1,TERRAIN::LVL7_WALL_2 },
+        { TERRAIN::LVL7_FLOOR_0,TERRAIN::LVL7_FLOOR_1,TERRAIN::LVL7_FLOOR_2 } }
 
     };
 } 
@@ -145,7 +191,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
                     if ((neighbor_x < MAP_WIDTH)&&(neighbor_y < MAP_HEIGHT)&&(neighbor_x >= 0)&&(neighbor_y >= 0)) {
                         FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
-                        if (neighbor_cell.PackedTileIndex == TERRAIN::VOID) {
+                        if (neighbor_cell.PackedTileIndex == void_material) {
                             host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
                         }
                     }
@@ -173,7 +219,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
                         UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
                         FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
 
-                        if (neighbor_cell.PackedTileIndex == TERRAIN::VOID) {
+                        if (neighbor_cell.PackedTileIndex == void_material) {
                             target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
                         }
 
@@ -214,13 +260,13 @@ ATerrainGenerator::ATerrainGenerator()
     static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
-    static ConstructorHelpers::FClassFinder<AActor> EnemyWalker(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Walker"));
+    //static ConstructorHelpers::FClassFinder<AActor> EnemyWalker(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Walker"));
 
     Enemies.Add(EnemyDemon.Class);
     Enemies.Add(EnemyHellhound.Class);
     Enemies.Add(EnemyImp.Class);
     Enemies.Add(EnemyShade.Class);
-    Enemies.Add(EnemyWalker.Class);
+    //Enemies.Add(EnemyWalker.Class);
 
     //load objects
     static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
@@ -264,18 +310,50 @@ void ATerrainGenerator::BeginPlay()
     case 0: 
         floor_material = TERRAIN::STONE_FLOOR_0;
         wall_material = TERRAIN::STONE_WALL_1;
+        void_material = TERRAIN::LVL1_VOID;
         break;
     case 1:
         floor_material = TERRAIN::FIRE_FLOOR_0;
         wall_material = TERRAIN::FIRE_WALL_1;
+        void_material = TERRAIN::LVL2_VOID;
+
         break;
     case 2:
         floor_material = TERRAIN::ICE_FLOOR_0;
         wall_material = TERRAIN::ICE_WALL_1;
+        void_material = TERRAIN::LVL3_VOID;
+
+        break;
+    case 3:
+        floor_material = TERRAIN::LVL4_FLOOR_0;
+        wall_material = TERRAIN::LVL4_WALL_1;
+        void_material = TERRAIN::LVL4_VOID;
+
+        break;
+
+    case 4:
+        floor_material = TERRAIN::LVL5_FLOOR_0;
+        wall_material = TERRAIN::LVL5_WALL_1;
+        void_material = TERRAIN::LVL5_VOID;
+
+        break;
+
+    case 5:
+        floor_material = TERRAIN::LVL6_FLOOR_0;
+        wall_material = TERRAIN::LVL6_WALL_1;
+        void_material = TERRAIN::LVL6_VOID;
+
+        break;
+    case 6:
+        floor_material = TERRAIN::LVL7_FLOOR_0;
+        wall_material = TERRAIN::LVL7_WALL_1;
+        void_material = TERRAIN::LVL7_VOID;
+
         break;
     default: 
-        floor_material = TERRAIN::STONE_FLOOR_0;
-        wall_material = TERRAIN::STONE_WALL_1; 
+        floor_material = TERRAIN::LVL4_FLOOR_0;
+        wall_material = TERRAIN::LVL4_WALL_1;
+        void_material = TERRAIN::LVL4_VOID;
         break;
     }
         
@@ -361,7 +439,7 @@ public:
                 FVector location;
                 location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
                 FRotator rotation = { 0,0,0 };
-                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 4)], location, rotation);
+                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 3)], location, rotation);
             }
 
 
@@ -489,7 +567,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
     for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
         for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
-            TileInfo.PackedTileIndex = TERRAIN::VOID;
+            TileInfo.PackedTileIndex = void_material;
             tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
         }
     }
