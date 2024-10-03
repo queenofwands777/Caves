@@ -17,87 +17,115 @@
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 enum TERRAIN {
-    LVL1_VOID = 6,
-    STONE_WALL_0 = 0,
-    STONE_WALL_1 = 2,
-    STONE_WALL_2 = 4,
-    STONE_FLOOR_0 = 1,
-    STONE_FLOOR_1 = 3,
-    STONE_FLOOR_2 = 5,
+    LVL1_VOID = 15,
+    STONE_WALL_0 = 5,
+    STONE_WALL_1 = 6,
+    STONE_WALL_2 = 7,
+    STONE_WALL_3 = 8,
+    STONE_WALL_4 = 9,
+    STONE_FLOOR_0 = 0,
+    STONE_FLOOR_1 = 1,
+    STONE_FLOOR_2 = 2,
+    STONE_FLOOR_3 = 3,
+    STONE_FLOOR_4 = 4,
 
-    LVL2_VOID = 22,
-    FIRE_WALL_0 = 19,
-    FIRE_WALL_1 = 20,
-    FIRE_WALL_2 = 21,
+    LVL2_VOID = 31,
+    FIRE_WALL_0 = 21,
+    FIRE_WALL_1 = 22,
+    FIRE_WALL_2 = 23,
+    FIRE_WALL_3 = 24,
+    FIRE_WALL_4 = 25,
     FIRE_FLOOR_0 = 16,
     FIRE_FLOOR_1 = 17,
     FIRE_FLOOR_2 = 18,
+    FIRE_FLOOR_3 = 19,
+    FIRE_FLOOR_4 = 20,
 
-    LVL3_VOID = 38,
-    ICE_WALL_0 = 35,
-    ICE_WALL_1 = 36,
-    ICE_WALL_2 = 37,
+    LVL3_VOID = 47,
+    ICE_WALL_0 = 37,
+    ICE_WALL_1 = 38,
+    ICE_WALL_2 = 39,
+    ICE_WALL_3 = 40,
+    ICE_WALL_4 = 41,
     ICE_FLOOR_0 = 32,
     ICE_FLOOR_1 = 33,
     ICE_FLOOR_2 = 34,
+    ICE_FLOOR_3 = 35,
+    ICE_FLOOR_4 = 36,
 
-    LVL4_VOID = 54,
-    LVL4_WALL_0 = 51,
-    LVL4_WALL_1 = 52,
-    LVL4_WALL_2 = 53,
+    LVL4_VOID = 63,
+    LVL4_WALL_0 = 53,
+    LVL4_WALL_1 = 54,
+    LVL4_WALL_2 = 55,
+    LVL4_WALL_3 = 56,
+    LVL4_WALL_4 = 57,
     LVL4_FLOOR_0 = 48,
     LVL4_FLOOR_1 = 49,
     LVL4_FLOOR_2 = 50,
+    LVL4_FLOOR_3 = 51,
+    LVL4_FLOOR_4 = 52,
 
-    LVL5_VOID = 70,
-    LVL5_WALL_0 = 67,
-    LVL5_WALL_1 = 68,
-    LVL5_WALL_2 = 69,
+    LVL5_VOID = 79,
+    LVL5_WALL_0 = 69,
+    LVL5_WALL_1 = 70,
+    LVL5_WALL_2 = 71,
+    LVL5_WALL_3 = 72,
+    LVL5_WALL_4 = 73,
     LVL5_FLOOR_0 = 64,
     LVL5_FLOOR_1 = 65,
     LVL5_FLOOR_2 = 66,
+    LVL5_FLOOR_3 = 67,
+    LVL5_FLOOR_4 = 68,
 
-    LVL6_VOID = 86,
-    LVL6_WALL_0 = 83,
-    LVL6_WALL_1 = 84,
-    LVL6_WALL_2 = 85,
+    LVL6_VOID = 95,
+    LVL6_WALL_0 = 85,
+    LVL6_WALL_1 = 86,
+    LVL6_WALL_2 = 87,
+    LVL6_WALL_3 = 88,
+    LVL6_WALL_4 = 89,
     LVL6_FLOOR_0 = 80,
     LVL6_FLOOR_1 = 81,
     LVL6_FLOOR_2 = 82,
+    LVL6_FLOOR_3 = 83,
+    LVL6_FLOOR_4 = 84,
 
-    LVL7_VOID = 102,
-    LVL7_WALL_0 = 99,
-    LVL7_WALL_1 = 100,
-    LVL7_WALL_2 = 101,
+    LVL7_VOID = 111,
+    LVL7_WALL_0 = 101,
+    LVL7_WALL_1 = 102,
+    LVL7_WALL_2 = 103,
+    LVL7_WALL_3 = 104,
+    LVL7_WALL_4 = 105,
     LVL7_FLOOR_0 = 96,
     LVL7_FLOOR_1 = 97,
     LVL7_FLOOR_2 = 98,
+    LVL7_FLOOR_3 = 99,
+    LVL7_FLOOR_4 = 100,
 };
 
 namespace LEVEL {
 
-    const int TILES[7][2][3] = {
+    const int TILES[7][2][5] = {
 
-        { { TERRAIN::STONE_WALL_0,TERRAIN::STONE_WALL_1,TERRAIN::STONE_WALL_2 },
-        {TERRAIN::STONE_FLOOR_0,TERRAIN::STONE_FLOOR_1,TERRAIN::STONE_FLOOR_2} },
+        { { TERRAIN::STONE_WALL_0,TERRAIN::STONE_WALL_1,TERRAIN::STONE_WALL_2, TERRAIN::STONE_WALL_3, TERRAIN::STONE_WALL_4 },
+        {TERRAIN::STONE_FLOOR_0,TERRAIN::STONE_FLOOR_1,TERRAIN::STONE_FLOOR_2, TERRAIN::STONE_FLOOR_3, TERRAIN::STONE_FLOOR_4 } },
 
-        { { TERRAIN::FIRE_WALL_0,TERRAIN::FIRE_WALL_1,TERRAIN::FIRE_WALL_2}, 
-        { TERRAIN::FIRE_FLOOR_0,TERRAIN::FIRE_FLOOR_1,TERRAIN::FIRE_FLOOR_2 }},
+        { { TERRAIN::FIRE_WALL_0,TERRAIN::FIRE_WALL_1,TERRAIN::FIRE_WALL_2, TERRAIN::FIRE_WALL_3, TERRAIN::FIRE_WALL_4 },
+        { TERRAIN::FIRE_FLOOR_0,TERRAIN::FIRE_FLOOR_1,TERRAIN::FIRE_FLOOR_2, TERRAIN::FIRE_FLOOR_3, TERRAIN::FIRE_FLOOR_4  }},
 
-        { { TERRAIN::ICE_WALL_0,TERRAIN::ICE_WALL_1,TERRAIN::ICE_WALL_2 }, 
-        { TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2 } },
+        { { TERRAIN::ICE_WALL_0,TERRAIN::ICE_WALL_1,TERRAIN::ICE_WALL_2, TERRAIN::ICE_WALL_3, TERRAIN::ICE_WALL_4  },
+        { TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2, TERRAIN::ICE_FLOOR_3, TERRAIN::ICE_FLOOR_4 } },
 
-        { { TERRAIN::LVL4_WALL_0,TERRAIN::LVL4_WALL_1,TERRAIN::LVL4_WALL_2 },
-        { TERRAIN::LVL4_FLOOR_0,TERRAIN::LVL4_FLOOR_1,TERRAIN::LVL4_FLOOR_2 } },
+        { { TERRAIN::LVL4_WALL_0,TERRAIN::LVL4_WALL_1,TERRAIN::LVL4_WALL_2, TERRAIN::LVL4_WALL_3, TERRAIN::LVL4_WALL_4 },
+        { TERRAIN::LVL4_FLOOR_0,TERRAIN::LVL4_FLOOR_1,TERRAIN::LVL4_FLOOR_2, TERRAIN::LVL4_FLOOR_3, TERRAIN::LVL4_FLOOR_4  } },
 
-        { { TERRAIN::LVL5_WALL_0,TERRAIN::LVL5_WALL_1,TERRAIN::LVL5_WALL_2 },
-        { TERRAIN::LVL5_FLOOR_0,TERRAIN::LVL5_FLOOR_1,TERRAIN::LVL5_FLOOR_2 } },
+        { { TERRAIN::LVL5_WALL_0,TERRAIN::LVL5_WALL_1,TERRAIN::LVL5_WALL_2, TERRAIN::LVL5_WALL_3, TERRAIN::LVL5_WALL_4  },
+        { TERRAIN::LVL5_FLOOR_0,TERRAIN::LVL5_FLOOR_1,TERRAIN::LVL5_FLOOR_2, TERRAIN::LVL5_FLOOR_3, TERRAIN::LVL5_FLOOR_4  } },
 
-        { { TERRAIN::LVL6_WALL_0,TERRAIN::LVL6_WALL_1,TERRAIN::LVL6_WALL_2 },
-        { TERRAIN::LVL6_FLOOR_0,TERRAIN::LVL6_FLOOR_1,TERRAIN::LVL6_FLOOR_2 } },
+        { { TERRAIN::LVL6_WALL_0,TERRAIN::LVL6_WALL_1,TERRAIN::LVL6_WALL_2, TERRAIN::LVL6_WALL_3, TERRAIN::LVL6_WALL_4  },
+        { TERRAIN::LVL6_FLOOR_0,TERRAIN::LVL6_FLOOR_1,TERRAIN::LVL6_FLOOR_2, TERRAIN::LVL6_FLOOR_3, TERRAIN::LVL6_FLOOR_4  } },
 
-        { { TERRAIN::LVL7_WALL_0,TERRAIN::LVL7_WALL_1,TERRAIN::LVL7_WALL_2 },
-        { TERRAIN::LVL7_FLOOR_0,TERRAIN::LVL7_FLOOR_1,TERRAIN::LVL7_FLOOR_2 } }
+        { { TERRAIN::LVL7_WALL_0,TERRAIN::LVL7_WALL_1,TERRAIN::LVL7_WALL_2,  TERRAIN::LVL7_WALL_2, TERRAIN::LVL7_WALL_2  },
+        { TERRAIN::LVL7_FLOOR_0,TERRAIN::LVL7_FLOOR_1,TERRAIN::LVL7_FLOOR_2, TERRAIN::LVL7_FLOOR_3, TERRAIN::LVL7_FLOOR_4  } }
 
     };
 } 
@@ -138,8 +166,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
     //set tiles according to brush size
-    for (int xx = -size/2; xx < size/2; xx++) {
-        for (int yy = -size/2; yy < size/2; yy++) {
+    for (int xx = -size/2; xx <= size/2; xx++) {
+        for (int yy = -size/2; yy <= size/2; yy++) {
 
             TileInfo.PackedTileIndex = terrain;
 
@@ -515,6 +543,100 @@ void ATerrainGenerator::GenerateMap() {
     }
 
 
+    //give border to floor tiles
+
+   /* for (int i = 0; i < TerrainMapData.Num(); i++) {
+        UPaperTileMapComponent* target_map = TerrainMapData[i];
+        if (target_map != nullptr) {
+            int target_map_x = i % MAP_WIDTH;
+            int target_map_y = (i - target_map_x) / MAP_WIDTH;
+            int width;
+            int height;
+            int num_layers;
+            target_map->GetMapSize(width, height, num_layers);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+
+                    FPaperTileInfo target_tile = target_map->GetTile(x, y, 0);
+
+                    if (target_tile.PackedTileIndex == floor_material) {
+
+                        int num_neighboring_walls = 0;
+
+                        for (int xx = -1; xx <= 1; xx++) {
+
+                            int compare_x = x + xx;
+                            int compare_y = y;
+
+                            int target_x = x + xx;
+                            UPaperTileMapComponent* compare_map;
+                            FPaperTileInfo compare_tile;
+
+
+                            if (target_x < 0) {
+                                compare_map = GetTileMap(target_map_x + xx, y);
+                                compare_x = width - 1;
+                            }
+
+                            else if (target_x >= width) {
+                                compare_map = GetTileMap(target_map_x + xx, y);
+                                compare_x = 0;
+                            }
+                            else {
+                                compare_map = target_map;
+                            }
+
+                            if (compare_map->GetTile(compare_x, compare_y, 0).PackedTileIndex == LEVEL::TILES[floor][0][0]) {
+                                num_neighboring_walls += 1;
+                            }
+
+
+                        }
+
+                        for (int yy = -1; yy <= 1; yy++) {
+                            int compare_x = x;
+                            int compare_y = y + yy;
+
+                            int target_y = y + yy;
+                            UPaperTileMapComponent* compare_map;
+                            FPaperTileInfo compare_tile;
+
+
+                            if (target_y < 0) {
+                                compare_map = GetTileMap(x, target_map_y + yy);
+                                compare_y = height - 1;
+                            }
+
+                            else if (target_y >= width) {
+                                compare_map = GetTileMap(x, target_map_y + yy);
+                                compare_y = 0;
+                            }
+                            else {
+                                compare_map = target_map;
+                            }
+
+                            if (compare_map->GetTile(compare_x, compare_y, 0).PackedTileIndex == LEVEL::TILES[floor][0][0]) {
+                                num_neighboring_walls += 1;
+                            }
+                        }
+
+                        int world_x = (target_map_x * MAP_WIDTH) + x;
+                        int world_y = (target_map_y * MAP_HEIGHT) + y;
+
+                        SetTile(world_x, world_y, LEVEL::TILES[floor][1][num_neighboring_walls], 0);
+
+                    }
+
+
+
+
+                }
+            }
+        }
+
+        
+    }*/
 
 
 
