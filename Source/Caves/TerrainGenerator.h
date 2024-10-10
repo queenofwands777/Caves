@@ -38,7 +38,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void GenerateMap();
 	void MakeRoom(int x, int y);
-	void SetTile(int x, int y, int terrain, int size);
+	void SetTile(int x, int y, int terrain, int size, bool generating_floor);
+	FPaperTileInfo* GetTile(int x, int y);
 
 	const int LEVEL_WIDTH = 1024;
 	const int LEVEL_HEIGHT = 1024;

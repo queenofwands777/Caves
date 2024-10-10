@@ -10,6 +10,7 @@
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Actor.h"
+#include "string"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -142,7 +143,7 @@ void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponen
 
 }
 
-void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size) {
+void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size, bool generating_floor = true) {
 
     //input_x and input_y are in terms of the world coordinates on a tile level
 
@@ -164,114 +165,130 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size)
 
 
 
-
     //set tiles according to brush size
-    for (int xx = -size/2; xx <= size/2; xx++) {
-        for (int yy = -size/2; yy <= size/2; yy++) {
+    for (int xx = -size/2; xx <= size/2; ++xx) {
+        for (int yy = -size/2; yy <= size/2; ++yy) {
 
+            
             TileInfo.PackedTileIndex = terrain;
 
-            //input coords plus brush placement
-            int world_x = input_x + xx;
-            int world_y = input_y + yy;
+                //input coords plus brush placement
+                int world_x = input_x + xx;
+                int world_y = input_y + yy;
 
-            //how far into the target tilemap are we placing the tile
-            int target_x = world_x % MAP_WIDTH;
-            int target_y = world_y % MAP_HEIGHT;
+                //how far into the target tilemap are we placing the tile
+                int target_x = world_x % MAP_WIDTH;
+                int target_y = world_y % MAP_HEIGHT;
 
-            int tilemap_x = (world_x - target_x) / MAP_WIDTH;
-            int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
+                int tilemap_x = (world_x - target_x) / MAP_WIDTH;
+                int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
 
-            //check if the target tilemap is initialized. if not, initialize a new tilemap.
-            if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
-                InitializeTileMap(tilemap_x, tilemap_y);
-            }
+                //check if the target tilemap is initialized. if not, initialize a new tilemap.
+                if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
+                    InitializeTileMap(tilemap_x, tilemap_y);
+                }
 
-            //check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
-            if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
+                //check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
+                if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
 
-                for (int i = -1; i <= 1; i++) {
-                    for (int ii = -1; ii <= 1; ii++) {
-                        if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
-                            InitializeTileMap(tilemap_x + i, tilemap_y + ii);
+                    for (int i = -1; i <= 1; i++) {
+                        for (int ii = -1; ii <= 1; ii++) {
+                            if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
+                                InitializeTileMap(tilemap_x + i, tilemap_y + ii);
+                            }
                         }
                     }
                 }
-            }
 
-            //set the tile
-            UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
-            host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+                //set the tile
+                UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
+                host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
 
+                if (generating_floor) {
+                    TileInfo.PackedTileIndex = wall_material;
+                    //set surrounding tiles to wall, if they are void
+                    for (int mod_x = -1; mod_x <= 1; mod_x++) {
+                        for (int mod_y = -1; mod_y <= 1; mod_y++) {
 
-
-            TileInfo.PackedTileIndex = wall_material;
-            //set surrounding tiles to wall, if they are void
-            for (int mod_x = -1; mod_x <= 1; mod_x++) {
-                for (int mod_y = -1; mod_y <= 1; mod_y++) {
-
-                    int neighbor_x = target_x + mod_x;
-                    int neighbor_y = MAP_WIDTH - (target_y)-1 - mod_y;
+                            int neighbor_x = target_x + mod_x;
+                            int neighbor_y = MAP_WIDTH - (target_y)-1 - mod_y;
 
 
 
 
 
-                    if ((neighbor_x < MAP_WIDTH)&&(neighbor_y < MAP_HEIGHT)&&(neighbor_x >= 0)&&(neighbor_y >= 0)) {
-                        FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
-                        if (neighbor_cell.PackedTileIndex == void_material) {
-                            host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
+                            if ((neighbor_x < MAP_WIDTH) && (neighbor_y < MAP_HEIGHT) && (neighbor_x >= 0) && (neighbor_y >= 0)) {
+                                FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
+                                if (neighbor_cell.PackedTileIndex == void_material) {
+                                    host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
+                                }
+                            }
+
+
+
+                            else {
+                                int x_over_violation = neighbor_x >= MAP_WIDTH;
+                                int x_under_violation = neighbor_x < 0;
+                                int y_over_violation = neighbor_y >= MAP_HEIGHT;
+                                int y_under_violation = neighbor_y < 0;
+
+                                int nudge_x = 0 - x_under_violation + x_over_violation;
+                                int nudge_y = 0 + y_under_violation - y_over_violation;
+
+
+
+
+
+
+
+                                int relative_x = ((MAP_WIDTH)*x_under_violation) + neighbor_x + (-MAP_WIDTH * x_over_violation);
+                                int relative_y = ((MAP_HEIGHT)*y_under_violation) + neighbor_y + (-MAP_HEIGHT * y_over_violation);
+
+                                UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
+                                FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
+
+                                if (neighbor_cell.PackedTileIndex == void_material) {
+                                    target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
+                                }
+
+
+
+
+
+
+
+
+                            }
+
                         }
                     }
-
-
-
-                    else {
-                        int x_over_violation = neighbor_x >= MAP_WIDTH;
-                        int x_under_violation = neighbor_x < 0;
-                        int y_over_violation = neighbor_y >= MAP_HEIGHT;
-                        int y_under_violation = neighbor_y < 0;
-
-                        int nudge_x = 0 - x_under_violation + x_over_violation;
-                        int nudge_y = 0 + y_under_violation - y_over_violation;
-
-
-
-
-
-
-
-                        int relative_x = ((MAP_WIDTH) * x_under_violation) + neighbor_x + (-MAP_WIDTH * x_over_violation);
-                        int relative_y = ((MAP_HEIGHT) * y_under_violation) + neighbor_y + (-MAP_HEIGHT * y_over_violation);
-
-                        UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
-                        FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
-
-                        if (neighbor_cell.PackedTileIndex == void_material) {
-                            target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
-                        }
-
-
-
-
-
-
-
-
-                    }
-
                 }
-            }
-
-
-
-
-
-
-
-
+                
         }
     }
+}
+
+FPaperTileInfo* ATerrainGenerator::GetTile(int input_x, int input_y) {
+
+    FPaperTileInfo* result;
+    UPaperTileMapComponent* tilemap;
+
+    int x_within_tilemap = input_x % MAP_WIDTH;
+    int y_within_tilemap = input_y % MAP_HEIGHT;
+    int tilemap_x = (input_x - x_within_tilemap)/MAP_WIDTH;
+    int tilemap_y = (input_y - y_within_tilemap) / MAP_HEIGHT;
+
+    tilemap = GetTileMap(tilemap_x, tilemap_y);
+    if (tilemap == nullptr) {
+        result = nullptr;
+    }
+    else {
+        FPaperTileInfo buffer = tilemap->GetTile(x_within_tilemap, MAP_WIDTH - y_within_tilemap - 1, 0);
+        result = &buffer;
+    }
+
+    return result;
+
 }
 
 // Sets default values
@@ -393,7 +410,7 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
     for (int i = 0; i < 6; i++) {
         x += FMath::RandRange(-1, 1);
         y += FMath::RandRange(-1, 1);
-        SetTile(x, y, floor_material, 8);
+        SetTile(x, y, floor_material, 7);
 
     }
 
@@ -480,6 +497,7 @@ public:
 
 void ATerrainGenerator::GenerateMap() {
 
+#pragma region init
     PRINT("Generating Map");
 
     //set start location
@@ -487,7 +505,7 @@ void ATerrainGenerator::GenerateMap() {
     float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
     
     //create spawn area
-    SetTile(cursor_x, cursor_y, floor_material, 8);
+    SetTile(cursor_x, cursor_y, floor_material, 7);
     FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(16*TILE_HEIGHT) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
@@ -497,6 +515,8 @@ void ATerrainGenerator::GenerateMap() {
 
     int num_chests = 3;
     int num_altars = 1;
+
+#pragma endregion
 
     while (num_chests+num_altars > rooms.size()) {
         float heading = FMath::RandRange(0, 360);
@@ -542,103 +562,143 @@ void ATerrainGenerator::GenerateMap() {
         }
     }
 
-
     //give border to floor tiles
 
-   /* for (int i = 0; i < TerrainMapData.Num(); i++) {
-        UPaperTileMapComponent* target_map = TerrainMapData[i];
-        if (target_map != nullptr) {
-            int target_map_x = i % MAP_WIDTH;
-            int target_map_y = (i - target_map_x) / MAP_WIDTH;
-            int width;
-            int height;
-            int num_layers;
-            target_map->GetMapSize(width, height, num_layers);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-
-                    FPaperTileInfo target_tile = target_map->GetTile(x, y, 0);
-
-                    if (target_tile.PackedTileIndex == floor_material) {
-
-                        int num_neighboring_walls = 0;
-
-                        for (int xx = -1; xx <= 1; xx++) {
-
-                            int compare_x = x + xx;
-                            int compare_y = y;
-
-                            int target_x = x + xx;
-                            UPaperTileMapComponent* compare_map;
-                            FPaperTileInfo compare_tile;
+    //loop through every individual tile
+        //check if that tile is a floor tile
+            //if it is, count how many neighbors it has
+            //depending on how may neighbors are wall, switch the texture
 
 
-                            if (target_x < 0) {
-                                compare_map = GetTileMap(target_map_x + xx, y);
-                                compare_x = width - 1;
+
+
+
+
+
+
+
+
+
+    /**/
+
+    //loop through every individual tile
+    for (int tilemap_x = 0; tilemap_x < LEVEL_WIDTH; tilemap_x++) {
+        for (int tilemap_y = 0; tilemap_y < LEVEL_HEIGHT; tilemap_y++) {
+            if (GetTileMap(tilemap_x, tilemap_y) != nullptr) {
+
+
+
+                for (int x_within_tilemap = 0; x_within_tilemap < MAP_WIDTH; x_within_tilemap++) {
+                    for (int y_within_tilemap = 0; y_within_tilemap < MAP_HEIGHT; y_within_tilemap++) {
+
+
+
+                        //check if that tile is a floor tile
+                        FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
+
+                        if (target_tile.PackedTileIndex == floor_material) {
+
+
+
+
+
+                            int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
+                            int world_y = (tilemap_y * MAP_HEIGHT) + ( MAP_HEIGHT - y_within_tilemap - 1);
+
+
+
+
+
+
+
+                            /*
+                            FString tile_coords = "tile coordinates where floor was found: ";
+                            tile_coords.Append(FString::FromInt(world_x));
+                            tile_coords.Append(", ");
+                            tile_coords.Append(FString::FromInt(world_y));
+
+
+                            GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, tile_coords);
+
+
+
+                            SetTile(world_x, world_y, LEVEL::TILES[1][1][0], 0, false);
+                            */
+
+
+
+
+
+                            
+
+
+
+
+
+
+
+                            //if it is, count how many neighbors it has
+                            int num_neighboring_walls = 0;
+
+                            for (int xx = -1; xx <= 1; xx++) {
+
+                                FPaperTileInfo* neighbor_tile = GetTile(world_x + xx, world_y);
+                                if (neighbor_tile != nullptr) {
+                                    //FString neighbor_terrain;
+                                    //neighbor_terrain.Append("found terrain during x pass: ");
+                                    //neighbor_terrain.Append(FString::FromInt(neighbor_tile->PackedTileIndex));
+                                    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, neighbor_terrain);
+
+
+
+
+
+
+                                    if (neighbor_tile->PackedTileIndex == wall_material) {
+                                        //ENGINEPRINT("neighbor tile found during x scan was a wall");
+                                        num_neighboring_walls++;
+                                    }
+                                }
                             }
 
-                            else if (target_x >= width) {
-                                compare_map = GetTileMap(target_map_x + xx, y);
-                                compare_x = 0;
-                            }
-                            else {
-                                compare_map = target_map;
+                            for (int yy = -1; yy <= 1; yy++) {
+
+                                FPaperTileInfo* neighbor_tile = GetTile(world_x, world_y + yy);
+                                if (neighbor_tile != nullptr) {
+
+                                    //FString neighbor_terrain;
+                                    //neighbor_terrain.Append("found terrain during y pass: ");
+                                    //neighbor_terrain.Append(FString::FromInt(neighbor_tile->PackedTileIndex));
+                                    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, neighbor_terrain);
+
+
+                                    if (neighbor_tile->PackedTileIndex == wall_material) {
+                                        //ENGINEPRINT("neighbor tile found during y scan was a wall");
+
+                                        num_neighboring_walls++;
+                                    }
+                                }
                             }
 
-                            if (compare_map->GetTile(compare_x, compare_y, 0).PackedTileIndex == LEVEL::TILES[floor][0][0]) {
-                                num_neighboring_walls += 1;
+                            if (num_neighboring_walls > 4) {
+                                FString how_many_walls;
+                                how_many_walls.Append("found walls: ");
+                                how_many_walls.Append(FString::FromInt(num_neighboring_walls));
+                                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, how_many_walls);
                             }
 
+
+
+                            SetTile(world_x, world_y, LEVEL::TILES[floor][1][num_neighboring_walls], 0, false);
+                            
 
                         }
-
-                        for (int yy = -1; yy <= 1; yy++) {
-                            int compare_x = x;
-                            int compare_y = y + yy;
-
-                            int target_y = y + yy;
-                            UPaperTileMapComponent* compare_map;
-                            FPaperTileInfo compare_tile;
-
-
-                            if (target_y < 0) {
-                                compare_map = GetTileMap(x, target_map_y + yy);
-                                compare_y = height - 1;
-                            }
-
-                            else if (target_y >= width) {
-                                compare_map = GetTileMap(x, target_map_y + yy);
-                                compare_y = 0;
-                            }
-                            else {
-                                compare_map = target_map;
-                            }
-
-                            if (compare_map->GetTile(compare_x, compare_y, 0).PackedTileIndex == LEVEL::TILES[floor][0][0]) {
-                                num_neighboring_walls += 1;
-                            }
-                        }
-
-                        int world_x = (target_map_x * MAP_WIDTH) + x;
-                        int world_y = (target_map_y * MAP_HEIGHT) + y;
-
-                        SetTile(world_x, world_y, LEVEL::TILES[floor][1][num_neighboring_walls], 0);
-
                     }
-
-
-
-
                 }
             }
         }
-
-        
-    }*/
-
-
+    }
+    /**/
 
     //rebuild terrain map
     for (int i = 0; i < TerrainMapData.Num(); i++) {
