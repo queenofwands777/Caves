@@ -305,12 +305,14 @@ ATerrainGenerator::ATerrainGenerator()
     static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
     static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
+    static ConstructorHelpers::FClassFinder<AActor> EnemySoldier(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Soldier"));
     //static ConstructorHelpers::FClassFinder<AActor> EnemyWalker(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Walker"));
 
     Enemies.Add(EnemyDemon.Class);
     Enemies.Add(EnemyHellhound.Class);
     Enemies.Add(EnemyImp.Class);
     Enemies.Add(EnemyShade.Class);
+    Enemies.Add(EnemySoldier.Class);
     //Enemies.Add(EnemyWalker.Class);
 
     //load objects
@@ -337,7 +339,8 @@ enum ENEMIES {
     Hellhound = 1,
     Imp = 2,
     Shade = 3,
-    Walker = 4,
+    Soldier = 4,
+    
 };
 
 enum OBJECTS {
@@ -484,7 +487,7 @@ public:
                 FVector location;
                 location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
                 FRotator rotation = { 0,0,0 };
-                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 3)], location, rotation);
+                parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, 4)], location, rotation);
             }
 
 
@@ -573,13 +576,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-
-
-
-
-
-
-    /**/
+    /*
 
     //loop through every individual tile
     for (int tilemap_x = 0; tilemap_x < LEVEL_WIDTH; tilemap_x++) {
@@ -598,96 +595,35 @@ void ATerrainGenerator::GenerateMap() {
 
                         if (target_tile.PackedTileIndex == floor_material) {
 
-
-
-
-
                             int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
                             int world_y = (tilemap_y * MAP_HEIGHT) + ( MAP_HEIGHT - y_within_tilemap - 1);
 
 
-
-
-
-
-
-                            /*
-                            FString tile_coords = "tile coordinates where floor was found: ";
-                            tile_coords.Append(FString::FromInt(world_x));
-                            tile_coords.Append(", ");
-                            tile_coords.Append(FString::FromInt(world_y));
-
-
-                            GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, tile_coords);
-
-
-
-                            SetTile(world_x, world_y, LEVEL::TILES[1][1][0], 0, false);
-                            */
-
-
-
-
-
-                            
-
-
-
-
-
-
-
                             //if it is, count how many neighbors it has
                             int num_neighboring_walls = 0;
+                            int rotation = 0;
 
-                            for (int xx = -1; xx <= 1; xx++) {
-
-                                FPaperTileInfo* neighbor_tile = GetTile(world_x + xx, world_y);
-                                if (neighbor_tile != nullptr) {
-                                    //FString neighbor_terrain;
-                                    //neighbor_terrain.Append("found terrain during x pass: ");
-                                    //neighbor_terrain.Append(FString::FromInt(neighbor_tile->PackedTileIndex));
-                                    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, neighbor_terrain);
-
-
-
-
-
-
-                                    if (neighbor_tile->PackedTileIndex == wall_material) {
-                                        //ENGINEPRINT("neighbor tile found during x scan was a wall");
-                                        num_neighboring_walls++;
-                                    }
+                            if (GetTile(world_x, world_y + 1)) {
+                                if (GetTile(world_x, world_y + 1)->PackedTileIndex == wall_material) {
+                                    num_neighboring_walls++;
+                                }
+                            }
+                            if (GetTile(world_x + 1, world_y)) {
+                                if (GetTile(world_x + 1, world_y)->PackedTileIndex == wall_material) {
+                                    num_neighboring_walls++;
+                                }
+                            }
+                            if (GetTile(world_x, world_y - 1)) {
+                                if (GetTile(world_x, world_y - 1)->PackedTileIndex == wall_material) {
+                                    num_neighboring_walls++;
                                 }
                             }
 
-                            for (int yy = -1; yy <= 1; yy++) {
-
-                                FPaperTileInfo* neighbor_tile = GetTile(world_x, world_y + yy);
-                                if (neighbor_tile != nullptr) {
-
-                                    //FString neighbor_terrain;
-                                    //neighbor_terrain.Append("found terrain during y pass: ");
-                                    //neighbor_terrain.Append(FString::FromInt(neighbor_tile->PackedTileIndex));
-                                    //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, neighbor_terrain);
-
-
-                                    if (neighbor_tile->PackedTileIndex == wall_material) {
-                                        //ENGINEPRINT("neighbor tile found during y scan was a wall");
-
-                                        num_neighboring_walls++;
-                                    }
+                            if (GetTile(world_x-1, world_y)) {
+                                if (GetTile(world_x-1, world_y)->PackedTileIndex == wall_material) {
+                                    num_neighboring_walls++;
                                 }
                             }
-
-                            if (num_neighboring_walls > 4) {
-                                FString how_many_walls;
-                                how_many_walls.Append("found walls: ");
-                                how_many_walls.Append(FString::FromInt(num_neighboring_walls));
-                                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, how_many_walls);
-                            }
-
-
 
                             SetTile(world_x, world_y, LEVEL::TILES[floor][1][num_neighboring_walls], 0, false);
                             
@@ -698,7 +634,7 @@ void ATerrainGenerator::GenerateMap() {
             }
         }
     }
-    /**/
+    */
 
     //rebuild terrain map
     for (int i = 0; i < TerrainMapData.Num(); i++) {
