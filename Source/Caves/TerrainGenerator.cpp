@@ -512,7 +512,7 @@ void ATerrainGenerator::GenerateMap() {
     FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1*TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT )-(16*TILE_HEIGHT) };
     FRotator spawn_rotation = { 0,0,0 };
     GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
-    FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 2, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+    FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
     GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
