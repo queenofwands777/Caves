@@ -2,6 +2,8 @@
 
 #pragma once
 
+struct Encounter;
+
 
 struct RoomMarker {
 	float x;
@@ -38,6 +40,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void GenerateMap();
 	void MakeRoom(int x, int y);
+	void PlaceEncounter(Encounter encounter, int x, int y);
 	void SetTile(int x, int y, int terrain, int size, bool generating_floor);
 	FPaperTileInfo* GetTile(int x, int y);
 
