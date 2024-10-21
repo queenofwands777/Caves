@@ -300,36 +300,7 @@ ATerrainGenerator::ATerrainGenerator()
     //load tileset
     LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
 
-    //load enemies
-    static ConstructorHelpers::FClassFinder<AActor> EnemyDemon(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Demon"));
-    static ConstructorHelpers::FClassFinder<AActor> EnemyHellhound(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Hellhound"));
-    static ConstructorHelpers::FClassFinder<AActor> EnemyImp(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Imp"));
-    static ConstructorHelpers::FClassFinder<AActor> EnemyShade(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Shade"));
-    static ConstructorHelpers::FClassFinder<AActor> EnemySoldier(TEXT("/Game/Blueprints/Entities/Enemies/Ranged/Soldier"));
-    //static ConstructorHelpers::FClassFinder<AActor> EnemyWalker(TEXT("/Game/Blueprints/Entities/Enemies/Melee/Walker"));
 
-    Enemies.Add(EnemyDemon.Class);
-    Enemies.Add(EnemyHellhound.Class);
-    Enemies.Add(EnemyImp.Class);
-    Enemies.Add(EnemyShade.Class);
-    Enemies.Add(EnemySoldier.Class);
-    //Enemies.Add(EnemyWalker.Class);
-
-    //load objects
-    static ConstructorHelpers::FClassFinder<AActor> Portal(TEXT("/Game/Blueprints/Level/Portal"));
-    static ConstructorHelpers::FClassFinder<AActor> Chest(TEXT("/Game/Blueprints/Pickups/Chest"));
-    static ConstructorHelpers::FClassFinder<AActor> Altar(TEXT("/Game/Blueprints/Level/Altar"));
-    static ConstructorHelpers::FClassFinder<AActor> RoomMarker(TEXT("/Game/Blueprints/Level/RoomMarker"));
-
-    Objects.Add(Portal.Class);
-    Objects.Add(Chest.Class);
-    Objects.Add(Altar.Class);
-    Objects.Add(RoomMarker.Class);
-
-
-    //load player
-    static ConstructorHelpers::FClassFinder<AActor> PlayerPawn(TEXT("/Game/Blueprints/Entities/player"));
-    Player = PlayerPawn.Class;
 
     TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 }

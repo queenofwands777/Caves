@@ -72,8 +72,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
 	TArray<UPaperTileMapComponent*> TerrainMapData;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TArray<TSubclassOf<AActor>> Enemies;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TArray<TSubclassOf<AActor>> Objects;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TSubclassOf<AActor> Player ;
 };
 
