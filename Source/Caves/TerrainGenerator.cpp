@@ -478,8 +478,9 @@ struct Encounter {
 
 public:
 
-	Encounter(std::vector<ENEMIES> _enemies, std::vector<OBJECTS> objects) {
+	Encounter(std::vector<ENEMIES> _enemies, std::vector<OBJECTS> _objects) {
 		enemies = _enemies;
+		objects = _objects;
 	}
 
 
@@ -490,9 +491,9 @@ public:
 void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 
 	for (int enemy = 0; enemy < encounter.enemies.size(); enemy++) {
-
-		float offset_x = FMath::FRandRange(-5.0, 5.0);
-		float offset_y = FMath::FRandRange(-5.0, 5.0);
+		float distance = 20.0;
+		float offset_x = FMath::FRandRange(-distance, distance);
+		float offset_y = FMath::FRandRange(-distance, distance);
 		float spawn_x = x + offset_x;
 		float spawn_y = y + offset_y;
 		FVector spawn_location;
@@ -502,6 +503,20 @@ void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 
 		GetWorld()->SpawnActor<AActor>(Enemies[encounter.enemies[enemy]], spawn_location, rotation);
 
+	}
+
+	for (int object = 0; object < encounter.objects.size(); object++) {
+		float distance = 20.0;
+		float offset_x = FMath::FRandRange(-distance, distance);
+		float offset_y = FMath::FRandRange(-distance, distance);
+		float spawn_x = x + offset_x;
+		float spawn_y = y + offset_y;
+		FVector spawn_location;
+		spawn_location = { spawn_x, 2.0, spawn_y };
+		FRotator rotation = { 0,0,0 };
+
+
+		GetWorld()->SpawnActor<AActor>(Objects[encounter.objects[object]], spawn_location, rotation);
 	}
 }
 
@@ -562,52 +577,13 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-
-
-
-
 			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
 			Encounter encounter = encounters[rand_encounter];
-
-			//for (int enemy = 0; enemy < encounter.size(); enemy++) {
-
-			//    float offset_x = FMath::FRandRange(-5.0, 5.0);
-			//    float offset_y = FMath::FRandRange(-5.0, 5.0);
-			//    float spawn_x = room_x + offset_x;
-			//    float spawn_y = room_y + offset_y;
-			//    FVector encounter_location;
-			//    encounter_location = { spawn_x, 2.0, spawn_y };
-			//    FRotator rotation = { 0,0,0 };
-
-
-			//    GetWorld()->SpawnActor<AActor>(Enemies[encounter[enemy]], encounter_location, rotation);
-
-			//}
-
 			PlaceEncounter(encounter, room_x, room_y);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 			rooms.erase(rooms.begin() + rand_room);
 		}
 	}
-
-
 
 	for (int i = 0; i < num_altars; i++) {
 		int num_rooms = rooms.size();
@@ -615,15 +591,9 @@ void ATerrainGenerator::GenerateMap() {
 			int rand_room = FMath::RandRange(0, num_rooms - 1);
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
-			float offset_x = FMath::FRandRange(-5.0, 5.0);
-			float offset_y = FMath::FRandRange(-5.0, 5.0);
-			float spawn_x = room_x + offset_x;
-			float spawn_y = room_y + offset_y;
 
-			FVector chest_location;
-			chest_location = { spawn_x, 2.0, spawn_y };
-			FRotator rotation = { 0,0,0 };
-			GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Altar], chest_location, rotation);
+			PlaceEncounter({ {},{OBJECTS::Altar} }, room_x, room_y);
+
 			rooms.erase(rooms.begin() + rand_room);
 		}
 
@@ -635,15 +605,9 @@ void ATerrainGenerator::GenerateMap() {
 			int rand_room = FMath::RandRange(0, num_rooms - 1);
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
-			float offset_x = FMath::FRandRange(-5.0, 5.0);
-			float offset_y = FMath::FRandRange(-5.0, 5.0);
-			float spawn_x = room_x + offset_x;
-			float spawn_y = room_y + offset_y;
 
-			FVector chest_location;
-			chest_location = { spawn_x, 2.0, spawn_y };
-			FRotator rotation = { 0,0,0 };
-			GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Chest], chest_location, rotation);
+			PlaceEncounter({ {},{OBJECTS::Chest} }, room_x, room_y);
+
 			rooms.erase(rooms.begin() + rand_room);
 		}
 	}
