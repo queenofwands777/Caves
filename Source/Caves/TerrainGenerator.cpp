@@ -381,10 +381,10 @@ void ATerrainGenerator::BeginPlay()
 }
 
 void ATerrainGenerator::MakeRoom(int x, int y) {
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 5; i++) {
 		x += FMath::RandRange(-1, 1);
 		y += FMath::RandRange(-1, 1);
-		SetTile(x, y, floor_material, 7);
+		SetTile(x, y, floor_material, 8);
 
 	}
 
@@ -398,7 +398,8 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 
 struct GeneratorProbe {
 public:
-	GeneratorProbe(int _lifetime, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
+	GeneratorProbe(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
+		num_rooms = _num_rooms;
 		lifetime = _lifetime;
 		cursor_x = _cursor_x;
 		cursor_y = _cursor_y;
@@ -411,6 +412,7 @@ public:
 	}
 
 public:
+	int num_rooms;
 	int lifetime;
 	float cursor_x;
 	float cursor_y;
@@ -421,9 +423,14 @@ public:
 public:
 
 	void Generate() {
-		while (lifetime > 0) {
 
-			//move
+		int time_since_room = 0;
+		int remaining_rooms = num_rooms;
+		bool active = true;
+		while (active) {
+
+			time_since_room++;
+
 			heading += FMath::RandRange(-10, 10);
 			float rotation_radians = FMath::DegreesToRadians(heading);
 
@@ -438,34 +445,43 @@ public:
 			cursor_y += new_direction[1];
 
 			//set tile
-			parent->SetTile(cursor_x, cursor_y, parent->floor_material, 4);
+			parent->SetTile(cursor_x, cursor_y, parent->floor_material, 3);
 
-			//generate offshoot
+
+
+
 			int offshoot = FMath::RandRange(0, 1000);
-			if ((offshoot > 960) && (lifetime > parent->CURSOR_LIFETIME / 5)) {
-				GeneratorProbe new_offshoot = GeneratorProbe(lifetime / 2, cursor_x, cursor_y, heading + (FMath::RandRange(45, 135) * ((FMath::RandBool() * 2) - 1)), parent);
+			if ((offshoot > (950 - (remaining_rooms*10)))&&(remaining_rooms >= 2)) {
+				int spare_rooms = remaining_rooms - (remaining_rooms / 2);
+				GeneratorProbe new_offshoot = GeneratorProbe(lifetime / 2, spare_rooms, cursor_x, cursor_y, heading + (FMath::RandRange(45, 135) * ((FMath::RandBool() * 2) - 1)), parent);
+				remaining_rooms = remaining_rooms - spare_rooms;
 			}
 
-			//generate room
+
 			int room = FMath::RandRange(0, 1000);
-			if ((room > 990) && (lifetime > parent->CURSOR_LIFETIME / 5)) {
+			if (((room > 920) && (remaining_rooms > 0) && (time_since_room >= 18))||(time_since_room >= 32)) {
 				parent->MakeRoom(cursor_x, cursor_y);
+				remaining_rooms--;
+				time_since_room = 0;
 			}
 
-			////place enemy
-			//int encounter = FMath::RandRange(0, 100);
-			//if (encounter > 95) {
-			//    FVector location;
-			//    location = { (float)cursor_x * 16, 2.0, (float)((cursor_y * 16) - (16 * 15)) };
-			//    FRotator rotation = { 0,0,0 };
-			//    parent->GetWorld()->SpawnActor<AActor>(parent->Enemies[FMath::RandRange(0, parent->Enemies.Num()-1)], location, rotation);
-			//}
+			if (remaining_rooms == 0) { active = false; }
 
 
-			lifetime--;
+
+
+
+
 		}
-		parent->MakeRoom(cursor_x, cursor_y);
+
+
+
+
+
 	}
+
+
+
 };
 
 
@@ -541,10 +557,11 @@ void ATerrainGenerator::GenerateMap() {
 	GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
 
 
-	int num_chests = 3;
+	int num_chests = 2;
 	int num_altars = 1;
-	int num_encounters = 3;
+	int num_encounters = (round(floor/3.0));
 
+	int num_rooms = num_chests + num_altars + num_encounters;
 
 	std::vector<Encounter> encounters = {
 		{ {ENEMIES::Demon, ENEMIES::Demon, ENEMIES::Demon}, {} },
@@ -565,15 +582,15 @@ void ATerrainGenerator::GenerateMap() {
 
 #pragma endregion
 
-	while (num_chests + num_altars + num_encounters > rooms.size()) {
+	
 		float heading = FMath::RandRange(0, 360);
-		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, cursor_x, cursor_y, heading, this);
-	}
+		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, num_rooms, cursor_x, cursor_y, heading, this);
+	
 
 	for (int i = 0; i < num_encounters; i++) {
-		int num_rooms = rooms.size();
-		if (num_rooms > 0) {
-			int rand_room = FMath::RandRange(0, num_rooms - 1);
+		int max_rooms = rooms.size();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
@@ -586,13 +603,15 @@ void ATerrainGenerator::GenerateMap() {
 	}
 
 	for (int i = 0; i < num_altars; i++) {
-		int num_rooms = rooms.size();
-		if (num_rooms > 0) {
-			int rand_room = FMath::RandRange(0, num_rooms - 1);
+		int max_rooms = rooms.size();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			PlaceEncounter({ {},{OBJECTS::Altar} }, room_x, room_y);
+			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
+			Encounter encounter = encounters[rand_encounter];
+			PlaceEncounter({ encounter.enemies,{OBJECTS::Altar} }, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
 		}
@@ -600,13 +619,15 @@ void ATerrainGenerator::GenerateMap() {
 	}
 
 	for (int i = 0; i < num_chests; i++) {
-		int num_rooms = rooms.size();
-		if (num_rooms > 0) {
-			int rand_room = FMath::RandRange(0, num_rooms - 1);
+		int max_rooms = rooms.size();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			PlaceEncounter({ {},{OBJECTS::Chest} }, room_x, room_y);
+			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
+			Encounter encounter = encounters[rand_encounter];
+			PlaceEncounter({ encounter.enemies,{OBJECTS::Chest} }, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
 		}
