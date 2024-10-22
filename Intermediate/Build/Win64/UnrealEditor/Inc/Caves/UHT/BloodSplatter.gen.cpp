@@ -19,6 +19,53 @@ PAPER2D_API UClass* Z_Construct_UClass_UPaperSpriteComponent_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Caves();
 // End Cross Module References
 
+// Begin Class ABloodSplatter Function AbsorbSplatter
+struct Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics
+{
+	struct BloodSplatter_eventAbsorbSplatter_Parms
+	{
+		FVector location;
+		int32 ReturnValue;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Interaction" },
+		{ "ModuleRelativePath", "Public/BloodSplatter.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStructPropertyParams NewProp_location;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_ReturnValue;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::NewProp_location = { "location", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventAbsorbSplatter_Parms, location), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(BloodSplatter_eventAbsorbSplatter_Parms, ReturnValue), METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::NewProp_location,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::NewProp_ReturnValue,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ABloodSplatter, nullptr, "AbsorbSplatter", nullptr, nullptr, Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::PropPointers), sizeof(Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::BloodSplatter_eventAbsorbSplatter_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04820401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::Function_MetaDataParams), Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::BloodSplatter_eventAbsorbSplatter_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(ABloodSplatter::execAbsorbSplatter)
+{
+	P_GET_STRUCT(FVector,Z_Param_location);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	*(int32*)Z_Param__Result=P_THIS->AbsorbSplatter(Z_Param_location);
+	P_NATIVE_END;
+}
+// End Class ABloodSplatter Function AbsorbSplatter
+
 // Begin Class ABloodSplatter Function InitParams
 struct Z_Construct_UFunction_ABloodSplatter_InitParams_Statics
 {
@@ -137,6 +184,7 @@ void ABloodSplatter::StaticRegisterNativesABloodSplatter()
 {
 	UClass* Class = ABloodSplatter::StaticClass();
 	static const FNameNativePtrPair Funcs[] = {
+		{ "AbsorbSplatter", &ABloodSplatter::execAbsorbSplatter },
 		{ "InitParams", &ABloodSplatter::execInitParams },
 		{ "Splatter", &ABloodSplatter::execSplatter },
 	};
@@ -216,6 +264,7 @@ struct Z_Construct_UClass_ABloodSplatter_Statics
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_ABloodSplatter_AbsorbSplatter, "AbsorbSplatter" }, // 3264403041
 		{ &Z_Construct_UFunction_ABloodSplatter_InitParams, "InitParams" }, // 2221470940
 		{ &Z_Construct_UFunction_ABloodSplatter_Splatter, "Splatter" }, // 3270687124
 	};
@@ -290,10 +339,10 @@ ABloodSplatter::~ABloodSplatter() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 2497830769U) },
+		{ Z_Construct_UClass_ABloodSplatter, ABloodSplatter::StaticClass, TEXT("ABloodSplatter"), &Z_Registration_Info_UClass_ABloodSplatter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ABloodSplatter), 2649015930U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_3701294493(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_821252103(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

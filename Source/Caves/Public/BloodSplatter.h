@@ -33,6 +33,10 @@ public:
 	void GenerateSplatter(int snapshot);
 	void PlaceSplatter();
 
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	int AbsorbSplatter(FVector location);
+
+
 	UFUNCTION(BlueprintCallable, Category = "Splatter")
 	void Splatter();
 

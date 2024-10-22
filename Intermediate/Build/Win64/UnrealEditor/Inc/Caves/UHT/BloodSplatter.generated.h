@@ -16,7 +16,8 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 #define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_19_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execInitParams); \
-	DECLARE_FUNCTION(execSplatter);
+	DECLARE_FUNCTION(execSplatter); \
+	DECLARE_FUNCTION(execAbsorbSplatter);
 
 
 #define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodSplatter_h_19_INCLASS_NO_PURE_DECLS \

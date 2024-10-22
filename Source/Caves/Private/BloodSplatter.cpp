@@ -98,7 +98,26 @@ void ABloodSplatter::Tick(float DeltaTime)
         NewConvex.UpdateElemBox();
 
 
-        //render hitbox here
+        FVector geometric_mean;
+        for (int32 i = 0; i < Vertices.Num(); i++) {
+            geometric_mean += Vertices[i];
+        }
+        geometric_mean /= Vertices.Num();
+
+        for (int32 i = 0; i < Vertices.Num(); i++) {
+
+            
+            FVector dir = (Vertices[i] - geometric_mean);
+            dir.Normalize();
+            dir *= 5.0;
+            Vertices[i] += dir;
+
+        }
+
+
+
+
+        ////render hitbox here
         //for (int32 i = 0; i < Vertices.Num(); ++i)
         //{
         //    // Get the current vertex and the next one (wrap around at the end)
@@ -227,6 +246,94 @@ void ABloodSplatter::InitSplatter() {
 
 
 }
+
+#include <format>
+#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+
+
+int ABloodSplatter::AbsorbSplatter(FVector input) {
+    int quantity_of_blood_absorbed = 0;
+
+    //where the interaction is happening
+    int world_x = input.X;
+    int world_y = input.Z;
+
+    //where the blood splatter begins
+    int splatter_x = location.X;
+    int splatter_y = location.Z;
+
+    //where the interaction is happening, relative to the start of the texture. might want to reverse the order of the subtractions.
+    int relative_x = world_x - splatter_x;
+    int relative_y = splatter_y - world_y;
+
+    //where the interaction is happening relative to the actual coordinates of the texture
+    int actual_x = relative_x + (texture_width / 2);
+    int actual_y = relative_y + (texture_height / 2);
+
+    int x_var = FMath::RandRange(-2, 2);
+    int y_var = FMath::RandRange(-2, 2);
+    
+    actual_x += x_var;
+    actual_y += y_var;
+
+
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, std::format("absorbing. x: {}, y: {}", actual_x, actual_y).c_str());
+
+    FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
+    void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+
+
+    int radius = 5;
+
+    for (int x = -radius; x <= radius; x++) {
+        for (int y = -radius; y <= radius; y++) {
+
+
+
+
+            int remove_x = actual_x + x;
+            int remove_y = actual_y + y;
+
+            if (sqrt((x*x) + (y*y)) >= (radius)) {
+                continue;
+            }
+
+            if (((remove_y >= texture_height) || (remove_x >= texture_width)) || ((remove_y < 0) || (remove_x < 0))) {
+                GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString::Printf(TEXT("X:%d, Y:%d is out of bounds"), x, y));
+                return quantity_of_blood_absorbed;
+            }
+
+            int32 PixelIndex = ((remove_y * texture_width) + remove_x);
+            uint8* Ptr = (uint8*)Data + PixelIndex * 4;
+
+
+
+
+            if (Ptr[0] + Ptr[1] + Ptr[2] + Ptr[3] != 0) {
+                Ptr[0] = 0;
+                Ptr[1] = 0;
+                Ptr[2] = 0;
+                Ptr[3] = 0;
+
+                quantity_of_blood_absorbed++;
+            }
+
+
+            // Set the pixel color
+
+
+
+
+
+
+        }
+    }
+
+    Mip.BulkData.Unlock();
+    splatter_texture->UpdateResource();
+    return quantity_of_blood_absorbed;
+}
+
 
 void ABloodSplatter::GenerateSplatter(int snapshot) {
 
