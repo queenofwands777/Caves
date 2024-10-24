@@ -136,6 +136,10 @@ UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
 	return TerrainMapData[index];
 }
 
+UPaperTileMapComponent* ATerrainGenerator::GetOverlayTileMap(int grid_x, int grid_y) {
+	return TerrainOverlayMapData[(grid_x * LEVEL_HEIGHT) + grid_y];
+}
+
 void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap) {
 	PRINT("setting tilemap")
 		int index = (grid_x * LEVEL_HEIGHT) + grid_y;
@@ -147,23 +151,9 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 	//input_x and input_y are in terms of the world coordinates on a tile level
 
-
-
-
-
-
-
-
 	//probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
 	FPaperTileInfo TileInfo;
 	TileInfo.TileSet = *LevelTileSet;
-
-
-
-
-
-
-
 
 	//set tiles according to brush size
 	for (int xx = -size / 2; xx <= size / 2; ++xx) {
@@ -266,6 +256,65 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 		}
 	}
+
+}
+
+void ATerrainGenerator::SetOverlayTile(int world_x, int world_y, int terrain, int rotation) {
+
+	//input_x and input_y are in terms of the world coordinates on a tile level
+
+	//probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
+	FPaperTileInfo TileInfo;
+	TileInfo.TileSet = *LevelOverlayTileSet;
+	TileInfo.PackedTileIndex = terrain;
+	
+	//how far into the target tilemap are we placing the tile
+	int target_x = world_x % MAP_WIDTH;
+	int target_y = world_y % MAP_HEIGHT;
+
+	int tilemap_x = (world_x - target_x) / MAP_WIDTH;
+	int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
+
+	FRotator rotator(0.0f, rotation, 0.0f);  // RotationAngle is in degrees
+	FTransform TileTransform(rotator);
+
+
+
+
+	//check if the target tilemap is initialized. if not, initialize a new tilemap.
+	//different for overlay. need to create an overlap map object which mirrors the regular map object. or use layers?
+	//if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
+	//	InitializeTileMap(tilemap_x, tilemap_y);
+	//}
+
+	//check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
+	//if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
+
+	//	for (int i = -1; i <= 1; i++) {
+	//		for (int ii = -1; ii <= 1; ii++) {
+	//			if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
+	//				InitializeTileMap(tilemap_x + i, tilemap_y + ii);
+	//			}
+	//		}
+	//	}
+	//}
+
+	switch (rotation) {
+	
+	case 0: break;
+	case 90: TileInfo.ToggleFlag(EPaperTileFlags::FlipDiagonal); TileInfo.ToggleFlag(EPaperTileFlags::FlipHorizontal); break;
+	case 180:TileInfo.ToggleFlag(EPaperTileFlags::FlipHorizontal); TileInfo.ToggleFlag(EPaperTileFlags::FlipVertical); break;
+	case 270:TileInfo.ToggleFlag(EPaperTileFlags::FlipDiagonal); TileInfo.ToggleFlag(EPaperTileFlags::FlipVertical); break;
+	default: ENGINEPRINT("rotation not recognized"); break;
+	}
+
+	TileInfo.ToggleFlag(EPaperTileFlags::FlipHorizontal);
+	TileInfo.ToggleFlag(EPaperTileFlags::FlipVertical);
+	
+	//set the tile
+	UPaperTileMapComponent* host_tile = GetOverlayTileMap(tilemap_x, tilemap_y);
+	host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+	
 }
 
 FPaperTileInfo* ATerrainGenerator::GetTile(int input_x, int input_y) {
@@ -299,11 +348,25 @@ ATerrainGenerator::ATerrainGenerator()
 
 	//load tileset
 	LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
-
-
+	LevelOverlayTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/TerrainOverlay1_TileSet"));
 
 	TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
+	TerrainOverlayMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 }
+
+enum OVERLAY {
+	side_1_0 = 0,
+	side_2_0 = 1,
+	side_2_1 = 2,
+	side_3_0 = 3,
+	side_4_0 = 4,
+	corner_1_0 = 16,
+	corner_2_0 = 17,
+	corner_2_1 = 18,
+	corner_3_0 = 19,
+	corner_4_0 = 20,
+
+};
 
 enum ENEMIES {
 	Demon = 0,
@@ -484,9 +547,6 @@ public:
 
 };
 
-
-
-
 struct Encounter {
 
 	std::vector<ENEMIES> enemies;
@@ -501,8 +561,6 @@ public:
 
 
 };
-
-
 
 void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 
@@ -535,6 +593,9 @@ void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 		GetWorld()->SpawnActor<AActor>(Objects[encounter.objects[object]], spawn_location, rotation);
 	}
 }
+
+
+
 
 
 
@@ -582,7 +643,9 @@ void ATerrainGenerator::GenerateMap() {
 
 #pragma endregion
 
-	
+
+#pragma region populate
+
 		float heading = FMath::RandRange(0, 360);
 		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, num_rooms, cursor_x, cursor_y, heading, this);
 	
@@ -632,6 +695,8 @@ void ATerrainGenerator::GenerateMap() {
 			rooms.erase(rooms.begin() + rand_room);
 		}
 	}
+#pragma endregion
+
 
 	//give border to floor tiles
 
@@ -642,58 +707,242 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-
-
-	/*
+	
 
 	//loop through every individual tile
+
+
+
+
+
+
+	//get tilemap
 	for (int tilemap_x = 0; tilemap_x < LEVEL_WIDTH; tilemap_x++) {
 		for (int tilemap_y = 0; tilemap_y < LEVEL_HEIGHT; tilemap_y++) {
+
+			//check that tilemap is valid
 			if (GetTileMap(tilemap_x, tilemap_y) != nullptr) {
 
-
-
+				//get each individual tile
 				for (int x_within_tilemap = 0; x_within_tilemap < MAP_WIDTH; x_within_tilemap++) {
 					for (int y_within_tilemap = 0; y_within_tilemap < MAP_HEIGHT; y_within_tilemap++) {
 
 
 
-						//check if that tile is a floor tile
+						//check if that tile is a certain kind
 						FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
-
-						if (target_tile.PackedTileIndex == floor_material) {
-
-							int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
-							int world_y = (tilemap_y * MAP_HEIGHT) + ( MAP_HEIGHT - y_within_tilemap - 1);
+						if (target_tile.PackedTileIndex == wall_material) {
 
 
-							//if it is, count how many neighbors it has
-							int num_neighboring_walls = 0;
-							int rotation = 0;
 
-							if (GetTile(world_x, world_y + 1)) {
-								if (GetTile(world_x, world_y + 1)->PackedTileIndex == wall_material) {
-									num_neighboring_walls++;
+
+
+
+
+
+
+
+							//sides
+							int num_sides = 0;
+							{
+								//if it is, count how many relevant neighbors it has
+								int num_neighboring_floors = 0;
+								std::vector<bool> neighbor_flags = { false,false,false,false };
+
+								//get global coordinates of tile
+								int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
+								int world_y = (tilemap_y * MAP_HEIGHT) + (MAP_HEIGHT - y_within_tilemap - 1);
+
+								//check if neighbor is relevant material
+								//might want to swap world_y order if we get flipped 
+								
+									if (GetTile(world_x, world_y + 1)->PackedTileIndex == floor_material) {
+										num_neighboring_floors++;
+										neighbor_flags[0] = true;
+									}
+								
+
+									if (GetTile(world_x + 1, world_y)->PackedTileIndex == floor_material) {
+										num_neighboring_floors++;
+										neighbor_flags[1] = true;
+									}
+								
+
+									if (GetTile(world_x, world_y - 1)->PackedTileIndex == floor_material) {
+										num_neighboring_floors++;
+										neighbor_flags[2] = true;
+									}
+								
+
+									if (GetTile(world_x - 1, world_y)->PackedTileIndex == floor_material) {
+										num_neighboring_floors++;
+										neighbor_flags[3] = true;
+									}
+								
+
+								//set overlay tile
+								switch (num_neighboring_floors) {
+								case 0: break;
+								case 1:
+									if (neighbor_flags[0]) { SetOverlayTile(world_x, world_y, OVERLAY::side_1_0, 180); }
+									else if (neighbor_flags[1]) { SetOverlayTile(world_x, world_y, OVERLAY::side_1_0, 270); }
+									else if (neighbor_flags[2]) { SetOverlayTile(world_x, world_y, OVERLAY::side_1_0, 0); }
+									else if (neighbor_flags[3]) { SetOverlayTile(world_x, world_y, OVERLAY::side_1_0, 90); }
+									break;
+								case 2:
+
+									if (neighbor_flags[0]) {
+										if (neighbor_flags[1]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::side_2_1, 0);
+										}
+										else if (neighbor_flags[2]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::side_2_0, 270);
+										}
+										else if (neighbor_flags[3]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::side_2_1, 270);
+										}
+									}
+
+									else if (neighbor_flags[1]) {
+										if (neighbor_flags[2]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::side_2_1, 90);
+										}
+										else if (neighbor_flags[3]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::side_2_0, 0);
+										}
+									}
+
+									else {
+										SetOverlayTile(world_x, world_y, OVERLAY::side_2_1, 180);
+									}
+									break;
+								case 3:
+
+									if (!neighbor_flags[0]) { SetOverlayTile(world_x, world_y, OVERLAY::side_3_0, 0); }
+									else if (!neighbor_flags[1]) { SetOverlayTile(world_x, world_y, OVERLAY::side_3_0, 90); }
+									else if (!neighbor_flags[2]) { SetOverlayTile(world_x, world_y, OVERLAY::side_3_0, 180); }
+									else if (!neighbor_flags[3]) { SetOverlayTile(world_x, world_y, OVERLAY::side_3_0, 270); }
+									break;
+								case 4:
+									SetOverlayTile(world_x, world_y, OVERLAY::side_4_0, 0);
+									break;
+								default: ENGINEPRINT("too many floors detected in wall edging algorithm"); break;
+								}
+
+
+								num_sides = num_neighboring_floors;
+
+							}
+
+
+
+
+
+
+
+
+							////corners
+							if (num_sides == 0)
+							{
+								//if it is, count how many relevant neighbors it has
+								int num_neighboring_floors = 0;
+								std::vector<bool> neighbor_flags = { false,false,false,false };
+
+								//get global coordinates of tile
+								int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
+								int world_y = (tilemap_y * MAP_HEIGHT) + (MAP_HEIGHT - y_within_tilemap - 1);
+
+								//check if neighbor is relevant material
+								//might want to swap world_y order if we get flipped 
+
+								if (GetTile(world_x - 1, world_y + 1)->PackedTileIndex == floor_material) {
+									num_neighboring_floors++;
+									neighbor_flags[0] = true;
+								}
+
+
+								if (GetTile(world_x + 1, world_y + 1)->PackedTileIndex == floor_material) {
+									num_neighboring_floors++;
+									neighbor_flags[1] = true;
+								}
+
+
+								if (GetTile(world_x + 1, world_y - 1)->PackedTileIndex == floor_material) {
+									num_neighboring_floors++;
+									neighbor_flags[2] = true;
+								}
+
+
+								if (GetTile(world_x - 1, world_y - 1)->PackedTileIndex == floor_material) {
+									num_neighboring_floors++;
+									neighbor_flags[3] = true;
+								}
+
+
+								//set overlay tile
+								switch (num_neighboring_floors) {
+								case 0: break;
+								case 1:
+									if (neighbor_flags[0]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_1_0, 180); }
+									else if (neighbor_flags[1]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_1_0, 270); }
+									else if (neighbor_flags[2]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_1_0, 0); }
+									else if (neighbor_flags[3]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_1_0, 90); }
+									break;
+								case 2:
+
+									if (neighbor_flags[0]) {
+										if (neighbor_flags[1]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::corner_2_1, 0);
+										}
+										else if (neighbor_flags[2]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::corner_2_0, 270);
+										}
+										else if (neighbor_flags[3]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::corner_2_1, 270);
+										}
+									}
+
+									else if (neighbor_flags[1]) {
+										if (neighbor_flags[2]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::corner_2_1, 90);
+										}
+										else if (neighbor_flags[3]) {
+											SetOverlayTile(world_x, world_y, OVERLAY::corner_2_0, 0);
+										}
+									}
+
+									else {
+										SetOverlayTile(world_x, world_y, OVERLAY::corner_2_1, 180);
+									}
+									break;
+								case 3:
+
+									if (!neighbor_flags[0]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_3_0, 0); }
+									else if (!neighbor_flags[1]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_3_0, 90); }
+									else if (!neighbor_flags[2]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_3_0, 180); }
+									else if (!neighbor_flags[3]) { SetOverlayTile(world_x, world_y, OVERLAY::corner_3_0, 270); }
+									break;
+								case 4:
+									SetOverlayTile(world_x, world_y, OVERLAY::corner_4_0, 0);
+									break;
+								default: ENGINEPRINT("too many floors detected in wall cornering algorithm"); break;
 								}
 							}
-							if (GetTile(world_x + 1, world_y)) {
-								if (GetTile(world_x + 1, world_y)->PackedTileIndex == wall_material) {
-									num_neighboring_walls++;
-								}
-							}
-							if (GetTile(world_x, world_y - 1)) {
-								if (GetTile(world_x, world_y - 1)->PackedTileIndex == wall_material) {
-									num_neighboring_walls++;
-								}
-							}
 
-							if (GetTile(world_x-1, world_y)) {
-								if (GetTile(world_x-1, world_y)->PackedTileIndex == wall_material) {
-									num_neighboring_walls++;
-								}
-							}
 
-							SetTile(world_x, world_y, LEVEL::TILES[floor][1][num_neighboring_walls], 0, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 						}
@@ -702,7 +951,14 @@ void ATerrainGenerator::GenerateMap() {
 			}
 		}
 	}
-	*/
+	
+
+
+
+
+
+
+
 
 	//rebuild terrain map
 	for (int i = 0; i < TerrainMapData.Num(); i++) {
@@ -719,35 +975,59 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 	PRINT("Initializing tilemap")
 
-		FPaperTileInfo TileInfo;
+	FPaperTileInfo TileInfo;
 	TileInfo.TileSet = *LevelTileSet;
 	TileInfo.PackedTileIndex = wall_material;
+	////////////////////////////////////////////////
+	FPaperTileInfo OverlayTileInfo;
+	OverlayTileInfo.TileSet = *LevelOverlayTileSet;
+	OverlayTileInfo.PackedTileIndex = 69;
+
 
 	UPaperTileMapComponent* tile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
-
 	tile->RegisterComponent();
 	tile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	UPaperTileMapComponent* overlaytile = NewObject<UPaperTileMapComponent>(this, UPaperTileMapComponent::StaticClass());
+	overlaytile->RegisterComponent();
+	overlaytile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
 	tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
-
+	//////////////////////////////////////////////////////////////////////////
+	overlaytile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
 
 
 	FVector placement(double(grid_x * MAP_WIDTH * TILE_WIDTH), 0.0, double(grid_y * MAP_HEIGHT * TILE_HEIGHT));
 	tile->SetWorldLocation(placement);
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	FVector overlayplacement(double(grid_x * MAP_WIDTH * TILE_WIDTH), 6.0, double(grid_y * MAP_HEIGHT * TILE_HEIGHT));
+
+	overlaytile->SetWorldLocation(overlayplacement);
+
 
 	tile->TileMap->SetCollisionThickness(10.0);
 	tile->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	tile->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+
 	UPaperTileLayer* TileLayer = NewObject<UPaperTileLayer>(tile->TileMap, UPaperTileLayer::StaticClass());
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	UPaperTileLayer* TileOverlayLayer = NewObject<UPaperTileLayer>(overlaytile->TileMap, UPaperTileLayer::StaticClass());
+
 
 	if (TileLayer)
 	{
 		TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
 		tile->TileMap->TileLayers.Add(TileLayer);
 	}
+	/////////////////////////////////////////////////
+	if (TileOverlayLayer) {
+		TileOverlayLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+		overlaytile->TileMap->TileLayers.Add(TileOverlayLayer);
+	}
+
+
 
 	for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
 		for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
@@ -755,12 +1035,27 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 			tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
 		}
 	}
+	///////////////////////////////////////
+	for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
+		for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
+			overlaytile->TileMap->TileLayers[0]->SetCell(xxx, yyy, OverlayTileInfo);
+		}
+	}
+
+
 
 	tile->TileMap->MarkPackageDirty();
 	tile->MarkPackageDirty();
+	//
+	overlaytile->TileMap->MarkPackageDirty();
+	overlaytile->MarkPackageDirty();
+
+
 
 	SetTileMap(grid_x, grid_y, tile);
 
+	int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+	TerrainOverlayMapData[index] = overlaytile;
 
 
 }

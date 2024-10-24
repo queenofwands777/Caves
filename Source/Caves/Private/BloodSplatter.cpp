@@ -11,6 +11,12 @@
 #include "RenderUtils.h"
 
 
+
+#include <format>
+#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+
+//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, std::format("absorbing. x: {}, y: {}", actual_x, actual_y).c_str());
+
 ABloodSplatter::ABloodSplatter(){
     PrimaryActorTick.bCanEverTick = true;
 
@@ -20,6 +26,7 @@ ABloodSplatter::ABloodSplatter(){
     
 
 }
+
 
 // Sets default values
 void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
@@ -247,8 +254,6 @@ void ABloodSplatter::InitSplatter() {
 
 }
 
-#include <format>
-#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
 
 
 int ABloodSplatter::AbsorbSplatter(FVector input) {
@@ -277,7 +282,7 @@ int ABloodSplatter::AbsorbSplatter(FVector input) {
     actual_y += y_var;
 
 
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, std::format("absorbing. x: {}, y: {}", actual_x, actual_y).c_str());
+   
 
     FTexture2DMipMap& Mip = splatter_texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);

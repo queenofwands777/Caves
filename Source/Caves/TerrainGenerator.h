@@ -42,6 +42,7 @@ public:
 	void MakeRoom(int x, int y);
 	void PlaceEncounter(Encounter encounter, int x, int y);
 	void SetTile(int x, int y, int terrain, int size, bool generating_floor);
+	void SetOverlayTile(int x, int y, int terrain, int rotation);
 	FPaperTileInfo* GetTile(int x, int y);
 
 	const int LEVEL_WIDTH = 1024;
@@ -62,6 +63,7 @@ public:
 	int floor = 0;
 
 	UPaperTileSet* LevelTileSet;
+	UPaperTileSet* LevelOverlayTileSet;
 	std::vector<RoomMarker> rooms;
 	
 
@@ -70,10 +72,16 @@ public:
 	void InitializeTileMap(int grid_x, int grid_y);
 
 	UPaperTileMapComponent* GetTileMap(int grid_x, int grid_y);
+
+	UPaperTileMapComponent* GetOverlayTileMap(int grid_x, int grid_y);
+
 	void SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
 	TArray<UPaperTileMapComponent*> TerrainMapData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TileMap", meta = (AllowPrivateAccess = "true"))
+	TArray<UPaperTileMapComponent*> TerrainOverlayMapData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TArray<TSubclassOf<AActor>> Enemies;
