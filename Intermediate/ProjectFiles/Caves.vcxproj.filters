@@ -30,6 +30,18 @@
     <None Include="..\..\Config\DefaultInput.ini">
       <Filter>Config</Filter>
     </None>
+    <Filter Include="Source\BeccasMod">
+      <UniqueIdentifier>{00F780AD-4EB3-30B1-9B02-4737C902E7A3}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BeccasMod\BeccasMod.Build.cs">
+      <Filter>Source\BeccasMod</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\BeccasMod\BeccasMod.cpp">
+      <Filter>Source\BeccasMod</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BeccasMod\BeccasMod.h">
+      <Filter>Source\BeccasMod</Filter>
+    </ClInclude>
     <Filter Include="Source\Caves">
       <UniqueIdentifier>{B64B22B6-FCAE-3816-BC89-11409E408CC1}</UniqueIdentifier>
     </Filter>

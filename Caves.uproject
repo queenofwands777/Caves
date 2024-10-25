@@ -11,6 +11,11 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
+		},
+		{
+			"Name": "BeccasMod",
+			"Type": "Editor",
+			"LoadingPhase":  "Default"
 		}
 	],
 	"Plugins": [

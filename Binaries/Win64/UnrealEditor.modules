@@ -2,6 +2,7 @@
 	"BuildId": "33043543",
 	"Modules": 
 	{
+		"BeccasMod": "UnrealEditor-BeccasMod.dll",
 		"Caves": "UnrealEditor-Caves.dll"
 	}
 }
