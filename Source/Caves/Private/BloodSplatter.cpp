@@ -29,7 +29,7 @@ ABloodSplatter::ABloodSplatter(){
 
 
 // Sets default values
-void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location)
+void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location, FColor _color)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	
@@ -43,6 +43,7 @@ void ABloodSplatter::InitParams(int _num_probes, int _blood_quantity, float _max
     direction = _direction;
     location = _location;
     blood_quantity = _blood_quantity;
+    color = _color;
 
 }
 
@@ -157,31 +158,61 @@ void ABloodSplatter::Tick(float DeltaTime)
 
 
 
+struct Color {
+public:
+    Color(std::vector<int> _base, float _variance) {
+        color = _base;
+        variance = _variance;
 
+        Mix();
+    }
+
+    std::vector<int> color;
+    float variance;
+
+    void Mix() {
+
+        float bias_0 = float(color[0]) / 255.0;
+        float bias_1 = float(color[1]) / 255.0;
+        float bias_2 = float(color[2]) / 255.0;
+        bias_0 *= variance;
+        bias_1 *= variance;
+        bias_2 *= variance;
+
+
+        color[0] = FMath::Min(FMath::Max(color[0] + FMath::RandRange(-bias_0, bias_0), 0), 255);
+        color[1] = FMath::Min(FMath::Max(color[1] + FMath::RandRange(-bias_1, bias_1), 0), 255);
+        color[2] = FMath::Min(FMath::Max(color[2] + FMath::RandRange(-bias_2,bias_2),0),255);
+
+
+
+
+        //color[0] = FMath::Min(FMath::Max(color[0] + FMath::RandRange(-variance, variance), 0), 255);
+        //color[1] = FMath::Min(FMath::Max(color[0] + FMath::RandRange(-variance, variance), 0), 255);
+        //color[2] = FMath::Min(FMath::Max(color[0] + FMath::RandRange(-variance, variance), 0), 255);
+    }
+
+
+};
 
 
 
 
 void ABloodSplatter::PlaceDot(int start_x, int start_y, int size, void* Data) {
 
-    int variance = FMath::RandRange(-80, 80);
+    Color Red = Color({ 0,0,160 }, 80);
+    Color Green = Color({ 0,160,0 }, 80);
 
-    //bgr
-    int color[3] = {
-        0,
-        0,
-        160 + variance
-    };
-
+    Color BlueprintColor = Color({ color.B,color.G, color.R }, 100.0);
 
     for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++){
-            PlacePixel(start_x + x, start_y + y, Data, color);
+            PlacePixel(start_x + x, start_y + y, Data, BlueprintColor);
         }
     }
 }
 
-void ABloodSplatter::PlacePixel(int x, int y, void* Data, int color[3]) {
+void ABloodSplatter::PlacePixel(int x, int y, void* Data, Color in_color) {
 
     // Calculate the pixel location
 
@@ -193,10 +224,14 @@ void ABloodSplatter::PlacePixel(int x, int y, void* Data, int color[3]) {
     int32 PixelIndex = ((y * texture_width) + x);
     uint8* Ptr = (uint8*)Data + PixelIndex * 4;
 
+    
+
+
+
     // Set the pixel color
-    Ptr[0] = color[0];
-    Ptr[1] = color[1];
-    Ptr[2] = color[2];
+    Ptr[0] = in_color.color[0];
+    Ptr[1] = in_color.color[1];
+    Ptr[2] = in_color.color[2];
     Ptr[3] = 255;
 
 }

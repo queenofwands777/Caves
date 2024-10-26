@@ -2,6 +2,8 @@
 
 #pragma once
 
+struct Color;
+
 #include "CoreMinimal.h"
 #include "Engine/CollisionProfile.h"
 #include "PhysicsEngine/BodySetup.h"
@@ -41,10 +43,10 @@ public:
 	void Splatter();
 
 	void PlaceDot(int start_x, int start_y, int size, void* Data);
-	void PlacePixel(int x, int y, void* Data, int color[3]);
+	void PlacePixel(int x, int y, void* Data, Color color);
 
 	UFUNCTION(BlueprintCallable, Category = "Initialization")
-	void InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location);
+	void InitParams(int _num_probes, int _blood_quantity, float _max_angle, int _probe_lifetime, int _num_frames, int _probe_variance, int _probe_speed, FVector _direction, FVector _location, FColor _color);
 
 public:
 	int texture_width = 256;
@@ -84,6 +86,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
 	FVector location;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialization")
+	FColor color;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Texture", meta = (AllowPrivateAccess = "true"))
 	UTexture2D* splatter_texture = nullptr;
