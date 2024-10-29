@@ -17,119 +17,7 @@
 #define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
-enum TERRAIN {
-	LVL1_VOID = 15,
-	STONE_WALL_0 = 5,
-	STONE_WALL_1 = 6,
-	STONE_WALL_2 = 7,
-	STONE_WALL_3 = 8,
-	STONE_WALL_4 = 9,
-	STONE_FLOOR_0 = 0,
-	STONE_FLOOR_1 = 1,
-	STONE_FLOOR_2 = 2,
-	STONE_FLOOR_3 = 3,
-	STONE_FLOOR_4 = 4,
 
-	LVL2_VOID = 31,
-	FIRE_WALL_0 = 21,
-	FIRE_WALL_1 = 22,
-	FIRE_WALL_2 = 23,
-	FIRE_WALL_3 = 24,
-	FIRE_WALL_4 = 25,
-	FIRE_FLOOR_0 = 16,
-	FIRE_FLOOR_1 = 17,
-	FIRE_FLOOR_2 = 18,
-	FIRE_FLOOR_3 = 19,
-	FIRE_FLOOR_4 = 20,
-
-	LVL3_VOID = 47,
-	ICE_WALL_0 = 37,
-	ICE_WALL_1 = 38,
-	ICE_WALL_2 = 39,
-	ICE_WALL_3 = 40,
-	ICE_WALL_4 = 41,
-	ICE_FLOOR_0 = 32,
-	ICE_FLOOR_1 = 33,
-	ICE_FLOOR_2 = 34,
-	ICE_FLOOR_3 = 35,
-	ICE_FLOOR_4 = 36,
-
-	LVL4_VOID = 63,
-	LVL4_WALL_0 = 53,
-	LVL4_WALL_1 = 54,
-	LVL4_WALL_2 = 55,
-	LVL4_WALL_3 = 56,
-	LVL4_WALL_4 = 57,
-	LVL4_FLOOR_0 = 48,
-	LVL4_FLOOR_1 = 49,
-	LVL4_FLOOR_2 = 50,
-	LVL4_FLOOR_3 = 51,
-	LVL4_FLOOR_4 = 52,
-
-	LVL5_VOID = 79,
-	LVL5_WALL_0 = 69,
-	LVL5_WALL_1 = 70,
-	LVL5_WALL_2 = 71,
-	LVL5_WALL_3 = 72,
-	LVL5_WALL_4 = 73,
-	LVL5_FLOOR_0 = 64,
-	LVL5_FLOOR_1 = 65,
-	LVL5_FLOOR_2 = 66,
-	LVL5_FLOOR_3 = 67,
-	LVL5_FLOOR_4 = 68,
-
-	LVL6_VOID = 95,
-	LVL6_WALL_0 = 85,
-	LVL6_WALL_1 = 86,
-	LVL6_WALL_2 = 87,
-	LVL6_WALL_3 = 88,
-	LVL6_WALL_4 = 89,
-	LVL6_FLOOR_0 = 80,
-	LVL6_FLOOR_1 = 81,
-	LVL6_FLOOR_2 = 82,
-	LVL6_FLOOR_3 = 83,
-	LVL6_FLOOR_4 = 84,
-
-	LVL7_VOID = 111,
-	LVL7_WALL_0 = 101,
-	LVL7_WALL_1 = 102,
-	LVL7_WALL_2 = 103,
-	LVL7_WALL_3 = 104,
-	LVL7_WALL_4 = 105,
-	LVL7_FLOOR_0 = 96,
-	LVL7_FLOOR_1 = 97,
-	LVL7_FLOOR_2 = 98,
-	LVL7_FLOOR_3 = 99,
-	LVL7_FLOOR_4 = 100,
-};
-
-namespace LEVEL {
-
-	const int TILES[7][2][5] = {
-
-		{ { TERRAIN::STONE_WALL_0,TERRAIN::STONE_WALL_1,TERRAIN::STONE_WALL_2, TERRAIN::STONE_WALL_3, TERRAIN::STONE_WALL_4 },
-		{TERRAIN::STONE_FLOOR_0,TERRAIN::STONE_FLOOR_1,TERRAIN::STONE_FLOOR_2, TERRAIN::STONE_FLOOR_3, TERRAIN::STONE_FLOOR_4 } },
-
-		{ { TERRAIN::FIRE_WALL_0,TERRAIN::FIRE_WALL_1,TERRAIN::FIRE_WALL_2, TERRAIN::FIRE_WALL_3, TERRAIN::FIRE_WALL_4 },
-		{ TERRAIN::FIRE_FLOOR_0,TERRAIN::FIRE_FLOOR_1,TERRAIN::FIRE_FLOOR_2, TERRAIN::FIRE_FLOOR_3, TERRAIN::FIRE_FLOOR_4  }},
-
-		{ { TERRAIN::ICE_WALL_0,TERRAIN::ICE_WALL_1,TERRAIN::ICE_WALL_2, TERRAIN::ICE_WALL_3, TERRAIN::ICE_WALL_4  },
-		{ TERRAIN::ICE_FLOOR_0,TERRAIN::ICE_FLOOR_1,TERRAIN::ICE_FLOOR_2, TERRAIN::ICE_FLOOR_3, TERRAIN::ICE_FLOOR_4 } },
-
-		{ { TERRAIN::LVL4_WALL_0,TERRAIN::LVL4_WALL_1,TERRAIN::LVL4_WALL_2, TERRAIN::LVL4_WALL_3, TERRAIN::LVL4_WALL_4 },
-		{ TERRAIN::LVL4_FLOOR_0,TERRAIN::LVL4_FLOOR_1,TERRAIN::LVL4_FLOOR_2, TERRAIN::LVL4_FLOOR_3, TERRAIN::LVL4_FLOOR_4  } },
-
-		{ { TERRAIN::LVL5_WALL_0,TERRAIN::LVL5_WALL_1,TERRAIN::LVL5_WALL_2, TERRAIN::LVL5_WALL_3, TERRAIN::LVL5_WALL_4  },
-		{ TERRAIN::LVL5_FLOOR_0,TERRAIN::LVL5_FLOOR_1,TERRAIN::LVL5_FLOOR_2, TERRAIN::LVL5_FLOOR_3, TERRAIN::LVL5_FLOOR_4  } },
-
-		{ { TERRAIN::LVL6_WALL_0,TERRAIN::LVL6_WALL_1,TERRAIN::LVL6_WALL_2, TERRAIN::LVL6_WALL_3, TERRAIN::LVL6_WALL_4  },
-		{ TERRAIN::LVL6_FLOOR_0,TERRAIN::LVL6_FLOOR_1,TERRAIN::LVL6_FLOOR_2, TERRAIN::LVL6_FLOOR_3, TERRAIN::LVL6_FLOOR_4  } },
-
-		{ { TERRAIN::LVL7_WALL_0,TERRAIN::LVL7_WALL_1,TERRAIN::LVL7_WALL_2,  TERRAIN::LVL7_WALL_2, TERRAIN::LVL7_WALL_2  },
-		{ TERRAIN::LVL7_FLOOR_0,TERRAIN::LVL7_FLOOR_1,TERRAIN::LVL7_FLOOR_2, TERRAIN::LVL7_FLOOR_3, TERRAIN::LVL7_FLOOR_4  } }
-
-	};
-}
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
 	int index = (grid_x * LEVEL_HEIGHT) + grid_y;
@@ -340,6 +228,12 @@ FPaperTileInfo* ATerrainGenerator::GetTile(int input_x, int input_y) {
 
 }
 
+
+
+
+
+
+
 // Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
@@ -352,36 +246,74 @@ ATerrainGenerator::ATerrainGenerator()
 
 	TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 	TerrainOverlayMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
+
+
+	std::vector<std::vector<Encounter>> local_encounters = {
+		{
+			{{ENEMIES::RifleSoldier, ENEMIES::KatanaSoldier, ENEMIES::GrenadeSoldier}, {}},
+			{{ENEMIES::RifleSoldier, ENEMIES::RifleSoldier}, {}},
+			{{ENEMIES::KatanaSoldier, ENEMIES::KatanaSoldier}, {}},
+			{{ENEMIES::GrenadeSoldier, ENEMIES::GrenadeSoldier}, {}}
+		},
+
+		{
+			{{GoblinSoldier, GoblinSoldier, Goblin, Goblin}, {}},
+			{{Goblin, GoblinSoldier, GoblinKnight}, {}},
+			{{GoblinKnight, GoblinKnight}, {}},
+		},
+
+
+		{
+			{{Demon, Demon, Demon, Shade}, {}},
+			{{Hellhound, Hellhound, Hellhound}, {}},
+			{{Shade, Shade}, {}},
+		},
+
+
+		{
+			{{Yeti,Yeti,Yeti}, {}},
+			{{Chomper, Chomper, IceSkeleton}, {}},
+			{{IceSkeleton, IceSkeleton, IceSkeleton},{} },
+		},
+
+
+		{
+			{{BipedRobot, BipedRobot, BipedRobot}, {}},
+			{{WheelRobot, WheelRobot, FourLegsRobot}, {}},
+			{{FourLegsRobot, FourLegsRobot, BipedRobot},{}},
+		},
+
+
+		{
+			{{Alien,Alien,Alien}, {}},
+		},
+
+
+		{
+			{{CosmicBeing, CosmicBeing, CosmicBeing}, {}},
+		},
+
+
+		{
+			{ {ENEMIES::Demon, ENEMIES::Demon, ENEMIES::Demon}, {} },
+			{ {ENEMIES::Goblin, ENEMIES::Goblin, ENEMIES::Goblin}, {} },
+			{ {ENEMIES::Hellhound, ENEMIES::Hellhound}, {} },
+			{ {ENEMIES::RifleSoldier, ENEMIES::Shade}, {} },
+			{{ENEMIES::GoblinSoldier, ENEMIES::GoblinSoldier,ENEMIES::GoblinSoldier,ENEMIES::GoblinSoldier,ENEMIES::GoblinKnight} ,{}}
+		}
+
+	};
+
+	encounters = local_encounters;
+	
+	
+	
+	
+
+
 }
 
-enum OVERLAY {
-	side_1_0 = 0,
-	side_2_0 = 1,
-	side_2_1 = 2,
-	side_3_0 = 3,
-	side_4_0 = 4,
-	corner_1_0 = 16,
-	corner_2_0 = 17,
-	corner_2_1 = 18,
-	corner_3_0 = 19,
-	corner_4_0 = 20,
 
-};
-
-enum ENEMIES {
-	Demon = 0,
-	Hellhound = 1,
-	Imp = 2,
-	Shade = 3,
-	Soldier = 4,
-
-};
-
-enum OBJECTS {
-	Portal = 0,
-	Chest = 1,
-	Altar = 2
-};
 
 // Called when the game starts or when spawned
 void ATerrainGenerator::BeginPlay()
@@ -547,20 +479,7 @@ public:
 
 };
 
-struct Encounter {
 
-	std::vector<ENEMIES> enemies;
-	std::vector<OBJECTS> objects;
-
-public:
-
-	Encounter(std::vector<ENEMIES> _enemies, std::vector<OBJECTS> _objects) {
-		enemies = _enemies;
-		objects = _objects;
-	}
-
-
-};
 
 void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 
@@ -615,7 +534,7 @@ void ATerrainGenerator::GenerateMap() {
 	FRotator spawn_rotation = { 0,0,0 };
 	GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
 	FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-	GetWorld()->SpawnActor<AActor>(Objects[0], portal_location, spawn_rotation);
+	GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Portal], portal_location, spawn_rotation);
 
 
 	int num_chests = 2;
@@ -623,13 +542,6 @@ void ATerrainGenerator::GenerateMap() {
 	int num_encounters = (round(floor/3.0));
 
 	int num_rooms = num_chests + num_altars + num_encounters;
-
-	std::vector<Encounter> encounters = {
-		{ {ENEMIES::Demon, ENEMIES::Demon, ENEMIES::Demon}, {} },
-		{ {ENEMIES::Imp, ENEMIES::Imp, ENEMIES::Imp}, {} },
-		{ {ENEMIES::Hellhound, ENEMIES::Hellhound}, {} },
-		{ {ENEMIES::Soldier, ENEMIES::Shade}, {} }
-	};
 
 
 
@@ -657,8 +569,8 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
-			Encounter encounter = encounters[rand_encounter];
+			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
+			Encounter encounter = encounters[floor][rand_encounter];
 			PlaceEncounter(encounter, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
@@ -672,8 +584,8 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
-			Encounter encounter = encounters[rand_encounter];
+			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
+			Encounter encounter = encounters[floor][rand_encounter];
 			PlaceEncounter({ encounter.enemies,{OBJECTS::Altar} }, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
@@ -688,8 +600,8 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters.size() - 1);
-			Encounter encounter = encounters[rand_encounter];
+			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
+			Encounter encounter = encounters[floor][rand_encounter];
 			PlaceEncounter({ encounter.enemies,{OBJECTS::Chest} }, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
