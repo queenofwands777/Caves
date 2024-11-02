@@ -541,7 +541,15 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Encounter.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\FloorInfo.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
@@ -551,7 +559,9 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\Caves\Public\BeccaUtil.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\Encounter.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\EnemyList.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\FloorInfo.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h"/>
   </ItemGroup>
   <PropertyGroup>

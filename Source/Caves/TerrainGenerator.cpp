@@ -41,7 +41,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 	//probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
 	FPaperTileInfo TileInfo;
-	TileInfo.TileSet = *LevelTileSet;
+	TileInfo.TileSet = floor_info->LevelTileSet;
 
 	//set tiles according to brush size
 	for (int xx = -size / 2; xx <= size / 2; ++xx) {
@@ -83,7 +83,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 			host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
 
 			if (generating_floor) {
-				TileInfo.PackedTileIndex = wall_material;
+				TileInfo.PackedTileIndex = floor_info->wall_material;
 				//set surrounding tiles to wall, if they are void
 				for (int mod_x = -1; mod_x <= 1; mod_x++) {
 					for (int mod_y = -1; mod_y <= 1; mod_y++) {
@@ -97,7 +97,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 						if ((neighbor_x < MAP_WIDTH) && (neighbor_y < MAP_HEIGHT) && (neighbor_x >= 0) && (neighbor_y >= 0)) {
 							FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
-							if (neighbor_cell.PackedTileIndex == void_material) {
+							if (neighbor_cell.PackedTileIndex == floor_info->void_material) {
 								host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
 							}
 						}
@@ -125,7 +125,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 							UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
 							FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
 
-							if (neighbor_cell.PackedTileIndex == void_material) {
+							if (neighbor_cell.PackedTileIndex == floor_info->void_material) {
 								target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
 							}
 
@@ -169,23 +169,6 @@ void ATerrainGenerator::SetOverlayTile(int world_x, int world_y, int terrain, in
 
 
 
-	//check if the target tilemap is initialized. if not, initialize a new tilemap.
-	//different for overlay. need to create an overlap map object which mirrors the regular map object. or use layers?
-	//if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
-	//	InitializeTileMap(tilemap_x, tilemap_y);
-	//}
-
-	//check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
-	//if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
-
-	//	for (int i = -1; i <= 1; i++) {
-	//		for (int ii = -1; ii <= 1; ii++) {
-	//			if (GetTileMap(tilemap_x + i, tilemap_y + ii) == nullptr) {
-	//				InitializeTileMap(tilemap_x + i, tilemap_y + ii);
-	//			}
-	//		}
-	//	}
-	//}
 
 	switch (rotation) {
 	
@@ -240,74 +223,17 @@ ATerrainGenerator::ATerrainGenerator()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	//load tileset
-	LevelTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/Terrain1_TileSet"));
+
+
+	//load overlay tileset
 	LevelOverlayTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/TerrainOverlay1_TileSet"));
 
 	TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 	TerrainOverlayMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
 
 
-	std::vector<std::vector<Encounter>> local_encounters = {
-		{
-			{{ENEMIES::RifleSoldier, ENEMIES::KatanaSoldier, ENEMIES::GrenadeSoldier}, {}},
-			{{ENEMIES::RifleSoldier, ENEMIES::RifleSoldier}, {}},
-			{{ENEMIES::KatanaSoldier, ENEMIES::KatanaSoldier}, {}},
-			{{ENEMIES::GrenadeSoldier, ENEMIES::GrenadeSoldier}, {}}
-		},
-
-		{
-			{{GoblinSoldier, GoblinSoldier, Goblin, Goblin}, {}},
-			{{Goblin, GoblinSoldier, GoblinKnight}, {}},
-			{{GoblinKnight, GoblinKnight}, {}},
-		},
 
 
-		{
-			{{Demon, Demon, Demon, Shade}, {}},
-			{{Hellhound, Hellhound, Hellhound}, {}},
-			{{Shade, Shade}, {}},
-		},
-
-
-		{
-			{{Yeti,Yeti,Yeti}, {}},
-			{{Chomper, Chomper, IceSkeleton}, {}},
-			{{IceSkeleton, IceSkeleton, IceSkeleton},{} },
-		},
-
-
-		{
-			{{BipedRobot, BipedRobot, BipedRobot}, {}},
-			{{WheelRobot, WheelRobot, FourLegsRobot}, {}},
-			{{FourLegsRobot, FourLegsRobot, BipedRobot},{}},
-		},
-
-
-		{
-			{{Alien,Alien,Alien}, {}},
-		},
-
-
-		{
-			{{CosmicBeing, CosmicBeing, CosmicBeing}, {}},
-		},
-
-
-		{
-			{ {ENEMIES::Demon, ENEMIES::Demon, ENEMIES::Demon}, {} },
-			{ {ENEMIES::Goblin, ENEMIES::Goblin, ENEMIES::Goblin}, {} },
-			{ {ENEMIES::Hellhound, ENEMIES::Hellhound}, {} },
-			{ {ENEMIES::RifleSoldier, ENEMIES::Shade}, {} },
-			{{ENEMIES::GoblinSoldier, ENEMIES::GoblinSoldier,ENEMIES::GoblinSoldier,ENEMIES::GoblinSoldier,ENEMIES::GoblinKnight} ,{}}
-		}
-
-	};
-
-	encounters = local_encounters;
-	
-	
-	
 	
 
 
@@ -320,56 +246,11 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	switch (floor) {
-	case 0:
-		floor_material = TERRAIN::STONE_FLOOR_0;
-		wall_material = TERRAIN::STONE_WALL_0;
-		void_material = TERRAIN::LVL1_VOID;
-		break;
-	case 1:
-		floor_material = TERRAIN::FIRE_FLOOR_0;
-		wall_material = TERRAIN::FIRE_WALL_0;
-		void_material = TERRAIN::LVL2_VOID;
+	//dont forget to delete!!
+	floor_info = GetWorld()->SpawnActor<AFloorInfo>(Floors[floor_num]);
+	
 
-		break;
-	case 2:
-		floor_material = TERRAIN::ICE_FLOOR_0;
-		wall_material = TERRAIN::ICE_WALL_0;
-		void_material = TERRAIN::LVL3_VOID;
-
-		break;
-	case 3:
-		floor_material = TERRAIN::LVL4_FLOOR_0;
-		wall_material = TERRAIN::LVL4_WALL_0;
-		void_material = TERRAIN::LVL4_VOID;
-
-		break;
-
-	case 4:
-		floor_material = TERRAIN::LVL5_FLOOR_0;
-		wall_material = TERRAIN::LVL5_WALL_0;
-		void_material = TERRAIN::LVL5_VOID;
-
-		break;
-
-	case 5:
-		floor_material = TERRAIN::LVL6_FLOOR_0;
-		wall_material = TERRAIN::LVL6_WALL_0;
-		void_material = TERRAIN::LVL6_VOID;
-
-		break;
-	case 6:
-		floor_material = TERRAIN::LVL7_FLOOR_0;
-		wall_material = TERRAIN::LVL7_WALL_0;
-		void_material = TERRAIN::LVL7_VOID;
-
-		break;
-	default:
-		floor_material = TERRAIN::LVL5_FLOOR_0;
-		wall_material = TERRAIN::LVL5_WALL_0;
-		void_material = TERRAIN::LVL5_VOID;
-		break;
-	}
+	
 
 	GenerateMap();
 
@@ -379,7 +260,7 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 	for (int i = 0; i < 5; i++) {
 		x += FMath::RandRange(-1, 1);
 		y += FMath::RandRange(-1, 1);
-		SetTile(x, y, floor_material, 8);
+		SetTile(x, y, floor_info->floor_material, 8);
 
 	}
 
@@ -440,7 +321,7 @@ public:
 			cursor_y += new_direction[1];
 
 			//set tile
-			parent->SetTile(cursor_x, cursor_y, parent->floor_material, 3);
+			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3);
 
 
 
@@ -481,9 +362,12 @@ public:
 
 
 
-void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
+void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 
-	for (int enemy = 0; enemy < encounter.enemies.size(); enemy++) {
+
+
+
+	for (int enemy = 0; enemy < encounter->Enemies.Num(); enemy++) {
 		float distance = 20.0;
 		float offset_x = FMath::FRandRange(-distance, distance);
 		float offset_y = FMath::FRandRange(-distance, distance);
@@ -494,11 +378,11 @@ void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 		FRotator rotation = { 0,0,0 };
 
 
-		GetWorld()->SpawnActor<AActor>(Enemies[encounter.enemies[enemy]], spawn_location, rotation);
+		GetWorld()->SpawnActor<AActor>(encounter->Enemies[enemy], spawn_location, rotation);
 
 	}
 
-	for (int object = 0; object < encounter.objects.size(); object++) {
+	for (int object = 0; object < encounter->Objects.Num(); object++) {
 		float distance = 20.0;
 		float offset_x = FMath::FRandRange(-distance, distance);
 		float offset_y = FMath::FRandRange(-distance, distance);
@@ -509,7 +393,7 @@ void ATerrainGenerator::PlaceEncounter(Encounter encounter, int x, int y) {
 		FRotator rotation = { 0,0,0 };
 
 
-		GetWorld()->SpawnActor<AActor>(Objects[encounter.objects[object]], spawn_location, rotation);
+		GetWorld()->SpawnActor<AActor>(encounter->Objects[object], spawn_location, rotation);
 	}
 }
 
@@ -529,17 +413,17 @@ void ATerrainGenerator::GenerateMap() {
 	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
 	//create spawn area
-	SetTile(cursor_x, cursor_y, floor_material, 7);
+	SetTile(cursor_x, cursor_y, floor_info->floor_material, 7);
 	FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
 	FRotator spawn_rotation = { 0,0,0 };
 	GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
 	FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-	GetWorld()->SpawnActor<AActor>(Objects[OBJECTS::Portal], portal_location, spawn_rotation);
+	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
 
 
 	int num_chests = 2;
 	int num_altars = 1;
-	int num_encounters = (round(floor/3.0));
+	int num_encounters = 0;
 
 	int num_rooms = num_chests + num_altars + num_encounters;
 
@@ -558,8 +442,8 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
-			Encounter encounter = encounters[floor][rand_encounter];
+
+			AEncounter* encounter = floor_info->GetEncounter();
 			PlaceEncounter(encounter, room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
@@ -573,9 +457,10 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
-			Encounter encounter = encounters[floor][rand_encounter];
-			PlaceEncounter({ encounter.enemies,{OBJECTS::Altar} }, room_x, room_y);
+			
+			//place altar here
+			AEncounter* encounter = floor_info->GetEncounter();
+			PlaceEncounter(encounter->AddObject(OBJECTS::Altar), room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
 		}
@@ -589,9 +474,9 @@ void ATerrainGenerator::GenerateMap() {
 			float room_x = rooms[rand_room].x;
 			float room_y = rooms[rand_room].y;
 
-			int rand_encounter = FMath::RandRange(0, encounters[floor].size() - 1);
-			Encounter encounter = encounters[floor][rand_encounter];
-			PlaceEncounter({ encounter.enemies,{OBJECTS::Chest} }, room_x, room_y);
+			//place chest here
+			AEncounter* encounter = floor_info->GetEncounter();
+			PlaceEncounter(encounter->AddObject(OBJECTS::Chest), room_x, room_y);
 
 			rooms.erase(rooms.begin() + rand_room);
 		}
@@ -632,7 +517,7 @@ void ATerrainGenerator::GenerateMap() {
 
 						//check if that tile is a certain kind
 						FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
-						if (target_tile.PackedTileIndex == wall_material) {
+						if (target_tile.PackedTileIndex == floor_info->wall_material) {
 
 
 
@@ -657,25 +542,25 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 								
-									if (GetTile(world_x, world_y + 1)->PackedTileIndex == floor_material) {
+									if (GetTile(world_x, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
 										num_neighboring_floors++;
 										neighbor_flags[0] = true;
 									}
 								
 
-									if (GetTile(world_x + 1, world_y)->PackedTileIndex == floor_material) {
+									if (GetTile(world_x + 1, world_y)->PackedTileIndex == floor_info->floor_material) {
 										num_neighboring_floors++;
 										neighbor_flags[1] = true;
 									}
 								
 
-									if (GetTile(world_x, world_y - 1)->PackedTileIndex == floor_material) {
+									if (GetTile(world_x, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
 										num_neighboring_floors++;
 										neighbor_flags[2] = true;
 									}
 								
 
-									if (GetTile(world_x - 1, world_y)->PackedTileIndex == floor_material) {
+									if (GetTile(world_x - 1, world_y)->PackedTileIndex == floor_info->floor_material) {
 										num_neighboring_floors++;
 										neighbor_flags[3] = true;
 									}
@@ -756,25 +641,25 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 
-								if (GetTile(world_x - 1, world_y + 1)->PackedTileIndex == floor_material) {
+								if (GetTile(world_x - 1, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
 									num_neighboring_floors++;
 									neighbor_flags[0] = true;
 								}
 
 
-								if (GetTile(world_x + 1, world_y + 1)->PackedTileIndex == floor_material) {
+								if (GetTile(world_x + 1, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
 									num_neighboring_floors++;
 									neighbor_flags[1] = true;
 								}
 
 
-								if (GetTile(world_x + 1, world_y - 1)->PackedTileIndex == floor_material) {
+								if (GetTile(world_x + 1, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
 									num_neighboring_floors++;
 									neighbor_flags[2] = true;
 								}
 
 
-								if (GetTile(world_x - 1, world_y - 1)->PackedTileIndex == floor_material) {
+								if (GetTile(world_x - 1, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
 									num_neighboring_floors++;
 									neighbor_flags[3] = true;
 								}
@@ -877,8 +762,8 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 	PRINT("Initializing tilemap")
 
 	FPaperTileInfo TileInfo;
-	TileInfo.TileSet = *LevelTileSet;
-	TileInfo.PackedTileIndex = wall_material;
+	TileInfo.TileSet = floor_info->LevelTileSet;
+	TileInfo.PackedTileIndex = floor_info->wall_material;
 	////////////////////////////////////////////////
 	FPaperTileInfo OverlayTileInfo;
 	OverlayTileInfo.TileSet = *LevelOverlayTileSet;
@@ -932,7 +817,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 	for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
 		for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
-			TileInfo.PackedTileIndex = void_material;
+			TileInfo.PackedTileIndex = floor_info->void_material;
 			tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
 		}
 	}

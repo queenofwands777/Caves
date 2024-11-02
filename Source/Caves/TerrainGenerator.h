@@ -166,20 +166,7 @@ enum OBJECTS {
 };
 
 
-struct Encounter {
 
-	std::vector<ENEMIES> enemies;
-	std::vector<OBJECTS> objects;
-
-public:
-
-	Encounter(std::vector<ENEMIES> _enemies, std::vector<OBJECTS> _objects) {
-		enemies = _enemies;
-		objects = _objects;
-	}
-
-
-};
 
 
 struct RoomMarker {
@@ -192,6 +179,8 @@ struct RoomMarker {
 	}
 };
 
+
+#include"FloorInfo.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -216,7 +205,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void GenerateMap();
 	void MakeRoom(int x, int y);
-	void PlaceEncounter(Encounter encounter, int x, int y);
+	void PlaceEncounter(AEncounter* encounter,int x, int y);
 	void SetTile(int x, int y, int terrain, int size, bool generating_floor);
 	void SetOverlayTile(int x, int y, int terrain, int rotation);
 	FPaperTileInfo* GetTile(int x, int y);
@@ -231,19 +220,15 @@ public:
 	const int TILE_WIDTH = 16;
 	const int TILE_HEIGHT = 16;
 
-	int floor_material;
-	int wall_material;
-	int void_material;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int floor = 0;
+	int floor_num = 0;
 
-	UPaperTileSet* LevelTileSet;
 	UPaperTileSet* LevelOverlayTileSet;
 	std::vector<RoomMarker> rooms;
-	std::vector<std::vector<Encounter>> encounters;
 
-	
+	AFloorInfo* floor_info;
 
 public:
 	//std::vector<std::vector<UPaperTileMapComponent*>> TerrainMap;
@@ -262,10 +247,8 @@ public:
 	TArray<UPaperTileMapComponent*> TerrainOverlayMapData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TArray<TSubclassOf<AActor>> Enemies;
+	TArray<TSubclassOf<AFloorInfo>> Floors;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	TArray<TSubclassOf<AActor>> Objects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TSubclassOf<AActor> Player ;
