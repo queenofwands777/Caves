@@ -544,23 +544,12 @@ void ATerrainGenerator::GenerateMap() {
 	int num_rooms = num_chests + num_altars + num_encounters;
 
 
-
-
-
-
-
-
-
-
-
-#pragma endregion
-
+		float heading = FMath::RandRange(0, 360);
+		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, num_rooms, cursor_x, cursor_y, heading, this);
+#pragma endregion	
 
 #pragma region populate
 
-		float heading = FMath::RandRange(0, 360);
-		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, num_rooms, cursor_x, cursor_y, heading, this);
-	
 
 	for (int i = 0; i < num_encounters; i++) {
 		int max_rooms = rooms.size();
