@@ -374,7 +374,7 @@ void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 		float spawn_x = x + offset_x;
 		float spawn_y = y + offset_y;
 		FVector spawn_location;
-		spawn_location = { spawn_x, 2.0, spawn_y };
+		spawn_location = { spawn_x, 4.0, spawn_y };
 		FRotator rotation = { 0,0,0 };
 
 
@@ -389,7 +389,7 @@ void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 		float spawn_x = x + offset_x;
 		float spawn_y = y + offset_y;
 		FVector spawn_location;
-		spawn_location = { spawn_x, 2.0, spawn_y };
+		spawn_location = { spawn_x, 3.0, spawn_y };
 		FRotator rotation = { 0,0,0 };
 
 
