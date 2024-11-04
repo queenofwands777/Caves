@@ -111,6 +111,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TArray<TSubclassOf<AFloorInfo>> Floors;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	TArray<TSubclassOf<AFloorInfo>> SpecialFloors;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TSubclassOf<AActor> Player ;

@@ -246,8 +246,21 @@ void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
+	int floors_per_shop = 1;
+
+	int floor_or_shop = (floor_num % (floors_per_shop + 1));
+	int true_floor = (floor_num - floor_or_shop) / (floors_per_shop + 1);
+
+	if (floor_or_shop == floors_per_shop) {
+
+		floor_info = GetWorld()->SpawnActor<AFloorInfo>(SpecialFloors[0]);
+
+	}
+	else {
+		floor_info = GetWorld()->SpawnActor<AFloorInfo>(Floors[true_floor]);
+	}
+
 	//dont forget to delete!!
-	floor_info = GetWorld()->SpawnActor<AFloorInfo>(Floors[floor_num]);
 	
 
 	
@@ -412,20 +425,35 @@ void ATerrainGenerator::GenerateMap() {
 	float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
 	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
-	//create spawn area
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 7);
-	FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-	FRotator spawn_rotation = { 0,0,0 };
-	GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
-	FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
+
+	if (floor_info->is_store) {
+
+		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
+		FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+		FRotator spawn_rotation = { 0,0,0 };
+		GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
+		FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 32 };
+		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
+
+		
+	}
+	else {
 
 
-	int num_chests = 2;
-	int num_altars = 1;
-	int num_encounters = 0;
+		//create spawn area
+		SetTile(cursor_x, cursor_y, floor_info->floor_material, 7);
+		FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+		FRotator spawn_rotation = { 0,0,0 };
+		GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
+		FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
 
-	int num_rooms = num_chests + num_altars + num_encounters;
+
+		int num_chests = 2;
+		int num_altars = 1;
+		int num_encounters = 0;
+
+		int num_rooms = num_chests + num_altars + num_encounters;
 
 
 		float heading = FMath::RandRange(0, 360);
@@ -435,53 +463,61 @@ void ATerrainGenerator::GenerateMap() {
 #pragma region populate
 
 
-	for (int i = 0; i < num_encounters; i++) {
-		int max_rooms = rooms.size();
-		if (max_rooms > 0) {
-			int rand_room = FMath::RandRange(0, max_rooms - 1);
-			float room_x = rooms[rand_room].x;
-			float room_y = rooms[rand_room].y;
+		for (int i = 0; i < num_encounters; i++) {
+			int max_rooms = rooms.size();
+			if (max_rooms > 0) {
+				int rand_room = FMath::RandRange(0, max_rooms - 1);
+				float room_x = rooms[rand_room].x;
+				float room_y = rooms[rand_room].y;
 
 
-			AEncounter* encounter = floor_info->GetEncounter();
-			PlaceEncounter(encounter, room_x, room_y);
+				AEncounter* encounter = floor_info->GetEncounter();
+				PlaceEncounter(encounter, room_x, room_y);
 
-			rooms.erase(rooms.begin() + rand_room);
-		}
-	}
-
-	for (int i = 0; i < num_altars; i++) {
-		int max_rooms = rooms.size();
-		if (max_rooms > 0) {
-			int rand_room = FMath::RandRange(0, max_rooms - 1);
-			float room_x = rooms[rand_room].x;
-			float room_y = rooms[rand_room].y;
-
-			
-			//place altar here
-			AEncounter* encounter = floor_info->GetEncounter();
-			PlaceEncounter(encounter->AddObject(OBJECTS::Altar), room_x, room_y);
-
-			rooms.erase(rooms.begin() + rand_room);
+				rooms.erase(rooms.begin() + rand_room);
+			}
 		}
 
-	}
+		for (int i = 0; i < num_altars; i++) {
+			int max_rooms = rooms.size();
+			if (max_rooms > 0) {
+				int rand_room = FMath::RandRange(0, max_rooms - 1);
+				float room_x = rooms[rand_room].x;
+				float room_y = rooms[rand_room].y;
 
-	for (int i = 0; i < num_chests; i++) {
-		int max_rooms = rooms.size();
-		if (max_rooms > 0) {
-			int rand_room = FMath::RandRange(0, max_rooms - 1);
-			float room_x = rooms[rand_room].x;
-			float room_y = rooms[rand_room].y;
 
-			//place chest here
-			AEncounter* encounter = floor_info->GetEncounter();
-			PlaceEncounter(encounter->AddObject(OBJECTS::Chest), room_x, room_y);
+				//place altar here
+				AEncounter* encounter = floor_info->GetEncounter();
+				PlaceEncounter(encounter->AddObject(OBJECTS::Altar), room_x, room_y);
 
-			rooms.erase(rooms.begin() + rand_room);
+				rooms.erase(rooms.begin() + rand_room);
+			}
+
 		}
-	}
+
+		for (int i = 0; i < num_chests; i++) {
+			int max_rooms = rooms.size();
+			if (max_rooms > 0) {
+				int rand_room = FMath::RandRange(0, max_rooms - 1);
+				float room_x = rooms[rand_room].x;
+				float room_y = rooms[rand_room].y;
+
+				//place chest here
+				AEncounter* encounter = floor_info->GetEncounter();
+				PlaceEncounter(encounter->AddObject(OBJECTS::Chest), room_x, room_y);
+
+				rooms.erase(rooms.begin() + rand_room);
+			}
+		}
 #pragma endregion
+
+
+
+	}
+
+
+
+	
 
 
 	//give border to floor tiles

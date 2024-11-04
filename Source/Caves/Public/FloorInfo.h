@@ -48,6 +48,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int void_material;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool is_store = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
