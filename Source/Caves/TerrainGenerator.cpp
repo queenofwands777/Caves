@@ -425,9 +425,37 @@ void ATerrainGenerator::GenerateMap() {
 	float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
 	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
-	SetTile(cursor_x, cursor_y + 8, floor_info->floor_material, 4);
-	FVector location = { float((cursor_x - 2) * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float((cursor_y + 8) * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], location, {0,0,0});
+	SetTile(cursor_x, cursor_y + 6, floor_info->floor_material, 4);
+	FVector elevator_location = { float((cursor_x - 2) * TILE_WIDTH) + (1.5 * TILE_WIDTH), 0.1, float((cursor_y + 6) * TILE_HEIGHT) - (15.5 * TILE_HEIGHT) };
+	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], elevator_location, {0,0,0});
+
+	float heading = FMath::RandRange(0, 360);
+	float heading_radians = FMath::DegreesToRadians(heading);
+
+	FVector direction = { 1,0,0 };
+
+
+	FVector new_direction = {
+		(direction[0] * FMath::Cos(heading_radians)) - (direction[2] * FMath::Sin(heading_radians)),
+		0,
+		(direction[0] * FMath::Sin(heading_radians)) + (direction[2] * FMath::Cos(heading_radians))
+	};
+
+	FVector new_direction_trunc = {
+		FMath::Sign(new_direction[0]),
+		0,
+		FMath::Sign(new_direction[2])
+	};
+
+	cursor_x = cursor_x + (new_direction_trunc[0] * 2);
+	cursor_y = cursor_y + 6 +( new_direction_trunc[2] * 2 );
+
+	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
+
+	cursor_y += (new_direction_trunc[2] * 5);
+	
+
+
 
 	if (floor_info->is_store) {
 
@@ -437,7 +465,7 @@ void ATerrainGenerator::GenerateMap() {
 		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
 		FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
 		FRotator spawn_rotation = { 0,0,0 };
-		GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
+		GetWorld()->SpawnActor<AActor>(Player, elevator_location, spawn_rotation);
 		FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 32 };
 		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
 
@@ -447,7 +475,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
 		//create spawn area
-		SetTile(cursor_x, cursor_y, floor_info->floor_material, 7);
+		SetTile(cursor_x, cursor_y, floor_info->floor_material, 8);
 		FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
 		FRotator spawn_rotation = { 0,0,0 };
 		GetWorld()->SpawnActor<AActor>(Player, spawn_location, spawn_rotation);
@@ -462,7 +490,7 @@ void ATerrainGenerator::GenerateMap() {
 		int num_rooms = num_chests + num_altars + num_encounters;
 
 
-		float heading = FMath::RandRange(0, 360);
+		
 		GeneratorProbe new_offshoot = GeneratorProbe(CURSOR_LIFETIME, num_rooms, cursor_x, cursor_y, heading, this);
 #pragma endregion	
 
