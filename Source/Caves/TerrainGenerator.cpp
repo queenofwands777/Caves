@@ -44,8 +44,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 	TileInfo.TileSet = floor_info->LevelTileSet;
 
 	//set tiles according to brush size
-	for (int xx = -size / 2; xx <= size / 2; ++xx) {
-		for (int yy = -size / 2; yy <= size / 2; ++yy) {
+	for (int xx = -size / 2; xx < size / 2; xx++) {
+		for (int yy = -size / 2; yy < size / 2; yy++) {
 
 
 			TileInfo.PackedTileIndex = terrain;
@@ -425,8 +425,14 @@ void ATerrainGenerator::GenerateMap() {
 	float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
 	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
+	SetTile(cursor_x, cursor_y + 8, floor_info->floor_material, 4);
+	FVector location = { float((cursor_x - 2) * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float((cursor_y + 8) * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
+	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], location, {0,0,0});
 
 	if (floor_info->is_store) {
+
+
+
 
 		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
 		FVector spawn_location = { float(cursor_x * TILE_WIDTH) + (1 * TILE_WIDTH), 4, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
