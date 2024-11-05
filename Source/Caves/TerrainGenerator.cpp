@@ -249,7 +249,7 @@ void ATerrainGenerator::BeginPlay()
 	int floors_per_shop = 1;
 
 	int floor_or_shop = (floor_num % (floors_per_shop + 1));
-	int true_floor = (floor_num - floor_or_shop) / (floors_per_shop + 1);
+	true_floor = (floor_num - floor_or_shop) / (floors_per_shop + 1);
 
 	if (floor_or_shop == floors_per_shop) {
 
@@ -501,9 +501,9 @@ void ATerrainGenerator::GenerateMap() {
 		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
 
 
-		int num_chests = 2;
+		int num_chests = 2 + ((true_floor - (true_floor % 3)) / 3);
 		int num_altars = 1;
-		int num_encounters = 0;
+		int num_encounters = 1 + ((true_floor - (true_floor % 2)) / 2);
 
 		int num_rooms = num_chests + num_altars + num_encounters;
 

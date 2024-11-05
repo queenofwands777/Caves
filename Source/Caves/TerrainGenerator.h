@@ -87,6 +87,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int floor_num = 0;
+	int true_floor;
 
 	UPaperTileSet* LevelOverlayTileSet;
 	std::vector<RoomMarker> rooms;
