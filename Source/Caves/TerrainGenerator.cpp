@@ -577,7 +577,7 @@ void ATerrainGenerator::GenerateMap() {
 	cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
 
-	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6);
+	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6, false);
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
 
 
