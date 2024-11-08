@@ -421,6 +421,8 @@ void ATerrainGenerator::GenerateMap() {
 #pragma region init
 	PRINT("Generating Map");
 
+	FRotator spawn_rotation = { 0,0,0 };
+
 	//set start location
 	float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
 	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
@@ -475,30 +477,30 @@ void ATerrainGenerator::GenerateMap() {
 
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
 
-	cursor_x += (new_direction_trunc[0] * 4);
-	cursor_y += (new_direction_trunc[2] * 4);
+	FVector elevator_door_location = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH/2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8};
+	FRotator elevator_door_rotation = { FMath::Sign(new_direction[0]) * 90,0,0};
+	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::ElevatorDoor], elevator_door_location, elevator_door_rotation);
+
+
+	cursor_x += (new_direction_trunc[0] * 5);
+	cursor_y += (new_direction_trunc[2] * 5);
 	
 
-	FRotator spawn_rotation = { 0,0,0 };
+	
 
 	if (floor_info->is_store) {
 
-		cursor_x += (new_direction_trunc[0] * 1);
-		cursor_y += (new_direction_trunc[2] * 1);
 
 		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
-		FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 32 };
-		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
 
+		//build shop
 		
 	}
 	else {
 
 
 		//create spawn area
-		SetTile(cursor_x, cursor_y, floor_info->floor_material, 8);
-		FVector portal_location = { float(cursor_x * TILE_WIDTH) - (2 * TILE_WIDTH), 1.9, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) };
-		GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Portal], portal_location, spawn_rotation);
+		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
 
 
 		int num_chests = 2 + ((true_floor - (true_floor % 3)) / 3);
@@ -576,7 +578,7 @@ void ATerrainGenerator::GenerateMap() {
 	cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
 	cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
 
-
+	SetTile(cursor_x, cursor_y, floor_info->floor_material, 12);
 	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6, false);
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
 
