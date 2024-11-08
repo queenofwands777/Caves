@@ -569,6 +569,22 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
+
+
+	//rebuild elevator shaft
+
+	cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
+	cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+
+
+	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6);
+	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
+
+
+	cursor_x += (new_direction_trunc[0] * 3);
+	cursor_y += (new_direction_trunc[2] * 3);
+
+	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
 	
 
 
