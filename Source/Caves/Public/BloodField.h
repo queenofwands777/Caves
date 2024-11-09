@@ -2,6 +2,15 @@
 
 #pragma once
 
+struct Color;
+struct BloodTile;
+
+#include "DrawDebugHelpers.h"
+#include "PaperSprite.h"
+#include"vector"
+#include "PaperSpriteComponent.h"
+
+#include "PaperSpriteAtlas.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BloodField.generated.h"
@@ -14,6 +23,16 @@ class CAVES_API ABloodField : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABloodField();
+
+	int TEXTURE_SIZE = 256;
+	TMap<int, TMap<int, BloodTile*>> TextureGrid;
+
+	void InitTexture(int grid_x, int grid_y);
+	void PlacePixel(int world_x, int world_y, Color color);
+	void PlaceDot(int world_x, int world_y, int size);
+
+	UFUNCTION(BlueprintCallable, Category = "Splatter")
+	void Splatter(FVector location, FVector direction);
 
 protected:
 	// Called when the game starts or when spawned

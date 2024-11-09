@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\Source\Caves\Private\BeccaUtil.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\BloodField.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -85,6 +88,9 @@
       <UniqueIdentifier>{71277794-0059-3576-BCF5-A300C439FB03}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\Caves\Public\BeccaUtil.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\BloodField.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">

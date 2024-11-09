@@ -521,6 +521,7 @@ void ABloodSplatter::PlaceSplatter() {
     NewSprite->BodySetup->AggGeom.EmptyElements();
     NewSprite->BodySetup->InvalidatePhysicsData();
     NewSprite->BodySetup->CreatePhysicsMeshes();
+
     SpriteComponent->SetSprite(NewSprite);
     SpriteComponent->RecreatePhysicsState();
     SpriteComponent->MarkRenderStateDirty();
