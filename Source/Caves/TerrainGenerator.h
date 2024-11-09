@@ -27,6 +27,7 @@ enum OBJECTS {
 	Altar = 2,
 	Elevator = 3,
 	ElevatorDoor = 4,
+	Shelf = 5,
 };
 
 
