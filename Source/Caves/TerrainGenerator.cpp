@@ -505,7 +505,7 @@ void ATerrainGenerator::GenerateMap() {
 
 		int num_chests = 2 + ((true_floor - (true_floor % 3)) / 3);
 		int num_altars = 1;
-		int num_encounters = 1 + ((true_floor - (true_floor % 2)) / 2);
+		int num_encounters =((true_floor - (true_floor % 2)) / 2);
 
 		int num_rooms = num_chests + num_altars + num_encounters;
 
