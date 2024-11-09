@@ -491,9 +491,52 @@ void ATerrainGenerator::GenerateMap() {
 	if (floor_info->is_store) {
 
 
+		//build shop
+
+
 		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
 
-		//build shop
+		//cursor_x += (new_direction_trunc[0] * 5);
+		//cursor_y += (new_direction_trunc[2] * 5);
+
+		FVector new_direction_perp = { new_direction_trunc[2], new_direction_trunc[1], new_direction_trunc[0] };
+
+
+		cursor_x += (new_direction_trunc[0] * -2);
+		cursor_y += (new_direction_trunc[2] * -2);
+
+		int num_rows = 7;
+		for (int i = 0; i < num_rows; i++) {
+
+			cursor_x += (new_direction_trunc[0] * 1);
+			cursor_y += (new_direction_trunc[2] * 1);
+
+			FRotator shelf_rotation = { 0,0,0 };
+
+
+
+
+
+
+
+
+			FVector shelf_location_1 = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH / 2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8 };
+			shelf_location_1 = { shelf_location_1[0] + (new_direction_perp[0] * 3 * TILE_WIDTH), shelf_location_1[1], shelf_location_1[2] + (new_direction_perp[2] * 3 * TILE_HEIGHT) };
+			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_1, shelf_rotation);
+
+			FVector shelf_location_2 = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH / 2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8 };
+			shelf_location_2 = { shelf_location_2[0] + (new_direction_perp[0] * -3 * TILE_WIDTH), shelf_location_2[1], shelf_location_2[2] + (new_direction_perp[2] * -3 * TILE_HEIGHT) };
+			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_2, shelf_rotation);
+
+		}
+
+		//cursor_x += (new_direction_trunc[0] * 5);
+		//cursor_y += (new_direction_trunc[2] * 5);
+		//SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
+
+
+
+
 		
 	}
 	else {
