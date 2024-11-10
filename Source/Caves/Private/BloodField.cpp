@@ -38,7 +38,6 @@ public:
 
 };
 
-
 struct Color {
 public:
     Color(std::vector<int> _base, float _variance) {
@@ -69,9 +68,6 @@ public:
 
 };
 
-
-
-
 // Sets default values
 ABloodField::ABloodField()
 {
@@ -81,8 +77,6 @@ ABloodField::ABloodField()
 }
 
 void ABloodField::InitTexture(int grid_x, int grid_y) {
-
-
 
     UTexture2D* new_texture = UTexture2D::CreateTransient(TEXTURE_SIZE, TEXTURE_SIZE, PF_B8G8R8A8);
     new_texture->Source.Init(TEXTURE_SIZE, TEXTURE_SIZE, 1, 0, ETextureSourceFormat::TSF_BGRA8);
@@ -100,36 +94,35 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
     // Initialize the texture data
-    FMemory::Memset(Data, 0, Mip.BulkData.GetBulkDataSize());
+    FMemory::Memset(Data, 128, Mip.BulkData.GetBulkDataSize());
 
     // Unlock the texture
     Mip.BulkData.Unlock();
     new_texture->UpdateResource();
 
-
-
-
     UPaperSpriteComponent* SpriteComponent = NewObject<UPaperSpriteComponent>(this);
-    //RootComponent = SpriteComponent; //idk if this is important, but it doesnt really work here
     //this->SetActorEnableCollision(true);
     SpriteComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
     // Register the component to activate it
     SpriteComponent->RegisterComponent();
 
+    //x = 0.5, y = 1
+    float offset_x = 0;
+    float offset_y = 0;
+    SpriteComponent->SetRelativeLocation({(grid_x + offset_x) * float(TEXTURE_SIZE), 0, ((grid_y) + offset_y) * float(TEXTURE_SIZE)});
 
-    SpriteComponent->SetRelativeLocation({grid_x * float(TEXTURE_SIZE), 0, grid_y * float(TEXTURE_SIZE)});
+
+
 
 
 
     //call once
     UMaterialInterface* BloodMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Assets/Materials/BloodMaterial.BloodMaterial"));
     UMaterialInstanceDynamic* BloodMaterialInstance = UMaterialInstanceDynamic::Create(BloodMaterial, this);
-
     //call once
     SpriteComponent->SetTranslucentSortPriority(FMath::RandRange(0, 5000));
     SpriteComponent->SetMaterial(0, BloodMaterialInstance);
-
     //call once
     //SpriteComponent->GetCollisionShape();
     SpriteComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -137,9 +130,6 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
     SpriteComponent->SetCollisionObjectType(ECC_WorldDynamic);
     SpriteComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
     SpriteComponent->SetGenerateOverlapEvents(true);
-
-
-
 
     FSpriteAssetInitParameters params;
     params.SetTextureAndFill(new_texture);
@@ -156,28 +146,19 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
     SpriteComponent->RecreatePhysicsState();
     SpriteComponent->MarkRenderStateDirty();
 
-
-
-
-
     BloodTile* new_tile = new BloodTile(new_texture, SpriteComponent);
 
-
     TextureGrid[grid_x].Add(grid_y, new_tile);
-
-
-
-
-
 }
 
 void ABloodField::PlaceDot(int world_x, int world_y, int size) {
 
+    Color color = { {0,0,160},40 };
 
 
     for (int x = -size; x < size; x++) {
         for (int y = -size; y < size; y++) {
-            PlacePixel(world_x + x, world_y + y, { {0,0,160},40 });
+            PlacePixel(world_x + x, world_y + y, color );
         }
     }
 
@@ -186,17 +167,29 @@ void ABloodField::PlaceDot(int world_x, int world_y, int size) {
 
 void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
 
-    int local_x = world_x % TEXTURE_SIZE;
-    int local_y = world_y % TEXTURE_SIZE;
 
-    int grid_x = (world_x - local_x) / TEXTURE_SIZE;
-    int grid_y = (world_y - local_y) / TEXTURE_SIZE;
+    //get coords within tile
+    int local_x = (world_x % TEXTURE_SIZE);
+    int local_y = (world_y % TEXTURE_SIZE);
+
+    //get position of tile within field
+    int grid_x = (world_x + local_x) / TEXTURE_SIZE;
+    int grid_y = (world_y + local_y) / TEXTURE_SIZE;
+
+
+
+
+
+
+
+
+
+
 
     if (TextureGrid.Contains(grid_x)) {
-        if (TextureGrid[grid_x].Contains(grid_y)) {
-        }
-        else {
+        if (!TextureGrid[grid_x].Contains(grid_y)) {
             InitTexture(grid_x, grid_y);
+
         }
     }
     else {
@@ -204,8 +197,14 @@ void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
         InitTexture(grid_x, grid_y);
     }
 
-
     BloodTile* target_tile = TextureGrid[grid_x][grid_y];
+
+
+
+
+
+
+
 
     FTexture2DMipMap& Mip = target_tile->texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
@@ -215,12 +214,19 @@ void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
         return;
     }
 
-    int32 PixelIndex = ((local_y * TEXTURE_SIZE) + local_x);
-    uint8* Ptr = (uint8*)Data + PixelIndex * 4;
 
 
 
 
+
+
+    int32 PixelIndex = (((TEXTURE_SIZE - local_y - 1) * TEXTURE_SIZE) + (local_x));
+
+
+
+
+
+    uint8* Ptr = (uint8*)Data + (PixelIndex * 4);
 
     // Set the pixel color
     Ptr[0] = color.color[0];
@@ -228,15 +234,10 @@ void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
     Ptr[2] = color.color[2];
     Ptr[3] = 255;
 
-
-
     Mip.BulkData.Unlock();
     target_tile->texture->UpdateResource();
 
     target_tile->ApplyTexture();
-
-
-
 }
 
 void ABloodField::Splatter(FVector world_location, FVector direction) {
