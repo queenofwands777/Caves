@@ -2,9 +2,6 @@
 
 
 #include "BloodField.h"
-
-
-
 #include <format>
 #define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
 
@@ -73,6 +70,10 @@ ABloodField::ABloodField()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+    target_tile_grid_loc.push_back(0);
+    target_tile_grid_loc.push_back(0);
+
+
 
 }
 
@@ -94,7 +95,7 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
     // Initialize the texture data
-    FMemory::Memset(Data, 128, Mip.BulkData.GetBulkDataSize());
+    FMemory::Memset(Data, 0, Mip.BulkData.GetBulkDataSize());
 
     // Unlock the texture
     Mip.BulkData.Unlock();
@@ -153,38 +154,35 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
 
 void ABloodField::PlaceDot(int world_x, int world_y, int size) {
 
-    Color color = { {0,0,160},40 };
+    //get coords within tile
+    int local_x = (world_x % TEXTURE_SIZE);
+    int local_y = (world_y % TEXTURE_SIZE);
 
+    //get position of tile within field
+    int grid_x = (world_x - local_x) / TEXTURE_SIZE;
+    int grid_y = (world_y - local_y) / TEXTURE_SIZE;
+
+    Color color = { {0,0,160},40 };
 
     for (int x = -size; x < size; x++) {
         for (int y = -size; y < size; y++) {
-            PlacePixel(world_x + x, world_y + y, color );
+            PlacePixel(world_x + x, world_y + y, color);
         }
     }
-
 
 }
 
 void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
-
 
     //get coords within tile
     int local_x = (world_x % TEXTURE_SIZE);
     int local_y = (world_y % TEXTURE_SIZE);
 
     //get position of tile within field
-    int grid_x = (world_x + local_x) / TEXTURE_SIZE;
-    int grid_y = (world_y + local_y) / TEXTURE_SIZE;
+    int grid_x = (world_x - local_x) / TEXTURE_SIZE;
+    int grid_y = (world_y - local_y) / TEXTURE_SIZE;
 
-
-
-
-
-
-
-
-
-
+    local_y = TEXTURE_SIZE - local_y - 1;
 
     if (TextureGrid.Contains(grid_x)) {
         if (!TextureGrid[grid_x].Contains(grid_y)) {
@@ -197,35 +195,13 @@ void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
         InitTexture(grid_x, grid_y);
     }
 
+
     BloodTile* target_tile = TextureGrid[grid_x][grid_y];
-
-
-
-
-
-
-
-
     FTexture2DMipMap& Mip = target_tile->texture->GetPlatformData()->Mips[0];
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
-    if (((local_y >= TEXTURE_SIZE) || (local_x >= TEXTURE_SIZE)) || ((local_y < 0) || (local_x < 0))) {
-        GEngine->AddOnScreenDebugMessage(-1, 5.0, FColor::Red, FString::Printf(TEXT("X:%d, Y:%d is out of bounds"), local_x, local_y));
-        return;
-    }
 
-
-
-
-
-
-
-    int32 PixelIndex = (((TEXTURE_SIZE - local_y - 1) * TEXTURE_SIZE) + (local_x));
-
-
-
-
-
+    int32 PixelIndex = (local_y * TEXTURE_SIZE) + (local_x);
     uint8* Ptr = (uint8*)Data + (PixelIndex * 4);
 
     // Set the pixel color
@@ -234,19 +210,31 @@ void ABloodField::PlacePixel(int world_x, int world_y, Color color) {
     Ptr[2] = color.color[2];
     Ptr[3] = 255;
 
+
     Mip.BulkData.Unlock();
     target_tile->texture->UpdateResource();
-
     target_tile->ApplyTexture();
+
 }
+
+
 
 void ABloodField::Splatter(FVector world_location, FVector direction) {
 
-    int world_x = world_location[0];
-    int world_y = world_location[2];
+    int world_x = world_location[0] + (TEXTURE_SIZE/2);
+    int world_y = world_location[2] + (TEXTURE_SIZE/2);
+
+    //get coords within tile
+    int local_x = (world_x % TEXTURE_SIZE);
+    int local_y = (world_y % TEXTURE_SIZE);
+
+    //get position of tile within field
+    int grid_x = (world_x - local_x) / TEXTURE_SIZE;
+    int grid_y = (world_y - local_y) / TEXTURE_SIZE;
+
+
 
     PlaceDot(world_x, world_y, 10);
-
 
 
 

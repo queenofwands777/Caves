@@ -9,7 +9,7 @@ struct BloodTile;
 #include "PaperSprite.h"
 #include"vector"
 #include "PaperSpriteComponent.h"
-
+#include"vector"
 #include "PaperSpriteAtlas.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -27,9 +27,13 @@ public:
 	int TEXTURE_SIZE = 256;
 	TMap<int, TMap<int, BloodTile*>> TextureGrid;
 
+	void* buffer = nullptr;
+	std::vector<int> target_tile_grid_loc;
+
 	void InitTexture(int grid_x, int grid_y);
 	void PlacePixel(int world_x, int world_y, Color color);
 	void PlaceDot(int world_x, int world_y, int size);
+
 
 	UFUNCTION(BlueprintCallable, Category = "Splatter")
 	void Splatter(FVector location, FVector direction);
