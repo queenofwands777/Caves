@@ -14,11 +14,11 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_BloodField_generated_h
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execSplatter);
 
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_INCLASS_NO_PURE_DECLS \
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesABloodField(); \
 	friend struct Z_Construct_UClass_ABloodField_Statics; \
@@ -27,7 +27,7 @@ public: \
 	DECLARE_SERIALIZER(ABloodField)
 
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_ENHANCED_CONSTRUCTORS \
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	ABloodField(ABloodField&&); \
@@ -39,13 +39,13 @@ public: \
 	NO_API virtual ~ABloodField();
 
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_18_PROLOG
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_GENERATED_BODY \
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_19_PROLOG
+#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_INCLASS_NO_PURE_DECLS \
-	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_21_ENHANCED_CONSTRUCTORS \
+	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_INCLASS_NO_PURE_DECLS \
+	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_BloodField_h_22_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

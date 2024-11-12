@@ -4,6 +4,7 @@
 
 struct Color;
 struct BloodTile;
+struct ActiveSplatter;
 
 #include "DrawDebugHelpers.h"
 #include "PaperSprite.h"
@@ -26,13 +27,39 @@ public:
 
 	int TEXTURE_SIZE = 256;
 	TMap<int, TMap<int, BloodTile*>> TextureGrid;
+	std::vector<ActiveSplatter*> ActiveSplatters;
 
 	void* buffer = nullptr;
-	std::vector<int> target_tile_grid_loc;
+	std::vector<int> target_tile_grid_loc = {0,0};
 
 	void InitTexture(int grid_x, int grid_y);
 	void PlacePixel(int world_x, int world_y, Color color);
 	void PlaceDot(int world_x, int world_y, int size);
+	BloodTile* GetTileWorldCoords(int world_x, int world_y) {
+		//get coords within tile
+		int local_x = (world_x % TEXTURE_SIZE);
+		int local_y = (world_y % TEXTURE_SIZE);
+
+		//get position of tile within field
+		int grid_x = (world_x - local_x) / TEXTURE_SIZE;
+		int grid_y = (world_y - local_y) / TEXTURE_SIZE;
+		
+		return GetTileGridCoords(grid_x, grid_y);
+	}
+	BloodTile* GetTileGridCoords(int grid_x, int grid_y) {
+		if (TextureGrid.Contains(grid_x)) {
+			if (!TextureGrid[grid_x].Contains(grid_y)) {
+				InitTexture(grid_x, grid_y);
+
+			}
+		}
+		else {
+			TextureGrid.Add(grid_x, TMap<int, BloodTile*>());
+			InitTexture(grid_x, grid_y);
+		}
+
+		return TextureGrid[grid_x][grid_y];
+	}
 
 
 	UFUNCTION(BlueprintCallable, Category = "Splatter")
