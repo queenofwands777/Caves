@@ -72,7 +72,7 @@ public:
 
 struct ActiveSplatter {
     UTexture2D* texture;
-    int TEXTURE_SIZE = 128;
+    int TEXTURE_SIZE = 32;
     std::vector<float> location;
     std::vector<std::vector<float>> probe_locations;
     bool finished = false;
@@ -145,7 +145,7 @@ public:
         void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
         // Initialize the texture data
-        FMemory::Memset(Data, 0, Mip.BulkData.GetBulkDataSize());
+        FMemory::Memset(Data, 128, Mip.BulkData.GetBulkDataSize());
 
         // Unlock the texture
         Mip.BulkData.Unlock();
@@ -180,110 +180,185 @@ public:
         
         FTexture2DMipMap& MipSplatter = texture->GetPlatformData()->Mips[0];
         void* DataSplatter = MipSplatter.BulkData.Lock(LOCK_READ_ONLY);
+
+
+
+        GEngine->AddOnScreenDebugMessage(-1, 60.0, FColor::Red, FString::Printf(TEXT("Blood Splatter WorldLoc: X:%d, Y:%d"), center[0], center[1]));
+
+        for (int quadrant = 0; quadrant < 1; quadrant++) {
+
+            FTexture2DMipMap& TileMip = quadrants[quadrant]->texture->GetPlatformData()->Mips[0];
+            void* TileData = TileMip.BulkData.Lock(LOCK_READ_WRITE);
+
+            float x_diff = quadrants[quadrant]->world_coords[0] - center[0];
+            float y_diff = quadrants[quadrant]->world_coords[2] - center[1];
+            float x_offset = (TEXTURE_SIZE / 2) - (x_diff - (parent->TEXTURE_SIZE / 2));
+            float y_offset = (TEXTURE_SIZE / 2) - (y_diff - (parent->TEXTURE_SIZE / 2));
+
+
+            GEngine->AddOnScreenDebugMessage(-1, 60.0, FColor::Red, FString::Printf(TEXT("Quadrant:%d, WorldLoc: X:%d, Y:%d, x_diff:%d, y_diff:%d "), quadrant, quadrants[quadrant]->world_coords[0], quadrants[quadrant]->world_coords[2], x_diff, y_diff));
+
+            for (int x = 0; x < TEXTURE_SIZE; x++) {
+                for (int y = 0; y < TEXTURE_SIZE; y++) {
+                    int tile_x = (x) + (parent->TEXTURE_SIZE / 2);
+                    int tile_y = (y) + (parent->TEXTURE_SIZE / 2);
+                    int32 TilePixelIndex = (tile_y * parent->TEXTURE_SIZE) + (tile_x);
+                    uint8* TilePtr = (uint8*)TileData + (TilePixelIndex * 4);
+
+                    int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
+                    uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+
+
+                    // Set the pixel color
+                    TilePtr[0] = SplatterPtr[0];
+                    TilePtr[1] = SplatterPtr[1];
+                    TilePtr[2] = SplatterPtr[2];
+                    TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+
+                }
+            }
+
+            TileMip.BulkData.Unlock();
+            quadrants[quadrant]->texture->UpdateResource();
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
         
-        //top left
-        FTexture2DMipMap& MipTL = quadrants[0]->texture->GetPlatformData()->Mips[0];
-        void* DataTL = MipTL.BulkData.Lock(LOCK_READ_WRITE);
+        ////top left
+        //FTexture2DMipMap& MipTL = quadrants[0]->texture->GetPlatformData()->Mips[0];
+        //void* DataTL = MipTL.BulkData.Lock(LOCK_READ_WRITE);
 
-        
-        for (int x = 0; x < TEXTURE_SIZE - diff;x++) {
-            for (int y = 0; y < TEXTURE_SIZE - diff; y++) {
+        //float x_diff = quadrants[0]->world_coords[0] - center[0];
+        //float y_diff = quadrants[0]->world_coords[1] - center[1];
+        //float x_offset = (TEXTURE_SIZE / 2) - (x_diff - (parent->TEXTURE_SIZE / 2));
+        //float y_offset = (TEXTURE_SIZE / 2) - (y_diff - (parent->TEXTURE_SIZE / 2));
+        //for (int x = 0; x < TEXTURE_SIZE - x_offset;x++) {
+        //    for (int y = 0; y < TEXTURE_SIZE - y_offset; y++) {
+        //        int tile_x = x+(parent->TEXTURE_SIZE/2)+x_diff;
+        //        int tile_y = y + (parent->TEXTURE_SIZE/2) + y_diff;
+        //        int32 TilePixelIndex = (tile_y * TEXTURE_SIZE) + (tile_x);
+        //        uint8* TilePtr = (uint8*)DataTL + (TilePixelIndex * 4);
 
-                int32 TilePixelIndex = (local_y * TEXTURE_SIZE) + (local_x);
-                uint8* TilePtr = (uint8*)DataTL + (TilePixelIndex * 4);
-
-                int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
-                uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
-
-
-                // Set the pixel color
-                TilePtr[0] = SplatterPtr[0];
-                TilePtr[1] = SplatterPtr[1];
-                TilePtr[2] = SplatterPtr[2];
-                TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3],0),255);
-
-            }
-        }
-        MipTL.BulkData.Unlock();
-        quadrants[0]->texture->UpdateResource();
+        //        int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
+        //        uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
 
 
-        //top right
-        FTexture2DMipMap& MipTR = quadrants[1]->texture->GetPlatformData()->Mips[0];
-        void* DataTR = MipTR.BulkData.Lock(LOCK_READ_WRITE);
+        //        // Set the pixel color
+        //        TilePtr[0] = SplatterPtr[0];
+        //        TilePtr[1] = SplatterPtr[1];
+        //        TilePtr[2] = SplatterPtr[2];
+        //        TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3],0),255);
 
-        for (int x = TEXTURE_SIZE - diff; x < TEXTURE_SIZE; x++) {
-            for (int y = 0; y < TEXTURE_SIZE - diff; y++) {
-
-                int32 TilePixelIndex = (local_y * TEXTURE_SIZE) + (local_x);
-                uint8* TilePtr = (uint8*)DataTR + (TilePixelIndex * 4);
-
-                int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
-                uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+        //    }
+        //}
+        //MipTL.BulkData.Unlock();
+        //quadrants[0]->texture->UpdateResource();
 
 
-                // Set the pixel color
-                TilePtr[0] = SplatterPtr[0];
-                TilePtr[1] = SplatterPtr[1];
-                TilePtr[2] = SplatterPtr[2];
-                TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+        ////top right
+        //FTexture2DMipMap& MipTR = quadrants[1]->texture->GetPlatformData()->Mips[0];
+        //void* DataTR = MipTR.BulkData.Lock(LOCK_READ_WRITE);
 
-            }
-        }
-        MipTR.BulkData.Unlock();
-        quadrants[1]->texture->UpdateResource();
+        //x_diff = quadrants[1]->world_coords[0] - center[0];
+        //y_diff = quadrants[1]->world_coords[1] - center[1];
+        //x_offset = (TEXTURE_SIZE / 2) - (x_diff - (parent->TEXTURE_SIZE / 2));
+        //y_offset = (TEXTURE_SIZE / 2) - (y_diff - (parent->TEXTURE_SIZE / 2));
+        //for (int x = TEXTURE_SIZE - x_offset; x < TEXTURE_SIZE; x++) {
+        //    for (int y = 0; y < TEXTURE_SIZE - x_offset; y++) {
+        //        int tile_x = x + (parent->TEXTURE_SIZE / 2) + x_diff;
+        //        int tile_y = y + (parent->TEXTURE_SIZE / 2) + y_diff;
+        //        int32 TilePixelIndex = (tile_y * TEXTURE_SIZE) + (tile_x);
+        //        uint8* TilePtr = (uint8*)DataTR + (TilePixelIndex * 4);
 
-
-        //bot left
-        FTexture2DMipMap& MipBL = quadrants[2]->texture->GetPlatformData()->Mips[0];
-        void* DataBL = MipBL.BulkData.Lock(LOCK_READ_WRITE);
-
-        for (int x = 0; x < TEXTURE_SIZE - diff; x++) {
-            for (int y = TEXTURE_SIZE - diff; y < TEXTURE_SIZE; y++) {
-
-                int32 TilePixelIndex = (local_y * TEXTURE_SIZE) + (local_x);
-                uint8* TilePtr = (uint8*)DataBL + (TilePixelIndex * 4);
-
-                int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
-                uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+        //        int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
+        //        uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
 
 
-                // Set the pixel color
-                TilePtr[0] = SplatterPtr[0];
-                TilePtr[1] = SplatterPtr[1];
-                TilePtr[2] = SplatterPtr[2];
-                TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+        //        // Set the pixel color
+        //        TilePtr[0] = SplatterPtr[0];
+        //        TilePtr[1] = SplatterPtr[1];
+        //        TilePtr[2] = SplatterPtr[2];
+        //        TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
 
-            }
-        }
-        MipBL.BulkData.Unlock();
-        quadrants[2]->texture->UpdateResource();
-
-
-        //bot right
-        FTexture2DMipMap& MipBR = quadrants[3]->texture->GetPlatformData()->Mips[0];
-        void* DataBR = MipBR.BulkData.Lock(LOCK_READ_WRITE);
-
-        for (int x = TEXTURE_SIZE - diff; x < TEXTURE_SIZE; x++) {
-            for (int y = TEXTURE_SIZE - diff; y < TEXTURE_SIZE; y++) {
-
-                int32 TilePixelIndex = (local_y * TEXTURE_SIZE) + (local_x);
-                uint8* TilePtr = (uint8*)DataBR + (TilePixelIndex * 4);
-
-                int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
-                uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+        //    }
+        //}
+        //MipTR.BulkData.Unlock();
+        //quadrants[1]->texture->UpdateResource();
 
 
-                // Set the pixel color
-                TilePtr[0] = SplatterPtr[0];
-                TilePtr[1] = SplatterPtr[1];
-                TilePtr[2] = SplatterPtr[2];
-                TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+        ////bot left
+        //FTexture2DMipMap& MipBL = quadrants[2]->texture->GetPlatformData()->Mips[0];
+        //void* DataBL = MipBL.BulkData.Lock(LOCK_READ_WRITE);
 
-            }
-        }
-        MipBR.BulkData.Unlock();
-        quadrants[3]->texture->UpdateResource();
+        //x_diff = quadrants[2]->world_coords[0] - center[0];
+        //y_diff = quadrants[2]->world_coords[1] - center[1];
+        //x_offset = (TEXTURE_SIZE / 2) - (x_diff - (parent->TEXTURE_SIZE / 2));
+        //y_offset = (TEXTURE_SIZE / 2) - (y_diff - (parent->TEXTURE_SIZE / 2));
+        //for (int x = 0; x < TEXTURE_SIZE - x_offset; x++) {
+        //    for (int y = TEXTURE_SIZE - x_offset; y < TEXTURE_SIZE; y++) {
+
+        //        int tile_x = x + (parent->TEXTURE_SIZE / 2) + x_diff;
+        //        int tile_y = y + (parent->TEXTURE_SIZE / 2) + y_diff;
+        //        int32 TilePixelIndex = (tile_y * TEXTURE_SIZE) + (tile_x);
+        //        uint8* TilePtr = (uint8*)DataBL + (TilePixelIndex * 4);
+
+        //        int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
+        //        uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+
+
+        //        // Set the pixel color
+        //        TilePtr[0] = SplatterPtr[0];
+        //        TilePtr[1] = SplatterPtr[1];
+        //        TilePtr[2] = SplatterPtr[2];
+        //        TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+
+        //    }
+        //}
+        //MipBL.BulkData.Unlock();
+        //quadrants[2]->texture->UpdateResource();
+
+
+        ////bot right
+        //FTexture2DMipMap& MipBR = quadrants[3]->texture->GetPlatformData()->Mips[0];
+        //void* DataBR = MipBR.BulkData.Lock(LOCK_READ_WRITE);
+
+        //x_diff = quadrants[3]->world_coords[0] - center[0];
+        //y_diff = quadrants[3]->world_coords[1] - center[1];
+        //x_offset = (TEXTURE_SIZE / 2) - (x_diff - (parent->TEXTURE_SIZE / 2));
+        //y_offset = (TEXTURE_SIZE / 2) - (y_diff - (parent->TEXTURE_SIZE / 2));
+        //for (int x = TEXTURE_SIZE - x_offset; x < TEXTURE_SIZE; x++) {
+        //    for (int y = TEXTURE_SIZE - x_offset; y < TEXTURE_SIZE; y++) {
+
+        //        int tile_x = x + (parent->TEXTURE_SIZE / 2) + x_diff;
+        //        int tile_y = y + (parent->TEXTURE_SIZE / 2) + y_diff;
+        //        int32 TilePixelIndex = (tile_y * TEXTURE_SIZE) + (tile_x);
+        //        uint8* TilePtr = (uint8*)DataBR + (TilePixelIndex * 4);
+
+        //        int32 SplatterPixelIndex = (y * TEXTURE_SIZE) + (x);
+        //        uint8* SplatterPtr = (uint8*)DataSplatter + (SplatterPixelIndex * 4);
+
+
+        //        // Set the pixel color
+        //        TilePtr[0] = SplatterPtr[0];
+        //        TilePtr[1] = SplatterPtr[1];
+        //        TilePtr[2] = SplatterPtr[2];
+        //        TilePtr[3] = std::min(std::max(TilePtr[3] + SplatterPtr[3], 0), 255);
+
+        //    }
+        //}
+        //MipBR.BulkData.Unlock();
+        //quadrants[3]->texture->UpdateResource();
 
 
         MipSplatter.BulkData.Unlock();
@@ -324,7 +399,7 @@ void ABloodField::InitTexture(int grid_x, int grid_y) {
     void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
 
     // Initialize the texture data
-    FMemory::Memset(Data, 0, Mip.BulkData.GetBulkDataSize());
+    FMemory::Memset(Data, 64, Mip.BulkData.GetBulkDataSize());
 
     // Unlock the texture
     Mip.BulkData.Unlock();
