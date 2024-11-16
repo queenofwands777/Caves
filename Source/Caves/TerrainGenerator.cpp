@@ -20,17 +20,17 @@
 
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
-	int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+	int index = (grid_x * LEVEL_SIZE) + grid_y;
 	return TerrainMapData[index];
 }
 
 UPaperTileMapComponent* ATerrainGenerator::GetOverlayTileMap(int grid_x, int grid_y) {
-	return TerrainOverlayMapData[(grid_x * LEVEL_HEIGHT) + grid_y];
+	return TerrainOverlayMapData[(grid_x * LEVEL_SIZE) + grid_y];
 }
 
 void ATerrainGenerator::SetTileMap(int grid_x, int grid_y, UPaperTileMapComponent* tilemap) {
 	PRINT("setting tilemap")
-		int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+		int index = (grid_x * LEVEL_SIZE) + grid_y;
 	TerrainMapData[index] = tilemap;
 
 }
@@ -55,11 +55,11 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 			int world_y = input_y + yy;
 
 			//how far into the target tilemap are we placing the tile
-			int target_x = world_x % MAP_WIDTH;
-			int target_y = world_y % MAP_HEIGHT;
+			int target_x = world_x % MAP_SIZE;
+			int target_y = world_y % MAP_SIZE;
 
-			int tilemap_x = (world_x - target_x) / MAP_WIDTH;
-			int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
+			int tilemap_x = (world_x - target_x) / MAP_SIZE;
+			int tilemap_y = (world_y - target_y) / MAP_SIZE;
 
 			//check if the target tilemap is initialized. if not, initialize a new tilemap.
 			if (GetTileMap(tilemap_x, tilemap_y) == nullptr) {
@@ -67,7 +67,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 			}
 
 			//check if we are on the edges of this tilemap. if so, initialize surrounding tilemaps.
-			if ((target_x == 0) || (target_x == MAP_WIDTH - 1) || (target_y == 0) || (target_y == MAP_HEIGHT - 1)) {
+			if ((target_x == 0) || (target_x == MAP_SIZE - 1) || (target_y == 0) || (target_y == MAP_SIZE - 1)) {
 
 				for (int i = -1; i <= 1; i++) {
 					for (int ii = -1; ii <= 1; ii++) {
@@ -80,7 +80,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 			//set the tile
 			UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
-			host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+			host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_SIZE - (target_y)-1, TileInfo);
 
 			if (generating_floor) {
 				TileInfo.PackedTileIndex = floor_info->wall_material;
@@ -89,13 +89,13 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 					for (int mod_y = -1; mod_y <= 1; mod_y++) {
 
 						int neighbor_x = target_x + mod_x;
-						int neighbor_y = MAP_WIDTH - (target_y)-1 - mod_y;
+						int neighbor_y = MAP_SIZE - (target_y)-1 - mod_y;
 
 
 
 
 
-						if ((neighbor_x < MAP_WIDTH) && (neighbor_y < MAP_HEIGHT) && (neighbor_x >= 0) && (neighbor_y >= 0)) {
+						if ((neighbor_x < MAP_SIZE) && (neighbor_y < MAP_SIZE) && (neighbor_x >= 0) && (neighbor_y >= 0)) {
 							FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
 							if (neighbor_cell.PackedTileIndex == floor_info->void_material) {
 								host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
@@ -105,9 +105,9 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 
 						else {
-							int x_over_violation = neighbor_x >= MAP_WIDTH;
+							int x_over_violation = neighbor_x >= MAP_SIZE;
 							int x_under_violation = neighbor_x < 0;
-							int y_over_violation = neighbor_y >= MAP_HEIGHT;
+							int y_over_violation = neighbor_y >= MAP_SIZE;
 							int y_under_violation = neighbor_y < 0;
 
 							int nudge_x = 0 - x_under_violation + x_over_violation;
@@ -119,8 +119,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 
 
-							int relative_x = ((MAP_WIDTH)*x_under_violation) + neighbor_x + (-MAP_WIDTH * x_over_violation);
-							int relative_y = ((MAP_HEIGHT)*y_under_violation) + neighbor_y + (-MAP_HEIGHT * y_over_violation);
+							int relative_x = ((MAP_SIZE)*x_under_violation) + neighbor_x + (-MAP_SIZE * x_over_violation);
+							int relative_y = ((MAP_SIZE)*y_under_violation) + neighbor_y + (-MAP_SIZE * y_over_violation);
 
 							UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
 							FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
@@ -157,11 +157,11 @@ void ATerrainGenerator::SetOverlayTile(int world_x, int world_y, int terrain, in
 	TileInfo.PackedTileIndex = terrain;
 	
 	//how far into the target tilemap are we placing the tile
-	int target_x = world_x % MAP_WIDTH;
-	int target_y = world_y % MAP_HEIGHT;
+	int target_x = world_x % MAP_SIZE;
+	int target_y = world_y % MAP_SIZE;
 
-	int tilemap_x = (world_x - target_x) / MAP_WIDTH;
-	int tilemap_y = (world_y - target_y) / MAP_HEIGHT;
+	int tilemap_x = (world_x - target_x) / MAP_SIZE;
+	int tilemap_y = (world_y - target_y) / MAP_SIZE;
 
 	FRotator rotator(0.0f, rotation, 0.0f);  // RotationAngle is in degrees
 	FTransform TileTransform(rotator);
@@ -184,7 +184,7 @@ void ATerrainGenerator::SetOverlayTile(int world_x, int world_y, int terrain, in
 	
 	//set the tile
 	UPaperTileMapComponent* host_tile = GetOverlayTileMap(tilemap_x, tilemap_y);
-	host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_WIDTH - (target_y)-1, TileInfo);
+	host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_SIZE - (target_y)-1, TileInfo);
 	
 }
 
@@ -193,17 +193,17 @@ FPaperTileInfo* ATerrainGenerator::GetTile(int input_x, int input_y) {
 	FPaperTileInfo* result;
 	UPaperTileMapComponent* tilemap;
 
-	int x_within_tilemap = input_x % MAP_WIDTH;
-	int y_within_tilemap = input_y % MAP_HEIGHT;
-	int tilemap_x = (input_x - x_within_tilemap) / MAP_WIDTH;
-	int tilemap_y = (input_y - y_within_tilemap) / MAP_HEIGHT;
+	int x_within_tilemap = input_x % MAP_SIZE;
+	int y_within_tilemap = input_y % MAP_SIZE;
+	int tilemap_x = (input_x - x_within_tilemap) / MAP_SIZE;
+	int tilemap_y = (input_y - y_within_tilemap) / MAP_SIZE;
 
 	tilemap = GetTileMap(tilemap_x, tilemap_y);
 	if (tilemap == nullptr) {
 		result = nullptr;
 	}
 	else {
-		FPaperTileInfo buffer = tilemap->GetTile(x_within_tilemap, MAP_WIDTH - y_within_tilemap - 1, 0);
+		FPaperTileInfo buffer = tilemap->GetTile(x_within_tilemap, MAP_SIZE - y_within_tilemap - 1, 0);
 		result = &buffer;
 	}
 
@@ -225,14 +225,11 @@ ATerrainGenerator::ATerrainGenerator()
 
 
 
+
+
+
 	//load overlay tileset
 	LevelOverlayTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/TerrainOverlay1_TileSet"));
-
-	TerrainMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
-	TerrainOverlayMapData.Init(nullptr, LEVEL_HEIGHT * LEVEL_WIDTH);
-
-
-
 
 	
 
@@ -245,6 +242,11 @@ ATerrainGenerator::ATerrainGenerator()
 void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+
+
+	TerrainMapData.Init(nullptr, LEVEL_SIZE * LEVEL_SIZE);
+	TerrainOverlayMapData.Init(nullptr, LEVEL_SIZE * LEVEL_SIZE);
 
 	int floors_per_shop = 1;
 
@@ -424,15 +426,15 @@ void ATerrainGenerator::GenerateMap() {
 	FRotator spawn_rotation = { 0,0,0 };
 
 	//set start location
-	float cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
-	float cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+	float cursor_x = (LEVEL_SIZE * MAP_SIZE) / 2;
+	float cursor_y = (LEVEL_SIZE * MAP_SIZE) / 2;
 
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
-	FVector elevator_location = { float((cursor_x - 2) * TILE_WIDTH) + (1.5 * TILE_WIDTH), 0.1, float((cursor_y) * TILE_HEIGHT) - (15.5 * TILE_HEIGHT) };
-	FVector spawn_location = { float((cursor_x - 2) * TILE_WIDTH) + (1.5 * TILE_WIDTH), 4, float((cursor_y)*TILE_HEIGHT) - (15.5 * TILE_HEIGHT) };
+	FVector elevator_location = { float((cursor_x - 2) * TILE_SIZE) + (1.5 * TILE_SIZE), 0.1, float((cursor_y) * TILE_SIZE) - (15.5 * TILE_SIZE) };
+	FVector spawn_location = { float((cursor_x - 2) * TILE_SIZE) + (1.5 * TILE_SIZE), 4, float((cursor_y)*TILE_SIZE) - (15.5 * TILE_SIZE) };
 
 	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], elevator_location, { 0,0,0 });
-	GetWorld()->SpawnActor<AActor>(Player, spawn_location, { 0,0,0 });
+	//GetWorld()->SpawnActor<AActor>(Player, spawn_location, { 0,0,0 });
 
 	float heading = FMath::RandRange(0, 360);
 	float heading_radians = FMath::DegreesToRadians(heading);
@@ -477,7 +479,7 @@ void ATerrainGenerator::GenerateMap() {
 
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
 
-	FVector elevator_door_location = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH/2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8};
+	FVector elevator_door_location = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE/2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8};
 	FRotator elevator_door_rotation = { FMath::Sign(new_direction[0]) * 90,0,0};
 	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::ElevatorDoor], elevator_door_location, elevator_door_rotation);
 
@@ -520,12 +522,12 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-			FVector shelf_location_1 = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH / 2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8 };
-			shelf_location_1 = { shelf_location_1[0] + (new_direction_perp[0] * 3 * TILE_WIDTH), shelf_location_1[1], shelf_location_1[2] + (new_direction_perp[2] * 3 * TILE_HEIGHT) };
+			FVector shelf_location_1 = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE / 2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8 };
+			shelf_location_1 = { shelf_location_1[0] + (new_direction_perp[0] * 3 * TILE_SIZE), shelf_location_1[1], shelf_location_1[2] + (new_direction_perp[2] * 3 * TILE_SIZE) };
 			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_1, shelf_rotation);
 
-			FVector shelf_location_2 = { float(cursor_x * TILE_WIDTH) - (FMath::Sign(new_direction[0]) * TILE_WIDTH / 2) - 8, 1, float(cursor_y * TILE_HEIGHT) - (16 * TILE_HEIGHT) + 8 };
-			shelf_location_2 = { shelf_location_2[0] + (new_direction_perp[0] * -3 * TILE_WIDTH), shelf_location_2[1], shelf_location_2[2] + (new_direction_perp[2] * -3 * TILE_HEIGHT) };
+			FVector shelf_location_2 = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE / 2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8 };
+			shelf_location_2 = { shelf_location_2[0] + (new_direction_perp[0] * -3 * TILE_SIZE), shelf_location_2[1], shelf_location_2[2] + (new_direction_perp[2] * -3 * TILE_SIZE) };
 			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_2, shelf_rotation);
 
 		}
@@ -618,8 +620,8 @@ void ATerrainGenerator::GenerateMap() {
 
 	//rebuild elevator shaft
 
-	cursor_x = (LEVEL_WIDTH * MAP_WIDTH) / 2;
-	cursor_y = (LEVEL_HEIGHT * MAP_HEIGHT) / 2;
+	cursor_x = (LEVEL_SIZE * MAP_SIZE) / 2;
+	cursor_y = (LEVEL_SIZE * MAP_SIZE) / 2;
 
 	SetTile(cursor_x, cursor_y, floor_info->floor_material, 12);
 	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6, false);
@@ -652,15 +654,15 @@ void ATerrainGenerator::GenerateMap() {
 
 
 	//get tilemap
-	for (int tilemap_x = 0; tilemap_x < LEVEL_WIDTH; tilemap_x++) {
-		for (int tilemap_y = 0; tilemap_y < LEVEL_HEIGHT; tilemap_y++) {
+	for (int tilemap_x = 0; tilemap_x < LEVEL_SIZE; tilemap_x++) {
+		for (int tilemap_y = 0; tilemap_y < LEVEL_SIZE; tilemap_y++) {
 
 			//check that tilemap is valid
 			if (GetTileMap(tilemap_x, tilemap_y) != nullptr) {
 
 				//get each individual tile
-				for (int x_within_tilemap = 0; x_within_tilemap < MAP_WIDTH; x_within_tilemap++) {
-					for (int y_within_tilemap = 0; y_within_tilemap < MAP_HEIGHT; y_within_tilemap++) {
+				for (int x_within_tilemap = 0; x_within_tilemap < MAP_SIZE; x_within_tilemap++) {
+					for (int y_within_tilemap = 0; y_within_tilemap < MAP_SIZE; y_within_tilemap++) {
 
 
 
@@ -685,8 +687,8 @@ void ATerrainGenerator::GenerateMap() {
 								std::vector<bool> neighbor_flags = { false,false,false,false };
 
 								//get global coordinates of tile
-								int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
-								int world_y = (tilemap_y * MAP_HEIGHT) + (MAP_HEIGHT - y_within_tilemap - 1);
+								int world_x = (tilemap_x * MAP_SIZE) + x_within_tilemap;
+								int world_y = (tilemap_y * MAP_SIZE) + (MAP_SIZE - y_within_tilemap - 1);
 
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
@@ -784,8 +786,8 @@ void ATerrainGenerator::GenerateMap() {
 								std::vector<bool> neighbor_flags = { false,false,false,false };
 
 								//get global coordinates of tile
-								int world_x = (tilemap_x * MAP_WIDTH) + x_within_tilemap;
-								int world_y = (tilemap_y * MAP_HEIGHT) + (MAP_HEIGHT - y_within_tilemap - 1);
+								int world_x = (tilemap_x * MAP_SIZE) + x_within_tilemap;
+								int world_y = (tilemap_y * MAP_SIZE) + (MAP_SIZE - y_within_tilemap - 1);
 
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
@@ -928,15 +930,15 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 	overlaytile->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 
-	tile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+	tile->CreateNewTileMap(MAP_SIZE, MAP_SIZE, TILE_SIZE, TILE_SIZE);
 	//////////////////////////////////////////////////////////////////////////
-	overlaytile->CreateNewTileMap(MAP_WIDTH, MAP_HEIGHT, TILE_WIDTH, TILE_HEIGHT);
+	overlaytile->CreateNewTileMap(MAP_SIZE, MAP_SIZE, TILE_SIZE, TILE_SIZE);
 
 
-	FVector placement(double(grid_x * MAP_WIDTH * TILE_WIDTH), 0.0, double(grid_y * MAP_HEIGHT * TILE_HEIGHT));
+	FVector placement(double(grid_x * MAP_SIZE * TILE_SIZE), 0.0, double(grid_y * MAP_SIZE * TILE_SIZE));
 	tile->SetWorldLocation(placement);
 	/////////////////////////////////////////////////////////////////////////////////////////////
-	FVector overlayplacement(double(grid_x * MAP_WIDTH * TILE_WIDTH), 6.0, double(grid_y * MAP_HEIGHT * TILE_HEIGHT));
+	FVector overlayplacement(double(grid_x * MAP_SIZE * TILE_SIZE), 6.0, double(grid_y * MAP_SIZE * TILE_SIZE));
 
 	overlaytile->SetWorldLocation(overlayplacement);
 
@@ -953,26 +955,26 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 	if (TileLayer)
 	{
-		TileLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+		TileLayer->ResizeMap(MAP_SIZE, MAP_SIZE);
 		tile->TileMap->TileLayers.Add(TileLayer);
 	}
 	/////////////////////////////////////////////////
 	if (TileOverlayLayer) {
-		TileOverlayLayer->ResizeMap(MAP_WIDTH, MAP_HEIGHT);
+		TileOverlayLayer->ResizeMap(MAP_SIZE, MAP_SIZE);
 		overlaytile->TileMap->TileLayers.Add(TileOverlayLayer);
 	}
 
 
 
-	for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
-		for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
+	for (int xxx = 0; xxx < MAP_SIZE; xxx++) {
+		for (int yyy = 0; yyy < MAP_SIZE; yyy++) {
 			TileInfo.PackedTileIndex = floor_info->void_material;
 			tile->TileMap->TileLayers[0]->SetCell(xxx, yyy, TileInfo);
 		}
 	}
 	///////////////////////////////////////
-	for (int xxx = 0; xxx < MAP_WIDTH; xxx++) {
-		for (int yyy = 0; yyy < MAP_HEIGHT; yyy++) {
+	for (int xxx = 0; xxx < MAP_SIZE; xxx++) {
+		for (int yyy = 0; yyy < MAP_SIZE; yyy++) {
 			overlaytile->TileMap->TileLayers[0]->SetCell(xxx, yyy, OverlayTileInfo);
 		}
 	}
@@ -989,7 +991,7 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 	SetTileMap(grid_x, grid_y, tile);
 
-	int index = (grid_x * LEVEL_HEIGHT) + grid_y;
+	int index = (grid_x * LEVEL_SIZE) + grid_y;
 	TerrainOverlayMapData[index] = overlaytile;
 
 

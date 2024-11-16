@@ -50,7 +50,6 @@ public:
 
     std::vector<int> color;
     float variance;
-
     void Mix() {
 
         float bias_0 = float(color[0]) / 255.0;
@@ -71,7 +70,7 @@ public:
 
 
 struct ActiveSplatter {
-    UTexture2D* texture;
+    UTexture2D* texture; 
     int TEXTURE_SIZE = 32;
     std::vector<float> location;
     std::vector<std::vector<float>> probe_locations;
