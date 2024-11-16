@@ -14,6 +14,7 @@
     <None Include="..\..\.gitattributes" />
     <None Include="..\..\.gitignore" />
     <None Include="..\..\.vsconfig" />
+    <None Include="..\..\UpgradeLog.htm" />
     <Filter Include="Config">
       <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
     </Filter>
@@ -29,6 +30,18 @@
     <None Include="..\..\Config\DefaultInput.ini">
       <Filter>Config</Filter>
     </None>
+    <Filter Include="Source\BeccasMod">
+      <UniqueIdentifier>{00F780AD-4EB3-30B1-9B02-4737C902E7A3}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\BeccasMod\BeccasMod.Build.cs">
+      <Filter>Source\BeccasMod</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\BeccasMod\BeccasMod.cpp">
+      <Filter>Source\BeccasMod</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\BeccasMod\BeccasMod.h">
+      <Filter>Source\BeccasMod</Filter>
+    </ClInclude>
     <Filter Include="Source\Caves">
       <UniqueIdentifier>{B64B22B6-FCAE-3816-BC89-11409E408CC1}</UniqueIdentifier>
     </Filter>
@@ -53,10 +66,22 @@
     <ClCompile Include="..\..\Source\Caves\Private\BeccaUtil.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\BloodField.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Encounter.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\FloorInfo.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Remains.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <Filter Include="Source\Caves\Public">
@@ -65,10 +90,22 @@
     <ClInclude Include="..\..\Source\Caves\Public\BeccaUtil.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\BloodField.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\Encounter.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\EnemyList.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\FloorInfo.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\Remains.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
   </ItemGroup>
