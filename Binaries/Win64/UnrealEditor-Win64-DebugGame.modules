@@ -2,6 +2,7 @@
 	"BuildId": "33043543",
 	"Modules": 
 	{
+		"BeccasMod": "UnrealEditor-BeccasMod-Win64-DebugGame.dll",
 		"Caves": "UnrealEditor-Caves-Win64-DebugGame.dll"
 	}
 }

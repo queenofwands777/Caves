@@ -17,7 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeCaves_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x6C5EA194,
+				0xBB1A7912,
 				0x69C41A4D,
 				METADATA_PARAMS(0, nullptr)
 			};
@@ -25,5 +25,5 @@ void EmptyLinkFunctionForGeneratedCodeCaves_init() {}
 		}
 		return Z_Registration_Info_UPackage__Script_Caves.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Caves(Z_Construct_UPackage__Script_Caves, TEXT("/Script/Caves"), Z_Registration_Info_UPackage__Script_Caves, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x6C5EA194, 0x69C41A4D));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Caves(Z_Construct_UPackage__Script_Caves, TEXT("/Script/Caves"), Z_Registration_Info_UPackage__Script_Caves, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xBB1A7912, 0x69C41A4D));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

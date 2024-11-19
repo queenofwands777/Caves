@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-C:\Users\Theo\source\repos\queenofwands777\Caves\Source\Caves\Public\BeccaUtil.h
-C:\Users\Theo\source\repos\queenofwands777\Caves\Source\Caves\Public\EnemyList.h
-C:\Users\Theo\source\repos\queenofwands777\Caves\Source\Caves\Public\BloodSplatter.h
-C:\Users\Theo\source\repos\queenofwands777\Caves\Source\Caves\TerrainGenerator.h
-=======
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\BeccaUtil.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\BloodSplatter.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\EnemyList.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\Remains.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\FloorInfo.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\Encounter.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\Public\BloodField.h
-C:\Users\becca\Documents\Unreal Projects\Caves\Source\Caves\TerrainGenerator.h
->>>>>>> 8fe3118b058e61a7fdc420e6b776fd111374979d
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\EnemyList.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\Remains.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\BloodField.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\BeccaUtil.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\Encounter.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\BloodSplatter.h
+C:\Users\becca\source\repos\Caves\Source\Caves\Public\FloorInfo.h
+C:\Users\becca\source\repos\Caves\Source\Caves\TerrainGenerator.h

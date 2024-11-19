@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_Encounter_generated_h
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_14_INCLASS_NO_PURE_DECLS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_14_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAEncounter(); \
 	friend struct Z_Construct_UClass_AEncounter_Statics; \
@@ -23,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(AEncounter)
 
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_14_ENHANCED_CONSTRUCTORS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_14_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	AEncounter(AEncounter&&); \
@@ -35,12 +35,12 @@ public: \
 	NO_API virtual ~AEncounter();
 
 
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_11_PROLOG
-#define FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_14_GENERATED_BODY \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_11_PROLOG
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_14_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_14_INCLASS_NO_PURE_DECLS \
-	FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h_14_ENHANCED_CONSTRUCTORS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_14_INCLASS_NO_PURE_DECLS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h_14_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -48,7 +48,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> CAVES_API UClass* StaticClass<class AEncounter>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_Users_becca_Documents_Unreal_Projects_Caves_Source_Caves_Public_Encounter_h
+#define CURRENT_FILE_ID FID_Users_becca_source_repos_Caves_Source_Caves_Public_Encounter_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
