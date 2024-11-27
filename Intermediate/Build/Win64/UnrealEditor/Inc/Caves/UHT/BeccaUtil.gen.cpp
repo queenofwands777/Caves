@@ -38,7 +38,7 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UBecca
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::NewProp_ReturnValue,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::PropPointers) < 2048);
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UBeccaUtil, nullptr, "HelloBlueprint", nullptr, nullptr, Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::PropPointers), sizeof(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::BeccaUtil_eventHelloBlueprint_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04040401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::Function_MetaDataParams), Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::Function_MetaDataParams) };
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UBeccaUtil, nullptr, "HelloBlueprint", nullptr, nullptr, Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::PropPointers), sizeof(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::BeccaUtil_eventHelloBlueprint_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04042401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::Function_MetaDataParams), Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::Function_MetaDataParams) };
 static_assert(sizeof(Z_Construct_UFunction_UBeccaUtil_HelloBlueprint_Statics::BeccaUtil_eventHelloBlueprint_Parms) < MAX_uint16);
 UFunction* Z_Construct_UFunction_UBeccaUtil_HelloBlueprint()
 {
@@ -53,7 +53,7 @@ DEFINE_FUNCTION(UBeccaUtil::execHelloBlueprint)
 {
 	P_FINISH;
 	P_NATIVE_BEGIN;
-	*(int32*)Z_Param__Result=P_THIS->HelloBlueprint();
+	*(int32*)Z_Param__Result=UBeccaUtil::HelloBlueprint();
 	P_NATIVE_END;
 }
 // End Class UBeccaUtil Function HelloBlueprint
@@ -85,7 +85,7 @@ struct Z_Construct_UClass_UBeccaUtil_Statics
 #endif // WITH_METADATA
 	static UObject* (*const DependentSingletons[])();
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
-		{ &Z_Construct_UFunction_UBeccaUtil_HelloBlueprint, "HelloBlueprint" }, // 880549427
+		{ &Z_Construct_UFunction_UBeccaUtil_HelloBlueprint, "HelloBlueprint" }, // 2646523688
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -134,10 +134,10 @@ UBeccaUtil::~UBeccaUtil() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_BeccaUtil_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_UBeccaUtil, UBeccaUtil::StaticClass, TEXT("UBeccaUtil"), &Z_Registration_Info_UClass_UBeccaUtil, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UBeccaUtil), 4062149789U) },
+		{ Z_Construct_UClass_UBeccaUtil, UBeccaUtil::StaticClass, TEXT("UBeccaUtil"), &Z_Registration_Info_UClass_UBeccaUtil, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(UBeccaUtil), 1178181524U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_BeccaUtil_h_2162166681(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_BeccaUtil_h_2353278824(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_BeccaUtil_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_BeccaUtil_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

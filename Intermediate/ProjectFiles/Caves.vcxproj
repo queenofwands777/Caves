@@ -532,6 +532,10 @@
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
     <ClInclude Include="..\..\Source\Caves\TerrainGenerator.h"/>
+    <ClCompile Include="..\..\Source\Caves\Private\BeccasBFL.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\BeccaUtil.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -560,6 +564,7 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClInclude Include="..\..\Source\Caves\Public\BeccasBFL.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\BeccaUtil.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\BloodField.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h"/>

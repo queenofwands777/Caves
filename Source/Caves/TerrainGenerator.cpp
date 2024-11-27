@@ -504,8 +504,10 @@ void ATerrainGenerator::GenerateMap() {
 		FVector new_direction_perp = { new_direction_trunc[2], new_direction_trunc[1], new_direction_trunc[0] };
 
 
-		cursor_x += (new_direction_trunc[0] * -2);
-		cursor_y += (new_direction_trunc[2] * -2);
+
+
+		cursor_x += (new_direction_trunc[0] * 5);
+		cursor_y += (new_direction_trunc[2] * 5);
 
 		int num_rows = 7;
 		for (int i = 0; i < num_rows; i++) {
@@ -530,10 +532,16 @@ void ATerrainGenerator::GenerateMap() {
 			shelf_location_2 = { shelf_location_2[0] + (new_direction_perp[0] * -3 * TILE_SIZE), shelf_location_2[1], shelf_location_2[2] + (new_direction_perp[2] * -3 * TILE_SIZE) };
 			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_2, shelf_rotation);
 
+
+			cursor_x += (new_direction_trunc[0] * 2);
+			cursor_y += (new_direction_trunc[2] * 2);
+			SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
+
+
 		}
 
-		//cursor_x += (new_direction_trunc[0] * 5);
-		//cursor_y += (new_direction_trunc[2] * 5);
+		//cursor_x += (new_direction_trunc[0] * 1);
+		//cursor_y += (new_direction_trunc[2] * 1);
 		//SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
 
 
