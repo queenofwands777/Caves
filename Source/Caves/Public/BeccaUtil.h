@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameFramework/GameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "BeccaUtil.generated.h"
 
 /**
@@ -16,6 +18,10 @@ class CAVES_API UBeccaUtil : public UBlueprintFunctionLibrary
 
 	UFUNCTION(BlueprintCallable, Category = "MyFunctions")
 	static int32 HelloBlueprint();
+
+
+
+
 
 	
 };
