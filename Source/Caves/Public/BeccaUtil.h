@@ -19,9 +19,4 @@ class CAVES_API UBeccaUtil : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, Category = "MyFunctions")
 	static int32 HelloBlueprint();
 
-
-
-
-
-	
 };

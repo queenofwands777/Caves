@@ -4,6 +4,6 @@
 #include "BeccaUtil.h"
 
 int32 UBeccaUtil::HelloBlueprint() {
-	return 69;
+	return 43110;
 	
 }
