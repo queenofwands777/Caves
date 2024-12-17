@@ -882,7 +882,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-
+	InitializeTerrainNodes();
 
 
 

@@ -32,7 +32,22 @@ enum OBJECTS {
 
 
 
+struct TerrainNode {
+public:
+	FVector location;
+	TArray<TerrainNode*> neighbors;
+	TerrainNode* parent = nullptr;
+	bool visited = false;
 
+	TerrainNode(FVector _location) {
+		location = _location;
+	}
+
+	void Reset() {
+		parent = nullptr;
+		visited = false;
+	}
+};
 
 struct RoomMarker {
 	float x;
@@ -131,9 +146,147 @@ public:
 //pathfinding stuff
 public:
 
+	TMap<int, TMap<int, TerrainNode*>> TerrainNodeMap;
+
+
+	void InitializeTerrainNodes() {
+
+		//look through all initialized tiles, make a terrain node for each floor tile. 
+
+		for (int tilemap_x = 0; tilemap_x < LEVEL_SIZE; tilemap_x++) {
+			for (int tilemap_y = 0; tilemap_y < LEVEL_SIZE; tilemap_y++) {
+
+				//check that tilemap is valid
+				if (GetTileMap(tilemap_x, tilemap_y) != nullptr) {
+
+					//get each individual tile
+					for (int x_within_tilemap = 0; x_within_tilemap < MAP_SIZE; x_within_tilemap++) {
+						for (int y_within_tilemap = 0; y_within_tilemap < MAP_SIZE; y_within_tilemap++) {
+
+
+
+							//check if that tile is a certain kind
+							FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
+							if (target_tile.PackedTileIndex == floor_info->floor_material) {
+
+								int world_x = (tilemap_x * MAP_SIZE) + x_within_tilemap;
+								int world_y = (tilemap_y * MAP_SIZE) + (MAP_SIZE - y_within_tilemap - 1);
+
+								TerrainNode* new_node = new TerrainNode({(float)world_x, 0.0, (float)world_y});
+
+								if (!TerrainNodeMap.Contains(world_x)) {
+									TMap<int, TerrainNode*> new_col;
+									TerrainNodeMap.Add(world_x, new_col);
+								}
+
+								TerrainNodeMap[world_x].Add(world_y, new_node);
+
+
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+
+		//look through list of terrain nodes. add neighbors to each one.
+
+		for (int i = 0; i < TerrainNodeMap.Array().Num(); i++) {
+			for (int j = 0; j < TerrainNodeMap.Array()[i].Value.Array().Num(); j++) {
+				TerrainNode* target_node;
+				target_node = TerrainNodeMap.Array()[i].Value.Array()[j].Value;
+
+				int target_world_x = target_node->location.X;
+				int target_world_y = target_node->location.Y;
+
+				int target_tile_x = target_world_x % MAP_SIZE;
+				int target_tile_y = target_world_y % MAP_SIZE;
+
+				int target_grid_x = (target_world_x - target_tile_x) / MAP_SIZE;
+				int target_grid_y = (target_world_y - target_tile_y) / MAP_SIZE;
+
+
+				for (int x = -1; x <= 1; x++) {
+					for (int y = -1; y <= 1; y++) {
+
+						if (!((x==0)&&(y==0))) {
+
+							
+
+							int x_offset = x * TILE_SIZE;
+							int y_offset = y * TILE_SIZE;
+
+							FPaperTileInfo* target_tile = GetTile(target_world_x + x_offset, target_world_y + y_offset);
+							if (target_tile != nullptr) {
+								if (target_tile->PackedTileIndex == floor_info->floor_material) {
+									target_node->neighbors.Add(TerrainNodeMap[target_world_x + x_offset][target_world_y + y_offset]);
+								}
+							}
+
+
+						}
+
+
+
+
+					}
+				}
+
+
+			}
+		}
+
+
+
+
+
+	}
+
 	UFUNCTION(BlueprintCallable, Category = "Pathfinding")
 	TArray<FVector> GetPath(FVector from, FVector to) {
 		TArray<FVector> result;
+
+		TQueue<TerrainNode*> queue;
+		queue.Enqueue(TerrainNodeMap[from.X][from.Z]);
+
+		
+
+		while (!queue.IsEmpty()) {
+			TerrainNode* target_node;
+			queue.Dequeue(target_node);
+			
+			if (!target_node->visited) {
+				
+				target_node->visited = true;
+
+				for (int i = 0; i < target_node->neighbors.Num(); i++) {
+					TerrainNode* target_neighbor = target_node->neighbors[i];
+					if (!target_neighbor->visited) {
+						target_neighbor->parent = target_node;
+						queue.Enqueue(target_neighbor);
+					}
+				}
+			}
+		}
+
+		TerrainNode* destination = TerrainNodeMap[to.X][to.Z];
+
+		TerrainNode* target_node = destination;
+
+		while (target_node->parent != nullptr) {
+			result.Add(target_node->location);
+			target_node = target_node->parent;
+		}
+
+		for (int i = 0; i < TerrainNodeMap.Array().Num(); i++) {
+			for (int j = 0; j < TerrainNodeMap.Array()[i].Value.Array().Num(); j++) {
+				TerrainNodeMap.Array()[i].Value.Array()[j].Value->Reset();
+			}
+		}
+
+		Algo::Reverse(result);
 		return result;
 	}
 
