@@ -50,6 +50,14 @@ struct Z_Construct_UClass_AFloorInfo_Statics
 		{ "Category", "FloorInfo" },
 		{ "ModuleRelativePath", "Public/FloorInfo.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FloorSpecificWeapons_MetaData[] = {
+		{ "Category", "FloorInfo" },
+		{ "ModuleRelativePath", "Public/FloorInfo.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_FloorSpecificAttachments_MetaData[] = {
+		{ "Category", "FloorInfo" },
+		{ "ModuleRelativePath", "Public/FloorInfo.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_Encounters_MetaData[] = {
 		{ "Category", "FloorInfo" },
 		{ "ModuleRelativePath", "Public/FloorInfo.h" },
@@ -81,6 +89,10 @@ struct Z_Construct_UClass_AFloorInfo_Statics
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_Objects;
 	static const UECodeGen_Private::FClassPropertyParams NewProp_EssentialObjects_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_EssentialObjects;
+	static const UECodeGen_Private::FClassPropertyParams NewProp_FloorSpecificWeapons_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_FloorSpecificWeapons;
+	static const UECodeGen_Private::FClassPropertyParams NewProp_FloorSpecificAttachments_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_FloorSpecificAttachments;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_Encounters_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_Encounters;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_LevelTileSet;
@@ -102,6 +114,10 @@ const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFloorInfo_Stat
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_Objects = { "Objects", nullptr, (EPropertyFlags)0x0015000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, Objects), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Objects_MetaData), NewProp_Objects_MetaData) };
 const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_EssentialObjects_Inner = { "EssentialObjects", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_EssentialObjects = { "EssentialObjects", nullptr, (EPropertyFlags)0x0014000000010005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, EssentialObjects), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_EssentialObjects_MetaData), NewProp_EssentialObjects_MetaData) };
+const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificWeapons_Inner = { "FloorSpecificWeapons", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificWeapons = { "FloorSpecificWeapons", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, FloorSpecificWeapons), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FloorSpecificWeapons_MetaData), NewProp_FloorSpecificWeapons_MetaData) };
+const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificAttachments_Inner = { "FloorSpecificAttachments", nullptr, (EPropertyFlags)0x0004000000000000, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UClass, Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificAttachments = { "FloorSpecificAttachments", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, FloorSpecificAttachments), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_FloorSpecificAttachments_MetaData), NewProp_FloorSpecificAttachments_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_Encounters_Inner = { "Encounters", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_AEncounter_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_Encounters = { "Encounters", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, Encounters), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_Encounters_MetaData), NewProp_Encounters_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_LevelTileSet = { "LevelTileSet", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, LevelTileSet), Z_Construct_UClass_UPaperTileSet_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_LevelTileSet_MetaData), NewProp_LevelTileSet_MetaData) };
@@ -120,6 +136,10 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFloorInf
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_Objects,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_EssentialObjects_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_EssentialObjects,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificWeapons_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificWeapons,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificAttachments_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_FloorSpecificAttachments,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_Encounters_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_Encounters,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_LevelTileSet,
@@ -169,10 +189,10 @@ AFloorInfo::~AFloorInfo() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 2555758160U) },
+		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 95726329U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_2878468779(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_1099904967(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

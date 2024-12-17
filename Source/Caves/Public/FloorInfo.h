@@ -32,6 +32,12 @@ public:
 	TArray<TSubclassOf<AActor>> EssentialObjects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<AActor>> FloorSpecificWeapons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<TSubclassOf<AActor>> FloorSpecificAttachments;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<AEncounter*> Encounters;
 
 	AEncounter* GetEncounter();
