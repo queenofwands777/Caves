@@ -18,7 +18,6 @@
 #define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 
-
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {
 	int index = (grid_x * LEVEL_SIZE) + grid_y;
 	return TerrainMapData[index];
@@ -211,13 +210,6 @@ FPaperTileInfo* ATerrainGenerator::GetTile(int input_x, int input_y) {
 
 }
 
-
-
-
-
-
-
-// Sets default values
 ATerrainGenerator::ATerrainGenerator()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -236,9 +228,6 @@ ATerrainGenerator::ATerrainGenerator()
 
 }
 
-
-
-// Called when the game starts or when spawned
 void ATerrainGenerator::BeginPlay()
 {
 	Super::BeginPlay();
@@ -375,8 +364,6 @@ public:
 
 };
 
-
-
 void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 
 
@@ -411,12 +398,6 @@ void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 		GetWorld()->SpawnActor<AActor>(encounter->Objects[object], spawn_location, rotation);
 	}
 }
-
-
-
-
-
-
 
 void ATerrainGenerator::GenerateMap() {
 
@@ -915,7 +896,6 @@ void ATerrainGenerator::GenerateMap() {
 	}
 }
 
-
 void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 	PRINT("Initializing tilemap")
@@ -1005,7 +985,6 @@ void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {
 
 }
 
-// Called every frame
 void ATerrainGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

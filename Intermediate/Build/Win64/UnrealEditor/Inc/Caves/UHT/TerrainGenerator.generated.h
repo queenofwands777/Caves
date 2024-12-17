@@ -14,6 +14,10 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_TerrainGenerator_generated_h
 
+#define FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_RPC_WRAPPERS_NO_PURE_DECLS \
+	DECLARE_FUNCTION(execGetPath);
+
+
 #define FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesATerrainGenerator(); \
@@ -39,6 +43,7 @@ public: \
 #define FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
+	FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_RPC_WRAPPERS_NO_PURE_DECLS \
 	FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_INCLASS_NO_PURE_DECLS \
 	FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_59_ENHANCED_CONSTRUCTORS \
 private: \

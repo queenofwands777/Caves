@@ -14,15 +14,76 @@ CAVES_API UClass* Z_Construct_UClass_AFloorInfo_NoRegister();
 CAVES_API UClass* Z_Construct_UClass_ATerrainGenerator();
 CAVES_API UClass* Z_Construct_UClass_ATerrainGenerator_NoRegister();
 COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
+COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 PAPER2D_API UClass* Z_Construct_UClass_UPaperTileMapComponent_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Caves();
 // End Cross Module References
 
+// Begin Class ATerrainGenerator Function GetPath
+struct Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics
+{
+	struct TerrainGenerator_eventGetPath_Parms
+	{
+		FVector from;
+		FVector to;
+		TArray<FVector> ReturnValue;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Pathfinding" },
+		{ "ModuleRelativePath", "TerrainGenerator.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FStructPropertyParams NewProp_from;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_to;
+	static const UECodeGen_Private::FStructPropertyParams NewProp_ReturnValue_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_from = { "from", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(TerrainGenerator_eventGetPath_Parms, from), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_to = { "to", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(TerrainGenerator_eventGetPath_Parms, to), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(TerrainGenerator_eventGetPath_Parms, ReturnValue), EArrayPropertyFlags::None, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_from,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_to,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_ReturnValue_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::NewProp_ReturnValue,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ATerrainGenerator, nullptr, "GetPath", nullptr, nullptr, Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::PropPointers), sizeof(Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::TerrainGenerator_eventGetPath_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04820401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::Function_MetaDataParams), Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::TerrainGenerator_eventGetPath_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_ATerrainGenerator_GetPath()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ATerrainGenerator_GetPath_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(ATerrainGenerator::execGetPath)
+{
+	P_GET_STRUCT(FVector,Z_Param_from);
+	P_GET_STRUCT(FVector,Z_Param_to);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	*(TArray<FVector>*)Z_Param__Result=P_THIS->GetPath(Z_Param_from,Z_Param_to);
+	P_NATIVE_END;
+}
+// End Class ATerrainGenerator Function GetPath
+
 // Begin Class ATerrainGenerator
 void ATerrainGenerator::StaticRegisterNativesATerrainGenerator()
 {
+	UClass* Class = ATerrainGenerator::StaticClass();
+	static const FNameNativePtrPair Funcs[] = {
+		{ "GetPath", &ATerrainGenerator::execGetPath },
+	};
+	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
 IMPLEMENT_CLASS_NO_AUTO_REGISTRATION(ATerrainGenerator);
 UClass* Z_Construct_UClass_ATerrainGenerator_NoRegister()
@@ -105,6 +166,10 @@ struct Z_Construct_UClass_ATerrainGenerator_Statics
 	static const UECodeGen_Private::FClassPropertyParams NewProp_Player;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static UObject* (*const DependentSingletons[])();
+	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
+		{ &Z_Construct_UFunction_ATerrainGenerator_GetPath, "GetPath" }, // 3742264266
+	};
+	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<ATerrainGenerator>::IsAbstract,
 	};
@@ -151,11 +216,11 @@ const UECodeGen_Private::FClassParams Z_Construct_UClass_ATerrainGenerator_Stati
 	"Engine",
 	&StaticCppClassTypeInfo,
 	DependentSingletons,
-	nullptr,
+	FuncInfo,
 	Z_Construct_UClass_ATerrainGenerator_Statics::PropPointers,
 	nullptr,
 	UE_ARRAY_COUNT(DependentSingletons),
-	0,
+	UE_ARRAY_COUNT(FuncInfo),
 	UE_ARRAY_COUNT(Z_Construct_UClass_ATerrainGenerator_Statics::PropPointers),
 	0,
 	0x009000A4u,
@@ -181,10 +246,10 @@ ATerrainGenerator::~ATerrainGenerator() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ATerrainGenerator, ATerrainGenerator::StaticClass, TEXT("ATerrainGenerator"), &Z_Registration_Info_UClass_ATerrainGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ATerrainGenerator), 3152084468U) },
+		{ Z_Construct_UClass_ATerrainGenerator, ATerrainGenerator::StaticClass, TEXT("ATerrainGenerator"), &Z_Registration_Info_UClass_ATerrainGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ATerrainGenerator), 1827783998U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_316705452(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_3353901137(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_TerrainGenerator_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

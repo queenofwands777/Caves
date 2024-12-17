@@ -126,6 +126,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	TSubclassOf<AActor> Player ;
+
+
+//pathfinding stuff
+public:
+
+	UFUNCTION(BlueprintCallable, Category = "Pathfinding")
+	TArray<FVector> GetPath(FVector from, FVector to) {
+		TArray<FVector> result;
+		return result;
+	}
+
+
 };
 
 
