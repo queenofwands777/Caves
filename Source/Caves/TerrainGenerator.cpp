@@ -14,8 +14,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
-#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
-#define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
+
 
 
 UPaperTileMapComponent* ATerrainGenerator::GetTileMap(int grid_x, int grid_y) {

@@ -62,9 +62,13 @@ struct RoomMarker {
 
 #include"FloorInfo.h"
 
+#include "DrawDebugHelpers.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileMapComponent.h"
+
+#define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT(message));
+#define PRINT(message) UE_LOG(LogTemp, Warning, TEXT(message));
 
 #include "TerrainGenerator.generated.h"
 
@@ -169,8 +173,8 @@ public:
 							FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
 							if (target_tile.PackedTileIndex == floor_info->floor_material) {
 
-								int world_x = (tilemap_x * MAP_SIZE) + x_within_tilemap;
-								int world_y = (tilemap_y * MAP_SIZE) + (MAP_SIZE - y_within_tilemap - 1);
+								int world_x = ((tilemap_x * MAP_SIZE) + (x_within_tilemap));
+								int world_y = ((((tilemap_y-1) * MAP_SIZE)) + ((MAP_SIZE - y_within_tilemap)));
 
 								TerrainNode* new_node = new TerrainNode({(float)world_x, 0.0, (float)world_y});
 
@@ -207,6 +211,11 @@ public:
 				int target_grid_x = (target_world_x - target_tile_x) / MAP_SIZE;
 				int target_grid_y = (target_world_y - target_tile_y) / MAP_SIZE;
 
+				FVector location = { target_node->location.X * TILE_SIZE, 10, target_node->location.Z * TILE_SIZE };
+				DrawDebugPoint(GetWorld(), location, 10.f, FColor::Red, true, 600, 255);
+				DrawDebugLine(GetWorld(), location, location +1, FColor::Red, true, 600, 255, 4);
+				FString message = location.ToText().ToString();
+				GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red,message);
 
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <= 1; y++) {
@@ -215,13 +224,19 @@ public:
 
 							
 
-							int x_offset = x * TILE_SIZE;
-							int y_offset = y * TILE_SIZE;
+							int x_offset = x;
+							int y_offset = y;
+							int target_x = target_world_x + x_offset;
+							int target_y = target_world_y + y_offset;
 
-							FPaperTileInfo* target_tile = GetTile(target_world_x + x_offset, target_world_y + y_offset);
+
+							FPaperTileInfo* target_tile = GetTile(target_x, target_y);
 							if (target_tile != nullptr) {
 								if (target_tile->PackedTileIndex == floor_info->floor_material) {
-									target_node->neighbors.Add(TerrainNodeMap[target_world_x + x_offset][target_world_y + y_offset]);
+									target_node->neighbors.Add(TerrainNodeMap[target_x][target_y]);
+									FVector neighbor_location = { TerrainNodeMap[target_x][target_y]->location.X * TILE_SIZE, 10, TerrainNodeMap[target_x][target_y]->location.Z * TILE_SIZE };
+
+									DrawDebugLine(GetWorld(), location, neighbor_location, FColor::Green, true, 600, 255, 2);
 								}
 							}
 
@@ -276,7 +291,7 @@ public:
 		TerrainNode* target_node = destination;
 
 		while (target_node->parent != nullptr) {
-			result.Add(target_node->location);
+			result.Add(target_node->location*TILE_SIZE);
 			target_node = target_node->parent;
 		}
 
