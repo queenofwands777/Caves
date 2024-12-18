@@ -211,11 +211,11 @@ public:
 				int target_grid_x = (target_world_x - target_tile_x) / MAP_SIZE;
 				int target_grid_y = (target_world_y - target_tile_y) / MAP_SIZE;
 
-				FVector location = { target_node->location.X * TILE_SIZE, 10, target_node->location.Z * TILE_SIZE };
-				DrawDebugPoint(GetWorld(), location, 10.f, FColor::Red, true, 600, 255);
-				DrawDebugLine(GetWorld(), location, location +1, FColor::Red, true, 600, 255, 4);
-				FString message = location.ToText().ToString();
-				GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red,message);
+				//FVector location = { target_node->location.X * TILE_SIZE, 10, target_node->location.Z * TILE_SIZE };
+				//DrawDebugPoint(GetWorld(), location, 10.f, FColor::Red, true, 600, 255);
+				//DrawDebugLine(GetWorld(), location, location +1, FColor::Red, true, 600, 255, 4);
+				//FString message = location.ToText().ToString();
+				//GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red,message);
 
 				for (int x = -1; x <= 1; x++) {
 					for (int y = -1; y <= 1; y++) {
@@ -236,7 +236,7 @@ public:
 									target_node->neighbors.Add(TerrainNodeMap[target_x][target_y]);
 									FVector neighbor_location = { TerrainNodeMap[target_x][target_y]->location.X * TILE_SIZE, 10, TerrainNodeMap[target_x][target_y]->location.Z * TILE_SIZE };
 
-									DrawDebugLine(GetWorld(), location, neighbor_location, FColor::Green, true, 600, 255, 2);
+									/*DrawDebugLine(GetWorld(), location, neighbor_location, FColor::Green, true, 600, 255, 2);*/
 								}
 							}
 
