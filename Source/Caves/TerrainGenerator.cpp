@@ -988,5 +988,8 @@ void ATerrainGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	
+
 }
 
