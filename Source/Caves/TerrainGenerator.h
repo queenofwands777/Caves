@@ -232,6 +232,10 @@ public:
 									continue;
 								}
 
+								if (abs(x_offset)==abs(y_offset)) {
+									continue;
+								}
+
 								int neighbor_x = target_x + x_offset;
 								int neighbor_y = target_y + y_offset;
 
@@ -311,6 +315,7 @@ public:
 		if (TerrainNodeMap.Contains(start_tile_x)) {
 			if (TerrainNodeMap[start_tile_x].Contains(start_tile_y)) {
 
+				TerrainNodeMap[start_tile_x][start_tile_y]->visited = true;
 				queue.Enqueue(TerrainNodeMap[start_tile_x][start_tile_y]);
 
 
@@ -328,18 +333,20 @@ public:
 			
 			queue.Dequeue(target_node);
 			
-			if (!target_node->visited) {
-				
-				target_node->visited = true;
+			target_node->neighbors.Sort([](const TerrainNode& A, const TerrainNode& B) {
+				return A.neighbors.Num() > B.neighbors.Num(); // Prefer nodes farther from walls
+				});
+
 
 				for (int i = 0; i < target_node->neighbors.Num(); i++) {
 					TerrainNode* target_neighbor = target_node->neighbors[i];
 					if (!target_neighbor->visited) {
 						target_neighbor->parent = target_node;
+						target_neighbor->visited = true;
 						queue.Enqueue(target_neighbor);
 					}
 				}
-			}
+			
 		}
 		
 		
@@ -357,8 +364,8 @@ public:
 		
 
 		while ((target_node != nullptr ) && (target_node->parent != nullptr)) {
-			FVector target_location = { float(target_node->X * TILE_SIZE), 10, float(target_node->Y * TILE_SIZE) };
-			DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.1, 255, 4);
+			//FVector target_location = { float(target_node->X * TILE_SIZE), 10, float(target_node->Y * TILE_SIZE) };
+			//DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.1, 255, 4);
 			result.Add({ float(target_node->X * TILE_SIZE) , 0, float(target_node->Y * TILE_SIZE) });
 			target_node = target_node->parent;
 		}
