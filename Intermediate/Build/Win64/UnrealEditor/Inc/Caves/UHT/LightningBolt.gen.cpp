@@ -14,6 +14,8 @@ CAVES_API UClass* Z_Construct_UClass_ALightningBolt();
 CAVES_API UClass* Z_Construct_UClass_ALightningBolt_NoRegister();
 COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
+ENGINE_API UClass* Z_Construct_UClass_UTexture2D_NoRegister();
+PAPER2D_API UClass* Z_Construct_UClass_UPaperSpriteComponent_NoRegister();
 UPackage* Z_Construct_UPackage__Script_Caves();
 // End Cross Module References
 
@@ -68,6 +70,17 @@ struct Z_Construct_UClass_ALightningBolt_Statics
 		{ "IncludePath", "LightningBolt.h" },
 		{ "ModuleRelativePath", "Public/LightningBolt.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_lightning_texture_MetaData[] = {
+		{ "AllowPrivateAccess", "true" },
+		{ "Category", "Texture" },
+		{ "ModuleRelativePath", "Public/LightningBolt.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_SpriteComponent_MetaData[] = {
+		{ "AllowPrivateAccess", "true" },
+		{ "Category", "Sprite" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Public/LightningBolt.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_start_location_MetaData[] = {
 		{ "Category", "LightningBolt" },
 		{ "ExposeOnSpawn", "true" },
@@ -79,6 +92,8 @@ struct Z_Construct_UClass_ALightningBolt_Statics
 		{ "ModuleRelativePath", "Public/LightningBolt.h" },
 	};
 #endif // WITH_METADATA
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_lightning_texture;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_SpriteComponent;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_start_location;
 	static const UECodeGen_Private::FStructPropertyParams NewProp_end_location;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
@@ -92,9 +107,13 @@ struct Z_Construct_UClass_ALightningBolt_Statics
 	};
 	static const UECodeGen_Private::FClassParams ClassParams;
 };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ALightningBolt_Statics::NewProp_lightning_texture = { "lightning_texture", nullptr, (EPropertyFlags)0x0010000000020015, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALightningBolt, lightning_texture), Z_Construct_UClass_UTexture2D_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_lightning_texture_MetaData), NewProp_lightning_texture_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ALightningBolt_Statics::NewProp_SpriteComponent = { "SpriteComponent", nullptr, (EPropertyFlags)0x00100000000a001d, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALightningBolt, SpriteComponent), Z_Construct_UClass_UPaperSpriteComponent_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_SpriteComponent_MetaData), NewProp_SpriteComponent_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ALightningBolt_Statics::NewProp_start_location = { "start_location", nullptr, (EPropertyFlags)0x0011000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALightningBolt, start_location), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_start_location_MetaData), NewProp_start_location_MetaData) };
 const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ALightningBolt_Statics::NewProp_end_location = { "end_location", nullptr, (EPropertyFlags)0x0011000000000005, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ALightningBolt, end_location), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_end_location_MetaData), NewProp_end_location_MetaData) };
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ALightningBolt_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALightningBolt_Statics::NewProp_lightning_texture,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALightningBolt_Statics::NewProp_SpriteComponent,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALightningBolt_Statics::NewProp_start_location,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ALightningBolt_Statics::NewProp_end_location,
 };
@@ -139,10 +158,10 @@ ALightningBolt::~ALightningBolt() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_LightningBolt_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ALightningBolt, ALightningBolt::StaticClass, TEXT("ALightningBolt"), &Z_Registration_Info_UClass_ALightningBolt, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ALightningBolt), 2446854327U) },
+		{ Z_Construct_UClass_ALightningBolt, ALightningBolt::StaticClass, TEXT("ALightningBolt"), &Z_Registration_Info_UClass_ALightningBolt, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ALightningBolt), 4101707399U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_LightningBolt_h_3674262396(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_LightningBolt_h_2304543494(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_LightningBolt_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_LightningBolt_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
