@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DrawDebugHelpers.h"
+
 #include "GameFramework/Actor.h"
 #include "LightningBolt.generated.h"
 
@@ -14,6 +16,23 @@ class CAVES_API ALightningBolt : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ALightningBolt();
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	FVector start_location;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	FVector end_location;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Functions")
+	void DrawLightning();
+
+
+
+
 
 protected:
 	// Called when the game starts or when spawned

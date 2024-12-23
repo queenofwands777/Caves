@@ -365,7 +365,7 @@ public:
 
 		while ((target_node != nullptr ) && (target_node->parent != nullptr)) {
 			//FVector target_location = { float(target_node->X * TILE_SIZE), 10, float(target_node->Y * TILE_SIZE) };
-			//DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.1, 255, 4);
+			/*DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.1, 255, 4);*/
 			result.Add({ float(target_node->X * TILE_SIZE) , 0, float(target_node->Y * TILE_SIZE) });
 			target_node = target_node->parent;
 		}

@@ -15,6 +15,8 @@ ALightningBolt::ALightningBolt()
 void ALightningBolt::BeginPlay()
 {
 	Super::BeginPlay();
+	DrawLightning();
+	
 	
 }
 
@@ -25,3 +27,6 @@ void ALightningBolt::Tick(float DeltaTime)
 
 }
 
+void ALightningBolt::DrawLightning() {
+	DrawDebugLine(GetWorld(), start_location, end_location, FColor::Blue, false, 0.1, 255, 1);
+}
