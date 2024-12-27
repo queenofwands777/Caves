@@ -13,5 +13,10 @@ UCLASS()
 class CAVES_API UBunkerGeneratorPattern : public UGeneratorPattern
 {
 	GENERATED_BODY()
+
+	UBunkerGeneratorPattern() {
+	}
+
+	void GenerateLevel() override;
 	
 };

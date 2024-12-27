@@ -74,7 +74,6 @@ template<> CAVES_API UClass* StaticClass<UBunkerGeneratorPattern>()
 {
 	return UBunkerGeneratorPattern::StaticClass();
 }
-UBunkerGeneratorPattern::UBunkerGeneratorPattern() {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UBunkerGeneratorPattern);
 UBunkerGeneratorPattern::~UBunkerGeneratorPattern() {}
 // End Class UBunkerGeneratorPattern

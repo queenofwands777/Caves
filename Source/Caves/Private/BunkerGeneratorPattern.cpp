@@ -3,3 +3,26 @@
 
 #include "BunkerGeneratorPattern.h"
 
+
+
+
+void UBunkerGeneratorPattern::GenerateLevel() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

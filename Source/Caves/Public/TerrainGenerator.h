@@ -28,6 +28,7 @@ enum OBJECTS {
 	Elevator = 3,
 	ElevatorDoor = 4,
 	Shelf = 5,
+	PlayerSpawn = 6
 };
 
 
@@ -109,18 +110,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int CURSOR_LIFETIME;
 
-
+	
 
 
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int floor_num = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int true_floor;
 
 	UPaperTileSet* LevelOverlayTileSet;
 	std::vector<RoomMarker> rooms;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AFloorInfo* floor_info;
 
 public:
@@ -325,31 +328,6 @@ public:
 
 
 
-
-		
-
-		while (!queue.IsEmpty()) {
-			TerrainNode* target_node;
-			
-			queue.Dequeue(target_node);
-			
-			target_node->neighbors.Sort([](const TerrainNode& A, const TerrainNode& B) {
-				return A.neighbors.Num() > B.neighbors.Num(); // Prefer nodes farther from walls
-				});
-
-
-				for (int i = 0; i < target_node->neighbors.Num(); i++) {
-					TerrainNode* target_neighbor = target_node->neighbors[i];
-					if (!target_neighbor->visited) {
-						target_neighbor->parent = target_node;
-						target_neighbor->visited = true;
-						queue.Enqueue(target_neighbor);
-					}
-				}
-			
-		}
-		
-		
 		TerrainNode* target_node = nullptr;
 
 		if (TerrainNodeMap.Contains(end_tile_x)) {
@@ -358,6 +336,34 @@ public:
 				target_node = destination;
 			}
 		}
+		
+
+		while (!queue.IsEmpty()) {
+			TerrainNode* selected_node;
+			
+			queue.Dequeue(selected_node);
+			
+			selected_node->neighbors.Sort([](const TerrainNode& A, const TerrainNode& B) {
+				return A.neighbors.Num() > B.neighbors.Num(); // Prefer nodes farther from walls
+				});
+
+
+				for (int i = 0; i < selected_node->neighbors.Num(); i++) {
+					TerrainNode* target_neighbor = selected_node->neighbors[i];
+					if (!target_neighbor->visited) {
+						target_neighbor->parent = selected_node;
+						target_neighbor->visited = true;
+						queue.Enqueue(target_neighbor);
+						if (target_neighbor == target_node) {
+							queue.Empty();
+						}
+					}
+				}
+			
+		}
+		
+		
+
 
 
 

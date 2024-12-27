@@ -34,6 +34,13 @@ public:
 	TArray<TSubclassOf<AActor>> Objects;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FString WorldName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FString StageName;
+
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<TSubclassOf<AActor>> EssentialObjects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

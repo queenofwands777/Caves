@@ -237,10 +237,15 @@ void ATerrainGenerator::BeginPlay()
 	TerrainMapData.Init(nullptr, LEVEL_SIZE * LEVEL_SIZE);
 	TerrainOverlayMapData.Init(nullptr, LEVEL_SIZE * LEVEL_SIZE);
 
-	int floors_per_shop = 1;
+	int floors_per_shop = 3;
 
 	int floor_or_shop = (floor_num % (floors_per_shop + 1));
-	true_floor = (floor_num - floor_or_shop) / (floors_per_shop + 1);
+
+	
+
+
+	int shops_so_far = (floor_num - floor_or_shop) / (floors_per_shop + 1);
+	true_floor = floor_num - shops_so_far;
 
 	if (floor_or_shop == floors_per_shop) {
 
@@ -276,93 +281,6 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 
 }
 
-struct GeneratorProbe {
-public:
-	GeneratorProbe(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
-		num_rooms = _num_rooms;
-		lifetime = _lifetime;
-		cursor_x = _cursor_x;
-		cursor_y = _cursor_y;
-		heading = _heading;
-		parent = _parent;
-
-		direction = { 1, 0 };
-
-		Generate();
-	}
-
-public:
-	int num_rooms;
-	int lifetime;
-	float cursor_x;
-	float cursor_y;
-	float heading;
-	FVector2d direction;
-	ATerrainGenerator* parent;
-
-public:
-
-	void Generate() {
-
-		int time_since_room = 0;
-		int remaining_rooms = num_rooms;
-		bool active = true;
-		while (active) {
-
-			time_since_room++;
-
-			heading += FMath::RandRange(-10, 10);
-			float rotation_radians = FMath::DegreesToRadians(heading);
-
-			FVector2D new_direction = {
-				(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-				(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-			};
-
-			//direction = new_direction;
-
-			cursor_x += new_direction[0];
-			cursor_y += new_direction[1];
-
-			//set tile
-			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3);
-
-
-
-
-			int offshoot = FMath::RandRange(0, 1000);
-			if ((offshoot > (950 - (remaining_rooms*10)))&&(remaining_rooms >= 2)) {
-				int spare_rooms = remaining_rooms - (remaining_rooms / 2);
-				GeneratorProbe new_offshoot = GeneratorProbe(lifetime / 2, spare_rooms, cursor_x, cursor_y, heading + (FMath::RandRange(45, 135) * ((FMath::RandBool() * 2) - 1)), parent);
-				remaining_rooms = remaining_rooms - spare_rooms;
-			}
-
-
-			int room = FMath::RandRange(0, 1000);
-			if (((room > 920) && (remaining_rooms > 0) && (time_since_room >= 18))||(time_since_room >= 32)) {
-				parent->MakeRoom(cursor_x, cursor_y);
-				remaining_rooms--;
-				time_since_room = 0;
-			}
-
-			if (remaining_rooms == 0) { active = false; }
-
-
-
-
-
-
-		}
-
-
-
-
-
-	}
-
-
-
-};
 
 void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 
@@ -415,6 +333,7 @@ void ATerrainGenerator::GenerateMap() {
 	FVector spawn_location = { float((cursor_x - 2) * TILE_SIZE) + (1.5 * TILE_SIZE), 4, float((cursor_y)*TILE_SIZE) - (15.5 * TILE_SIZE) };
 
 	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], elevator_location, { 0,0,0 });
+	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::PlayerSpawn], spawn_location, { 0,0,0 });
 	//GetWorld()->SpawnActor<AActor>(Player, spawn_location, { 0,0,0 });
 
 	float heading = FMath::RandRange(0, 360);

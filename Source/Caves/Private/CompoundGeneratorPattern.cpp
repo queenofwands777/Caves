@@ -7,59 +7,53 @@
 
 void UCompoundGeneratorPattern::GenerateLevel() {
 
+	float rotation_radians = FMath::DegreesToRadians(heading);
+
+	FVector2D new_direction = {
+		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
+		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
+	};
 
 
 
-	int time_since_room = 0;
-	int remaining_rooms = num_rooms;
-	bool active = true;
-	while (active) {
-
-		time_since_room++;
-
-		heading += FMath::RandRange(-10, 10);
-		float rotation_radians = FMath::DegreesToRadians(heading);
-
-		FVector2D new_direction = {
-			(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-			(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-		};
-
-		//direction = new_direction;
-
+	for (int i = 0; i < 5; i++) {
 		cursor_x += new_direction[0];
 		cursor_y += new_direction[1];
+		for (int p = -5; p <= 5; p++) {
+			FVector2D perp = { -new_direction[1], new_direction[0] };
+			perp *= p;
+			float rand_x = FMath::FRandRange(-5.0, 5.0);
+			float rand_y = FMath::FRandRange(-5.0, 5.0);
+			parent->SetTile(cursor_x + perp[0] + rand_x, cursor_y + perp[1] + rand_y, parent->floor_info->floor_material, 8, true);
 
-		//set tile
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
-
-
-
-
-		int offshoot = FMath::RandRange(0, 1000);
-		if ((offshoot > (950 - (remaining_rooms * 10))) && (remaining_rooms >= 2)) {
-			int spare_rooms = remaining_rooms - (remaining_rooms / 2);
-			UCompoundGeneratorPattern* new_offshoot = NewObject<UCompoundGeneratorPattern>(this);
-			new_offshoot->Init(lifetime / 2, spare_rooms, cursor_x, cursor_y, heading + (FMath::RandRange(45, 135) * ((FMath::RandBool() * 2) - 1)), parent);
-			remaining_rooms = remaining_rooms - spare_rooms;
 		}
-
-
-		int room = FMath::RandRange(0, 1000);
-		if (((room > 920) && (remaining_rooms > 0) && (time_since_room >= 18)) || (time_since_room >= 32)) {
-			parent->MakeRoom(cursor_x, cursor_y);
-			remaining_rooms--;
-			time_since_room = 0;
-		}
-
-		if (remaining_rooms == 0) { active = false; }
-
-
-
-
-
-
 	}
+
+
+	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 10, true);
+
+	cursor_x += new_direction[0]*5;
+	cursor_y += new_direction[1]*5;
+
+
+	for (int i = 0; i < 20; i++) {
+		cursor_x += new_direction[0];
+		cursor_y += new_direction[1];
+		for (int p = -2; p <= 2; p++) {
+			FVector2D perp = { -new_direction[1], new_direction[0] };
+			perp *= p;
+			float rand_x = FMath::FRandRange(-5.0, 5.0);
+			float rand_y = FMath::FRandRange(-5.0, 5.0);
+			parent->SetTile(cursor_x + perp[0] + rand_x, cursor_y + perp[1] + rand_y, parent->floor_info->floor_material, 10, true);
+
+		}
+	}
+
+
+
+
+
+
 
 
 

@@ -122,6 +122,14 @@ struct Z_Construct_UClass_ATerrainGenerator_Statics
 		{ "ExposeOnSpawn", "true" },
 		{ "ModuleRelativePath", "Public/TerrainGenerator.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_true_floor_MetaData[] = {
+		{ "Category", "TerrainGenerator" },
+		{ "ModuleRelativePath", "Public/TerrainGenerator.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_floor_info_MetaData[] = {
+		{ "Category", "TerrainGenerator" },
+		{ "ModuleRelativePath", "Public/TerrainGenerator.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_TerrainMapData_MetaData[] = {
 		{ "AllowPrivateAccess", "true" },
 		{ "Category", "TileMap" },
@@ -155,6 +163,8 @@ struct Z_Construct_UClass_ATerrainGenerator_Statics
 	static const UECodeGen_Private::FIntPropertyParams NewProp_TILE_SIZE;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_CURSOR_LIFETIME;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_floor_num;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_true_floor;
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_floor_info;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_TerrainMapData_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_TerrainMapData;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_TerrainOverlayMapData_Inner;
@@ -180,6 +190,8 @@ const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ATerrainGenerator
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TILE_SIZE = { "TILE_SIZE", nullptr, (EPropertyFlags)0x0011000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, TILE_SIZE), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TILE_SIZE_MetaData), NewProp_TILE_SIZE_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_CURSOR_LIFETIME = { "CURSOR_LIFETIME", nullptr, (EPropertyFlags)0x0011000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, CURSOR_LIFETIME), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_CURSOR_LIFETIME_MetaData), NewProp_CURSOR_LIFETIME_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_floor_num = { "floor_num", nullptr, (EPropertyFlags)0x0011000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, floor_num), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_floor_num_MetaData), NewProp_floor_num_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_true_floor = { "true_floor", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, true_floor), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_true_floor_MetaData), NewProp_true_floor_MetaData) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_floor_info = { "floor_info", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, floor_info), Z_Construct_UClass_AFloorInfo_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_floor_info_MetaData), NewProp_floor_info_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainMapData_Inner = { "TerrainMapData", nullptr, (EPropertyFlags)0x00000000000a0008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UPaperTileMapComponent_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainMapData = { "TerrainMapData", nullptr, (EPropertyFlags)0x001000800002001d, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ATerrainGenerator, TerrainMapData), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_TerrainMapData_MetaData), NewProp_TerrainMapData_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainOverlayMapData_Inner = { "TerrainOverlayMapData", nullptr, (EPropertyFlags)0x00000000000a0008, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_UPaperTileMapComponent_NoRegister, METADATA_PARAMS(0, nullptr) };
@@ -195,6 +207,8 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ATerrainG
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TILE_SIZE,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_CURSOR_LIFETIME,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_floor_num,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_true_floor,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_floor_info,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainMapData_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainMapData,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ATerrainGenerator_Statics::NewProp_TerrainOverlayMapData_Inner,
@@ -246,10 +260,10 @@ ATerrainGenerator::~ATerrainGenerator() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_TerrainGenerator_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ATerrainGenerator, ATerrainGenerator::StaticClass, TEXT("ATerrainGenerator"), &Z_Registration_Info_UClass_ATerrainGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ATerrainGenerator), 2113298946U) },
+		{ Z_Construct_UClass_ATerrainGenerator, ATerrainGenerator::StaticClass, TEXT("ATerrainGenerator"), &Z_Registration_Info_UClass_ATerrainGenerator, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ATerrainGenerator), 3314244160U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_TerrainGenerator_h_1833998167(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_TerrainGenerator_h_1723692643(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_TerrainGenerator_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_TerrainGenerator_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
