@@ -13,6 +13,7 @@ void EmptyLinkFunctionForGeneratedCodeFloorInfo() {}
 CAVES_API UClass* Z_Construct_UClass_AEncounter_NoRegister();
 CAVES_API UClass* Z_Construct_UClass_AFloorInfo();
 CAVES_API UClass* Z_Construct_UClass_AFloorInfo_NoRegister();
+CAVES_API UClass* Z_Construct_UClass_UGeneratorPattern_NoRegister();
 COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
@@ -78,6 +79,10 @@ struct Z_Construct_UClass_AFloorInfo_Statics
 		{ "Category", "FloorInfo" },
 		{ "ModuleRelativePath", "Public/FloorInfo.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_generator_MetaData[] = {
+		{ "Category", "FloorInfo" },
+		{ "ModuleRelativePath", "Public/FloorInfo.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_is_store_MetaData[] = {
 		{ "Category", "FloorInfo" },
 #if !UE_BUILD_SHIPPING
@@ -105,6 +110,7 @@ struct Z_Construct_UClass_AFloorInfo_Statics
 	static const UECodeGen_Private::FIntPropertyParams NewProp_floor_material;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_wall_material;
 	static const UECodeGen_Private::FIntPropertyParams NewProp_void_material;
+	static const UECodeGen_Private::FClassPropertyParams NewProp_generator;
 	static void NewProp_is_store_SetBit(void* Obj);
 	static const UECodeGen_Private::FBoolPropertyParams NewProp_is_store;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
@@ -130,6 +136,7 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AFloorInfo_Sta
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_floor_material = { "floor_material", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, floor_material), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_floor_material_MetaData), NewProp_floor_material_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_wall_material = { "wall_material", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, wall_material), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_wall_material_MetaData), NewProp_wall_material_MetaData) };
 const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_void_material = { "void_material", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, void_material), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_void_material_MetaData), NewProp_void_material_MetaData) };
+const UECodeGen_Private::FClassPropertyParams Z_Construct_UClass_AFloorInfo_Statics::NewProp_generator = { "generator", nullptr, (EPropertyFlags)0x0014000000000005, UECodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(AFloorInfo, generator), Z_Construct_UClass_UClass, Z_Construct_UClass_UGeneratorPattern_NoRegister, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_generator_MetaData), NewProp_generator_MetaData) };
 void Z_Construct_UClass_AFloorInfo_Statics::NewProp_is_store_SetBit(void* Obj)
 {
 	((AFloorInfo*)Obj)->is_store = 1;
@@ -152,6 +159,7 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AFloorInf
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_floor_material,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_wall_material,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_void_material,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_generator,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AFloorInfo_Statics::NewProp_is_store,
 };
 static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_AFloorInfo_Statics::PropPointers) < 2048);
@@ -195,10 +203,10 @@ AFloorInfo::~AFloorInfo() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 3733638650U) },
+		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 2487431947U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_3429416970(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_899479323(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

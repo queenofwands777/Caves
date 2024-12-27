@@ -2,10 +2,13 @@
 
 #pragma once
 
+
+class UGeneratorPattern;
+
+
 #include"Encounter.h"
 #include "Engine/Texture2D.h"
 #include "PaperSprite.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PaperTileSet.h"
@@ -55,6 +58,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int void_material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UGeneratorPattern> generator;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//UTexture2D* wall_texture;

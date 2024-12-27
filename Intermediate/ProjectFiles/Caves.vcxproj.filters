@@ -53,12 +53,6 @@
     <ClInclude Include="..\..\Source\Caves\Caves.h">
       <Filter>Source\Caves</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\Caves\TerrainGenerator.cpp">
-      <Filter>Source\Caves</Filter>
-    </ClCompile>
-    <ClInclude Include="..\..\Source\Caves\TerrainGenerator.h">
-      <Filter>Source\Caves</Filter>
-    </ClInclude>
     <Filter Include="Source\Caves\Private">
       <UniqueIdentifier>{3AEC3C97-9ACA-398C-9674-A96C04A4E1DA}</UniqueIdentifier>
     </Filter>
@@ -74,6 +68,9 @@
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\DefaultCavesGenerator.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\Encounter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -83,10 +80,16 @@
     <ClCompile Include="..\..\Source\Caves\Private\FloorInfo.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GeneratorPattern.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\Remains.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\TerrainGenerator.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <Filter Include="Source\Caves\Public">
@@ -104,6 +107,9 @@
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\DefaultCavesGenerator.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\Encounter.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
@@ -113,11 +119,19 @@
     <ClInclude Include="..\..\Source\Caves\Public\FloorInfo.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h">
       <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Caves\Public\TerrainGenerator.h">
+      <Filter>Source\Caves</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
