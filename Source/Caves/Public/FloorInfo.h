@@ -3,6 +3,8 @@
 #pragma once
 
 #include"Encounter.h"
+#include "Engine/Texture2D.h"
+#include "PaperSprite.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -44,7 +46,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPaperTileSet* LevelTileSet;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int floor_material;
 
@@ -53,6 +55,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int void_material;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//UTexture2D* wall_texture;
+	//
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//UTexture2D* floor_texture;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//UTexture2D* void_texture;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool is_store = false;

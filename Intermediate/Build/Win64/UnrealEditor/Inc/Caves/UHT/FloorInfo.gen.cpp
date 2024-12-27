@@ -80,7 +80,13 @@ struct Z_Construct_UClass_AFloorInfo_Statics
 	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_is_store_MetaData[] = {
 		{ "Category", "FloorInfo" },
+#if !UE_BUILD_SHIPPING
+		{ "Comment", "//UPROPERTY(EditAnywhere, BlueprintReadWrite)\n//UTexture2D* void_texture;\n" },
+#endif
 		{ "ModuleRelativePath", "Public/FloorInfo.h" },
+#if !UE_BUILD_SHIPPING
+		{ "ToolTip", "UPROPERTY(EditAnywhere, BlueprintReadWrite)\nUTexture2D* void_texture;" },
+#endif
 	};
 #endif // WITH_METADATA
 	static const UECodeGen_Private::FClassPropertyParams NewProp_Enemies_Inner;
@@ -189,10 +195,10 @@ AFloorInfo::~AFloorInfo() {}
 struct Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 95726329U) },
+		{ Z_Construct_UClass_AFloorInfo, AFloorInfo::StaticClass, TEXT("AFloorInfo"), &Z_Registration_Info_UClass_AFloorInfo, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(AFloorInfo), 3733638650U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_1099904967(TEXT("/Script/Caves"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_3429416970(TEXT("/Script/Caves"),
 	Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
