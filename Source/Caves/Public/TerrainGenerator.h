@@ -92,6 +92,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void GenerateMap();
 	void MakeRoom(int x, int y);
+	void MakeRegularRoom(float x, float y, float width, float height, float variance);
+	void MakeIrregularRoom(float x, float y, float width, float height, float variance);
 	void PlaceEncounter(AEncounter* encounter,int x, int y);
 	void SetTile(int x, int y, int terrain, int size, bool generating_floor);
 	void SetOverlayTile(int x, int y, int terrain, int rotation);

@@ -17,13 +17,13 @@ void EmptyLinkFunctionForGeneratedCodeCaves_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x496CE470,
-				0xFAC17EE3,
+				0xD35515B6,
+				0xA9C80B53,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_Caves.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_Caves.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Caves(Z_Construct_UPackage__Script_Caves, TEXT("/Script/Caves"), Z_Registration_Info_UPackage__Script_Caves, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x496CE470, 0xFAC17EE3));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_Caves(Z_Construct_UPackage__Script_Caves, TEXT("/Script/Caves"), Z_Registration_Info_UPackage__Script_Caves, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xD35515B6, 0xA9C80B53));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

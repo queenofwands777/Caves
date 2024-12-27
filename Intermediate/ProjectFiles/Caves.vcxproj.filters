@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -122,7 +125,28 @@
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\BunkerGeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\CompoundGeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\DefaultCavesGenerator.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\Encounter.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\EnemyList.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\FloorInfo.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPCluster.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h">
@@ -131,35 +155,11 @@
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
-    <Filter Include="Source\Caves\Public\Level">
-      <UniqueIdentifier>{E400EB31-0884-353B-B65B-CAEB61898CE7}</UniqueIdentifier>
-    </Filter>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\Encounter.h">
-      <Filter>Source\Caves\Public\Level</Filter>
+    <ClInclude Include="..\..\Source\Caves\Public\TerrainGenerator.h">
+      <Filter>Source\Caves\Public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\FloorInfo.h">
-      <Filter>Source\Caves\Public\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\TerrainGenerator.h">
-      <Filter>Source\Caves\Public\Level</Filter>
-    </ClInclude>
-    <Filter Include="Source\Caves\Public\Level\GeneratorPatterns">
-      <UniqueIdentifier>{3BF13302-31E6-3F0F-B66F-1B78F5286CAB}</UniqueIdentifier>
-    </Filter>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\GeneratorPatterns\BunkerGeneratorPattern.h">
-      <Filter>Source\Caves\Public\Level\GeneratorPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\GeneratorPatterns\CompoundGeneratorPattern.h">
-      <Filter>Source\Caves\Public\Level\GeneratorPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\GeneratorPatterns\DefaultCavesGenerator.h">
-      <Filter>Source\Caves\Public\Level\GeneratorPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\GeneratorPatterns\GeneratorPattern.h">
-      <Filter>Source\Caves\Public\Level\GeneratorPatterns</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Caves\Public\Level\GeneratorPatterns\WorshipGeneratorPattern.h">
-      <Filter>Source\Caves\Public\Level\GeneratorPatterns</Filter>
+    <ClInclude Include="..\..\Source\Caves\Public\WorshipGeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

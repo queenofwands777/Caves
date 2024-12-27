@@ -19,16 +19,11 @@ public:
 
 	virtual void GenerateLevel(){};
 
-	int num_rooms = 1;
-
-	int lifetime = 10;
-
-	float cursor_x = 0;
-
-	float cursor_y = 0;
-
-	float heading= 0.0;
-
+	int num_rooms;
+	int lifetime;
+	float cursor_x;
+	float cursor_y;
+	float heading;
 	FVector2d direction = {0,1};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

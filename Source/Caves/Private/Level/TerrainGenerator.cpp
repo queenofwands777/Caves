@@ -281,6 +281,49 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 
 }
 
+void ATerrainGenerator::MakeRegularRoom(float center_x, float center_y, float width, float height, float variance) {
+
+	float width_variance = FMath::FRandRange(-variance, variance);
+	float height_variance = FMath::FRandRange(-variance, variance);
+
+	int actual_width = width + width_variance;
+	int actual_height = height + height_variance;
+
+	for (int x = -actual_width/2; x < actual_width/2; x++) {
+		for (int y = -actual_height/2; y < actual_height/2; y++) {
+			SetTile(center_x + x, center_y + y, floor_info->floor_material, 1);
+		}
+	}
+
+	FVector marker_location;
+	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE };
+	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
+	rooms.push_back(marker);
+
+
+
+}
+
+void ATerrainGenerator::MakeIrregularRoom(float center_x, float center_y, float width, float height, float variance) {
+	float width_variance = FMath::FRandRange(-variance, variance);
+	float height_variance = FMath::FRandRange(-variance, variance);
+
+	int actual_width = width + width_variance;
+	int actual_height = height + height_variance;
+
+	for (int x = -actual_width / 2; x < actual_width / 2; x++) {
+		for (int y = -actual_height / 2; y < actual_height / 2; y++) {
+			float x_var = FMath::FRandRange(-variance/2, variance/2);
+			float y_var = FMath::FRandRange(-variance/2, variance/2);
+			SetTile(center_x + x + x_var, center_y + y + y_var, floor_info->floor_material, 1 + variance);
+		}
+	}
+
+	FVector marker_location;
+	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE };
+	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
+	rooms.push_back(marker);
+}
 
 void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 
@@ -458,7 +501,7 @@ void ATerrainGenerator::GenerateMap() {
 
 		int num_chests = 2 + ((true_floor - (true_floor % 3)) / 3);
 		int num_altars = 1;
-		int num_encounters =((true_floor - (true_floor % 2)) / 2);
+		int num_encounters =((true_floor - (true_floor % 3)) / 2);
 
 		int num_rooms = num_chests + num_altars + num_encounters;
 
