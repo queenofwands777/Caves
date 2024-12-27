@@ -158,9 +158,9 @@ void ABloodSplatter::Tick(float DeltaTime)
 
 
 
-struct Color {
+struct BeccaColor {
 public:
-    Color(std::vector<int> _base, float _variance) {
+    BeccaColor(std::vector<int> _base, float _variance) {
         color = _base;
         variance = _variance;
 
@@ -200,10 +200,10 @@ public:
 
 void ABloodSplatter::PlaceDot(int start_x, int start_y, int size, void* Data) {
 
-    Color Red = Color({ 0,0,160 }, 80);
-    Color Green = Color({ 0,160,0 }, 80);
+    BeccaColor Red = BeccaColor({ 0,0,160 }, 80);
+    BeccaColor Green = BeccaColor({ 0,160,0 }, 80);
 
-    Color BlueprintColor = Color({ color.B,color.G, color.R }, 100.0);
+    BeccaColor BlueprintColor = BeccaColor({ color.B,color.G, color.R }, 100.0);
 
     for (int x = 0; x < size; x++) {
         for (int y = 0; y < size; y++){
@@ -212,7 +212,7 @@ void ABloodSplatter::PlaceDot(int start_x, int start_y, int size, void* Data) {
     }
 }
 
-void ABloodSplatter::PlacePixel(int x, int y, void* Data, Color in_color) {
+void ABloodSplatter::PlacePixel(int x, int y, void* Data, BeccaColor in_color) {
 
     // Calculate the pixel location
 

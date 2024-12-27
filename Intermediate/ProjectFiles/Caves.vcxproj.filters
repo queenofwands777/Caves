@@ -68,6 +68,12 @@
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\BunkerGeneratorPattern.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\CompoundGeneratorPattern.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\DefaultCavesGenerator.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -92,6 +98,9 @@
     <ClCompile Include="..\..\Source\Caves\Private\TerrainGenerator.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\WorshipGeneratorPattern.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <Filter Include="Source\Caves\Public">
       <UniqueIdentifier>{71277794-0059-3576-BCF5-A300C439FB03}</UniqueIdentifier>
     </Filter>
@@ -105,6 +114,12 @@
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\BloodSplatter.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\BunkerGeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\CompoundGeneratorPattern.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\DefaultCavesGenerator.h">
@@ -128,10 +143,11 @@
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\Source\Caves\Public\TerrainGenerator.h">
-      <Filter>Source\Caves</Filter>
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\WorshipGeneratorPattern.h">
+      <Filter>Source\Caves\Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
