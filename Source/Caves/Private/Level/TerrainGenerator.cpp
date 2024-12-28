@@ -43,8 +43,8 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 	TileInfo.TileSet = floor_info->LevelTileSet;
 
 	//set tiles according to brush size
-	for (int xx = -size / 2; xx < (size / 2) + (size % 2); xx++) {
-		for (int yy = -size / 2; yy < (size / 2) + (size % 2); yy++) {
+	for (int xx = floor( - size / 2); xx < floor(size / 2) + (size % 2); xx++) {
+		for (int yy = floor( - size / 2); yy < floor(size / 2) + (size % 2); yy++) {
 
 
 			TileInfo.PackedTileIndex = terrain;
@@ -296,7 +296,7 @@ void ATerrainGenerator::MakeRegularRoom(float center_x, float center_y, float wi
 	}
 
 	FVector marker_location;
-	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE };
+	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE)};
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
 	rooms.push_back(marker);
 
@@ -320,7 +320,7 @@ void ATerrainGenerator::MakeIrregularRoom(float center_x, float center_y, float 
 	}
 
 	FVector marker_location;
-	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE };
+	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE) };
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
 	rooms.push_back(marker);
 }

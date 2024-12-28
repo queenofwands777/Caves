@@ -74,7 +74,6 @@ template<> CAVES_API UClass* StaticClass<UWorshipGeneratorPattern>()
 {
 	return UWorshipGeneratorPattern::StaticClass();
 }
-UWorshipGeneratorPattern::UWorshipGeneratorPattern() {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UWorshipGeneratorPattern);
 UWorshipGeneratorPattern::~UWorshipGeneratorPattern() {}
 // End Class UWorshipGeneratorPattern

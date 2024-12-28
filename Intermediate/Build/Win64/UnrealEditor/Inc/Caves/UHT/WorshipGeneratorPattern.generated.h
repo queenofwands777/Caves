@@ -24,8 +24,6 @@ public: \
 
 
 #define FID_Users_becca_source_repos_Caves_Source_Caves_Public_WorshipGeneratorPattern_h_15_ENHANCED_CONSTRUCTORS \
-	/** Standard constructor, called after all reflected properties have been initialized */ \
-	NO_API UWorshipGeneratorPattern(); \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	UWorshipGeneratorPattern(UWorshipGeneratorPattern&&); \

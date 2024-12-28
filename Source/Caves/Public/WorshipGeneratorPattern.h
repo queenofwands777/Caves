@@ -14,4 +14,7 @@ class CAVES_API UWorshipGeneratorPattern : public UGeneratorPattern
 {
 	GENERATED_BODY()
 	
+	UWorshipGeneratorPattern(){}
+
+	void GenerateLevel() override;
 };
