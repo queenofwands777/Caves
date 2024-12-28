@@ -18,7 +18,7 @@ void UGPCluster::GenerateLevel() {
 	int rooms_remaining = num_rooms;
 
 	float room_size = 10;
-	float variance = 2;
+	float variance = 1;
 	float room_spacing = 2;
 
 	float radius = num_rooms * (room_size / 2);
@@ -35,7 +35,7 @@ void UGPCluster::GenerateLevel() {
 
 
 	TArray<FVector2D>points;
-	points.Add({ start_x, start_y });
+	//points.Add({ start_x, start_y });
 
 
 	for (int r = 0; r < num_rooms; r++) {
@@ -49,7 +49,58 @@ void UGPCluster::GenerateLevel() {
 
 	}
 
-	points.Add({ end_x, end_y });
+	//points.Add({ end_x, end_y });
+
+#define DISPLACEMENT
+#ifdef DISPLACEMENT
+	TArray<FVector2D>displacement;
+	displacement.Init({0,0}, points.Num());
+
+	float distance_between_rooms = room_size + room_spacing + variance;
+	
+
+
+	for (int i = 0; i < 3; i++) {
+		for (int this_room = 0; this_room < points.Num(); this_room++) {
+
+			FVector2D this_location = points[this_room];
+
+			for (int other_room = 0; other_room < points.Num(); other_room++) {
+				if (this_room == other_room) { continue; }
+
+				FVector2D other_location = points[other_room];
+
+				float distance = FVector2D::Distance(this_location, other_location);
+
+				if (distance < distance_between_rooms) {
+
+					displacement[this_room] += (this_location - other_location); //if strange behavior exhibited where rooms spawn on top of each other, swap this
+
+				}
+			}
+
+			displacement[this_room] /= points.Num();
+			points[this_room] += displacement[this_room];
+
+		}
+	}
+	
+
+#endif
+
+
+	TArray<FVector2D> building_array;
+	building_array.Add({ start_x, start_y });
+	building_array.Append(points);
+	building_array.Add({ end_x, end_y });
+	points = building_array;
+
+
+
+
+
+
+	
 
 	TArray<FVector2D>closest_points;
 	closest_points.Init({ end_x, end_y }, points.Num());
@@ -59,7 +110,7 @@ void UGPCluster::GenerateLevel() {
 		float smallest_distance = FVector2D::Distance(points[p], closest_points[p]);
 
 		for (int pp = 0; pp < points.Num();pp++) {
-			if (p == pp) { continue; }
+			if (p == pp) { continue; } if (pp == 0) { continue; } if (pp == points.Num() - 1) { continue; }
 
 			float compare_distance = FVector2D::Distance(points[p], points[pp]);
 
@@ -94,14 +145,15 @@ void UGPCluster::GenerateLevel() {
 		for (int s = 0; s < distance; s++) {
 			cursor_x += path_direction[0];
 			cursor_y += path_direction[1];
-			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
+			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
 		}
 	}
 
 	
 
 
-
+	cursor_x = end_x;
+	cursor_y = end_y;
 
 
 }
