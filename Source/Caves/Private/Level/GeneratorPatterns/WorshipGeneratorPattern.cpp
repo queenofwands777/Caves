@@ -3,6 +3,7 @@
 
 #include "WorshipGeneratorPattern.h"
 #include "TerrainGenerator.h"
+#include"GPCluster.h"
 
 void UWorshipGeneratorPattern::GenerateLevel() {
 
@@ -24,10 +25,10 @@ void UWorshipGeneratorPattern::GenerateLevel() {
 		cursor_y += direction[1] * 1;
 	}
 
-	parent->MakeRoom(cursor_x, cursor_y);
-	rooms_remaining--;
+
 
 	//spawn GPCluster
-
+	UGPCluster* cluster = NewObject<UGPCluster>(this);
+	cluster->Init(lifetime, num_rooms, cursor_x, cursor_y, heading, parent);
 
 }
