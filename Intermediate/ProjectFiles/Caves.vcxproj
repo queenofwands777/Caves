@@ -67,7 +67,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{49161AF0-A859-3E83-838D-9A84C86B06A6}</ProjectGuid>
+    <ProjectGuid>{C5D87DEA-9E9C-3FAA-A91B-41FFC31E8A05}</ProjectGuid>
     <RootNamespace>Caves</RootNamespace>
   </PropertyGroup>
   <Import Project="UECommon.props" />
@@ -555,6 +555,14 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -608,6 +616,8 @@
     <ClInclude Include="..\..\Source\Caves\Public\GeneratorPattern.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPCluster.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPFrontGate.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnALine.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\TerrainGenerator.h"/>

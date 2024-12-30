@@ -62,10 +62,25 @@
     <ClCompile Include="..\..\Source\Caves\Private\BeccaUtil.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\BloodField.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\BloodSplatter.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPClusterWalls.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
@@ -146,6 +161,12 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPFrontGate.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnALine.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
@@ -158,16 +179,5 @@
     <ClInclude Include="..\..\Source\Caves\Public\WorshipGeneratorPattern.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\Caves\Private\BloodField.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
-      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPClusterWalls.cpp">
-      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

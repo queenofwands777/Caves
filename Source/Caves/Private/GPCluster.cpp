@@ -21,7 +21,7 @@ void UGPCluster::GenerateLevel() {
 	float variance = 1;
 	float room_spacing = 2;
 
-	float radius = num_rooms * (room_size / 2);
+	float radius = (num_rooms * (room_size))/8.0;
 
 
 	float start_x = cursor_x;
@@ -64,6 +64,8 @@ void UGPCluster::GenerateLevel() {
 		for (int this_room = 0; this_room < points.Num(); this_room++) {
 
 			FVector2D this_location = points[this_room];
+			FVector2D center_location = { center_x, center_y };
+			displacement[this_room] += center_location - this_location;
 
 			for (int other_room = 0; other_room < points.Num(); other_room++) {
 				if (this_room == other_room) { continue; }
@@ -89,11 +91,7 @@ void UGPCluster::GenerateLevel() {
 #endif
 
 
-	TArray<FVector2D> building_array;
-	building_array.Add({ start_x, start_y });
-	building_array.Append(points);
-	building_array.Add({ end_x, end_y });
-	points = building_array;
+
 
 
 
@@ -102,6 +100,20 @@ void UGPCluster::GenerateLevel() {
 
 	
 
+
+
+	for (int p = 0; p < points.Num(); p++) {
+		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, variance);
+	}
+
+
+	TArray<FVector2D> building_array;
+	building_array.Add({ start_x, start_y });
+	building_array.Append(points);
+	building_array.Add({ end_x, end_y });
+	points = building_array;
+
+
 	TArray<FVector2D>closest_points;
 	closest_points.Init({ end_x, end_y }, points.Num());
 
@@ -109,14 +121,14 @@ void UGPCluster::GenerateLevel() {
 
 		float smallest_distance = FVector2D::Distance(points[p], closest_points[p]);
 
-		for (int pp = 0; pp < points.Num();pp++) {
+		for (int pp = 0; pp < points.Num(); pp++) {
 			if (p == pp) { continue; } if (pp == 0) { continue; } if (pp == points.Num() - 1) { continue; }
 
 			float compare_distance = FVector2D::Distance(points[p], points[pp]);
 
 			if (compare_distance < smallest_distance) {
 
-				if (closest_points[pp] == points[p]&&(p!=points.Num()-1)) { continue; }
+				if (closest_points[pp] == points[p] && (p != points.Num() - 1)) { continue; }
 
 
 				smallest_distance = compare_distance;
@@ -127,6 +139,7 @@ void UGPCluster::GenerateLevel() {
 
 		}
 	}
+
 
 
 	for (int p = 0; p < points.Num();p++) {
@@ -140,7 +153,7 @@ void UGPCluster::GenerateLevel() {
 		cursor_y = start[1];
 
 
-		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, variance);
+		
 		
 		for (int s = 0; s < distance; s++) {
 			cursor_x += path_direction[0];

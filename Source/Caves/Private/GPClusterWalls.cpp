@@ -18,10 +18,10 @@ void UGPClusterWalls::GenerateLevel() {
 	int rooms_remaining = num_rooms;
 
 	float room_size = 10;
-	float variance = 1;
-	float room_spacing = 2;
+	float variance = 0;
+	float room_spacing = 4;
 
-	float radius = num_rooms * (room_size / 2);
+	float radius = (num_rooms * (room_size)) / 8.0;
 
 
 	float start_x = cursor_x;
@@ -64,6 +64,9 @@ void UGPClusterWalls::GenerateLevel() {
 		for (int this_room = 0; this_room < points.Num(); this_room++) {
 
 			FVector2D this_location = points[this_room];
+			FVector2D center_location = { center_x, center_y };
+			displacement[this_room] += center_location - this_location;
+
 
 			for (int other_room = 0; other_room < points.Num(); other_room++) {
 				if (this_room == other_room) { continue; }
@@ -74,12 +77,11 @@ void UGPClusterWalls::GenerateLevel() {
 
 				if (distance < distance_between_rooms) {
 
-					displacement[this_room] += (this_location - other_location); //if strange behavior exhibited where rooms spawn on top of each other, swap this
+					displacement[this_room] += (this_location - other_location)/points.Num(); //if strange behavior exhibited where rooms spawn on top of each other, swap this
 
 				}
 			}
-
-			displacement[this_room] /= points.Num();
+			
 			points[this_room] += displacement[this_room];
 
 		}
@@ -89,18 +91,33 @@ void UGPClusterWalls::GenerateLevel() {
 #endif
 
 
+
+
+
+
+
+
+
+
+
+
+
+	for (int p = 0; p < points.Num(); p++) {
+		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, 0);
+
+	}
+
+	for (int p = 0; p < points.Num(); p++) {
+		parent->SetTile(points[p][0], points[p][1], parent->floor_info->wall_material, room_size + 2, false);
+		parent->SetTile(points[p][0], points[p][1], parent->floor_info->floor_material, room_size, false);
+	}
+
+
 	TArray<FVector2D> building_array;
 	building_array.Add({ start_x, start_y });
 	building_array.Append(points);
 	building_array.Add({ end_x, end_y });
 	points = building_array;
-
-
-
-
-
-
-
 
 	TArray<FVector2D>closest_points;
 	closest_points.Init({ end_x, end_y }, points.Num());
@@ -128,7 +145,6 @@ void UGPClusterWalls::GenerateLevel() {
 		}
 	}
 
-
 	for (int p = 0; p < points.Num(); p++) {
 		FVector2d start = points[p];
 		FVector2d end = closest_points[p];
@@ -140,7 +156,6 @@ void UGPClusterWalls::GenerateLevel() {
 		cursor_y = start[1];
 
 
-		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, variance);
 
 		for (int s = 0; s < distance; s++) {
 			cursor_x += path_direction[0];
@@ -148,6 +163,37 @@ void UGPClusterWalls::GenerateLevel() {
 			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
 		}
 	}
+	
+
+
+	//for (int tilemap_x = 0; tilemap_x < parent->LEVEL_SIZE; tilemap_x++) {
+	//	for (int tilemap_y = 0; tilemap_y < parent->LEVEL_SIZE; tilemap_y++) {
+
+	//		//check that tilemap is valid
+	//		if (parent->GetTileMap(tilemap_x, tilemap_y) != nullptr) {
+
+	//			//get each individual tile
+	//			for (int x_within_tilemap = 0; x_within_tilemap < parent->MAP_SIZE; x_within_tilemap++) {
+	//				for (int y_within_tilemap = 0; y_within_tilemap < parent->MAP_SIZE; y_within_tilemap++) {
+
+
+
+	//					//check if that tile is a certain kind
+	//					FPaperTileInfo target_tile = parent->GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
+	//					if (target_tile.PackedTileIndex == parent->floor_info->floor_material) {
+
+	//						int world_x = ((tilemap_x * parent->MAP_SIZE) + (x_within_tilemap));
+	//						int world_y = ((((tilemap_y - 1) * parent->MAP_SIZE)) + ((parent->MAP_SIZE - y_within_tilemap)));
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+
+
+
 
 
 

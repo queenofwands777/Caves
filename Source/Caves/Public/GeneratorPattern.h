@@ -19,6 +19,8 @@ public:
 
 	virtual void GenerateLevel(){};
 
+	virtual void PopulateLevel() {};
+
 	int num_rooms;
 	int lifetime;
 	float cursor_x;
