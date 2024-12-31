@@ -14,4 +14,12 @@ class CAVES_API UGPFrontGate : public UGeneratorPattern
 {
 	GENERATED_BODY()
 	
+	UGPFrontGate() {
+
+	}
+
+	void GenerateLevel() override {
+
+	}
+
 };

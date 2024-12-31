@@ -74,7 +74,6 @@ template<> CAVES_API UClass* StaticClass<UGPHousesOnALine>()
 {
 	return UGPHousesOnALine::StaticClass();
 }
-UGPHousesOnALine::UGPHousesOnALine() {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UGPHousesOnALine);
 UGPHousesOnALine::~UGPHousesOnALine() {}
 // End Class UGPHousesOnALine

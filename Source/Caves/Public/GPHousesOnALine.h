@@ -13,5 +13,14 @@ UCLASS()
 class CAVES_API UGPHousesOnALine : public UGeneratorPattern
 {
 	GENERATED_BODY()
+
+
+	UGPHousesOnALine() {
+
+	}
+
+	void GenerateLevel() override {
+
+	}
 	
 };

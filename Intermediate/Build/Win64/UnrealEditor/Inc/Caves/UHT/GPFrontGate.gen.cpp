@@ -74,7 +74,6 @@ template<> CAVES_API UClass* StaticClass<UGPFrontGate>()
 {
 	return UGPFrontGate::StaticClass();
 }
-UGPFrontGate::UGPFrontGate() {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UGPFrontGate);
 UGPFrontGate::~UGPFrontGate() {}
 // End Class UGPFrontGate
