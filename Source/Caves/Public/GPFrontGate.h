@@ -20,5 +20,8 @@ class CAVES_API UGPFrontGate : public UGeneratorPattern
 
 	void GenerateLevel() override;
 	
+public:
+	FVector2D end_0;
+	FVector2D end_1;
 
 };

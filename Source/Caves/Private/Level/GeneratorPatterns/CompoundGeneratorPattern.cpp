@@ -52,12 +52,20 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		}
 	}
 
+	FVector2D end_point = { cursor_x + (new_direction[0] * 10), cursor_y + (new_direction[1] * 10)};
+
 	cursor_x = wall_position[0];
 	cursor_y = wall_position[1];
 
 	UGPFrontGate* front_gate = NewObject<UGPFrontGate>(this);
 	front_gate->Init(lifetime, num_rooms, cursor_x, cursor_y,heading, parent);
 
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, front_gate->end_0.ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, front_gate->end_1.ToString());
+
+	parent->SetTile(front_gate->end_0[0], front_gate->end_0[1], 6, 1, false);
+	parent->SetTile(front_gate->end_1[0], front_gate->end_1[1], 6, 1, false);
+	parent->SetTile(end_point[0], end_point[1], 6, 1, false);
 
 
 

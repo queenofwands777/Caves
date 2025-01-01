@@ -38,25 +38,13 @@ void UGPFrontGate::GenerateLevel() {
 	FVector2D starting_point = { cursor_x, cursor_y };
 
 	//bool running = true;
-	cursor_x += perp[0] * wall_thickness;
-	cursor_y += perp[1] * wall_thickness;
+	cursor_x += perp[0] * wall_thickness * 1.5;
+	cursor_y += perp[1] * wall_thickness * 1.5;
 	for (int i = 0; i < 20; i++) {
 		
+		//if (parent->GetTile(cursor_x + (perp[0]), cursor_y + (perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->wall_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); break; }
+		if (parent->GetTile(cursor_x + (perp[0] * wall_thickness), cursor_y + (perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->void_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); end_0 = { cursor_x + (perp[0]) , cursor_y + (perp[1]) }; break; }
 
-		//FHitResult HitResult;
-		//FCollisionQueryParams CollisionParams;
-
-		//bool bHit = GetWorld()->LineTraceSingleByChannel(
-		//	HitResult,               // Out parameter for hit result
-		//	{((cursor_x+(wall_thickness*perp[0]))) * parent->TILE_SIZE, 2, (cursor_y + (wall_thickness*perp[1])) * parent->TILE_SIZE},                   // Start of the trace
-		//	{(cursor_x + (perp[0] * (10*wall_thickness))), 2, (cursor_y + (perp[1] * (10 * wall_thickness))) },                     // End of the trace
-		//	ECC_GameTraceChannel1,          // Collision channel
-		//	CollisionParams          // Collision parameters
-		//);
-
-		//if (HitResult.bBlockingHit) {
-		//	running = false;
-		//}
 
 		parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false);
 		cursor_x += perp[0];
@@ -66,26 +54,14 @@ void UGPFrontGate::GenerateLevel() {
 	cursor_x = starting_point[0];
 	cursor_y = starting_point[1];
 
-	cursor_x += other_perp[0] * wall_thickness;
-	cursor_y += other_perp[1] * wall_thickness;
+	cursor_x += other_perp[0] * wall_thickness * 1.5;
+	cursor_y += other_perp[1] * wall_thickness * 1.5;
 	//running = true;
 	for (int i = 0; i < 20; i++) {
 
+		//if (parent->GetTile(cursor_x + (other_perp[0]), cursor_y + (other_perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->wall_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); break; }
+		if (parent->GetTile(cursor_x + (other_perp[0] * wall_thickness), cursor_y + (other_perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->void_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); end_1 = { cursor_x + (other_perp[0]) , cursor_y + (other_perp[1]) }; break; }
 
-		//FHitResult HitResult;
-		//FCollisionQueryParams CollisionParams;
-
-		//bool bHit = GetWorld()->LineTraceSingleByChannel(
-		//	HitResult,               // Out parameter for hit result
-		//	{ ((cursor_x + (wall_thickness * other_perp[0]))) * parent->TILE_SIZE, 2, (cursor_y + (wall_thickness * other_perp[1])) * parent->TILE_SIZE },                     // Start of the trace
-		//	{ (cursor_x + (other_perp[0] * (10 * wall_thickness))), 2, (cursor_y + (other_perp[1] * (10 * wall_thickness))) },                     // End of the trace
-		//	ECC_GameTraceChannel1,          // Collision channel
-		//	CollisionParams          // Collision parameters
-		//);
-
-		//if (HitResult.bBlockingHit) {
-		//	running = false;
-		//}
 
 		parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false);
 		cursor_x += other_perp[0];

@@ -13,6 +13,15 @@
 				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Weapons/Ranged/LightningGun.uasset",
 				"C:/Users/becca/source/repos/Caves/Content/Levels/Default.umap",
 				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Level/Floors/Level0/Cult/012Worship.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Engine/DynamicVariables.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Engine/player_controller.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/Menus/MainMenu.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/Menus/GameOver.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/Menus/ListItem.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/Menus/LevelListItem.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Entities/Entity.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/MainMenu.uasset",
+				"C:/Users/becca/source/repos/Caves/Content/Blueprints/UI/GameOver.uasset",
 				"C:/Users/becca/source/repos/Caves/Content/Blueprints/Weapons/LightningGun.uasset"
 			]
 		}
