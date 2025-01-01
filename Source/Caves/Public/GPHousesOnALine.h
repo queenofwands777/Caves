@@ -19,8 +19,6 @@ class CAVES_API UGPHousesOnALine : public UGeneratorPattern
 
 	}
 
-	void GenerateLevel() override {
-
-	}
+	void GenerateLevel() override;
 	
 };

@@ -3,6 +3,7 @@
 
 #include "CompoundGeneratorPattern.h"
 #include"TerrainGenerator.h"
+#include"GPFrontGate.h"
 
 
 void UCompoundGeneratorPattern::GenerateLevel() {
@@ -13,6 +14,7 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
 		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
 	};
+	direction = new_direction;
 
 
 
@@ -29,6 +31,7 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		}
 	}
 
+	FVector2D wall_position = { cursor_x, cursor_y };
 
 	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 10, true);
 
@@ -49,6 +52,11 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		}
 	}
 
+	cursor_x = wall_position[0];
+	cursor_y = wall_position[1];
+
+	UGPFrontGate* front_gate = NewObject<UGPFrontGate>(this);
+	front_gate->Init(lifetime, num_rooms, cursor_x, cursor_y,heading, parent);
 
 
 

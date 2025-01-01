@@ -71,18 +71,6 @@
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPClusterWalls.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -179,5 +167,19 @@
     <ClInclude Include="..\..\Source\Caves\Public\WorshipGeneratorPattern.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPClusterWalls.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

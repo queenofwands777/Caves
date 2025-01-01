@@ -18,8 +18,7 @@ class CAVES_API UGPFrontGate : public UGeneratorPattern
 
 	}
 
-	void GenerateLevel() override {
-
-	}
+	void GenerateLevel() override;
+	
 
 };
