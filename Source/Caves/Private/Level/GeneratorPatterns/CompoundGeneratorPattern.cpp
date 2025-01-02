@@ -63,11 +63,216 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, front_gate->end_0.ToString());
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, front_gate->end_1.ToString());
 
-	parent->SetTile(front_gate->end_0[0], front_gate->end_0[1], 6, 1, false);
-	parent->SetTile(front_gate->end_1[0], front_gate->end_1[1], 6, 1, false);
-	parent->SetTile(end_point[0], end_point[1], 6, 1, false);
+	//parent->SetTile(front_gate->end_0[0], front_gate->end_0[1], 6, 1, false);
+	//parent->SetTile(front_gate->end_1[0], front_gate->end_1[1], 6, 1, false);
+	//parent->SetTile(end_point[0], end_point[1], 11, 1, false);
 
 
+	TArray<FVector2D> points_0;
+	TArray<FVector2D> points_1;
+
+	int step_size = 10;
+
+	{
+		bool searching = true;
+		int limit = 100;
+		cursor_x = front_gate->end_0[0];
+		cursor_y = front_gate->end_0[1];
+		FVector2D probe_location = {cursor_x, cursor_y};
+		FVector2D next_location = {cursor_x, cursor_y};
+		while (searching) {
+			limit--;
+			points_0.Add({ cursor_x, cursor_y });
+
+			FVector2D direction_to_end = { end_point[0] - cursor_x, end_point[1] - cursor_y };
+			direction_to_end.Normalize();
+			
+
+
+
+
+			FVector2D delta_location = probe_location - next_location;
+			delta_location.Normalize();
+
+			float distance_to_end = 1;
+			float attenuation = 3;
+			probe_location = {
+							(cursor_x)+
+							(direction[0] * ((step_size * distance_to_end) / (attenuation))) +
+							(direction_to_end[0] * ((step_size) / (attenuation * distance_to_end))) +
+							(delta_location[0] * ((step_size)/(attenuation))),
+
+							(cursor_y)+
+							(direction[1] * ((step_size * distance_to_end) / (attenuation))) +
+							(direction_to_end[1] * ((step_size) / (attenuation * distance_to_end))) +
+							(delta_location[1] * ((step_size) / (attenuation))), };
+			bool target_found = false;
+			int i = 1;
+			while (!target_found) {
+				i++;
+				for (int x = -i; x <= i; x++) {
+					for (int y = -i; y <= i; y++) {
+
+						FVector2D check_tile = { probe_location[0] + x,probe_location[1] + y };
+						if (parent->GetTile(check_tile[0], check_tile[1])->GetTileIndex() == parent->floor_info->void_material) {
+							
+							for (int xx = -1; xx <= 1; xx++) {
+								for (int yy = -1; yy <= 1; yy++) {
+
+									if (parent->GetTile(check_tile[0] + xx, check_tile[1] + yy)->GetTileIndex() == parent->floor_info->wall_material) {
+										target_found = true;
+										next_location = check_tile;
+									}
+
+
+
+
+								}
+							}
+
+
+
+
+							
+						}
+
+
+					}
+				}
+
+				if (i >= 5) {
+					target_found = true;
+				}
+
+			}
+
+
+			cursor_x = next_location[0];
+			cursor_y = next_location[1];
+
+
+
+
+			distance_to_end = FVector2D::Distance({cursor_x, cursor_y}, end_point);
+
+			if (distance_to_end < (step_size)) {
+				points_0.Add({ cursor_x, cursor_y });
+				searching = false;
+			} if (limit <= 0) {
+				searching = false;
+			}
+		}
+
+	}
+
+	for (int i = 0; i < points_0.Num(); i++) {
+		parent->SetTile(points_0[i][0], points_0[i][1], 6, 1, false);
+	}
+
+
+
+
+
+
+
+
+
+
+	{
+		bool searching = true;
+		int limit = 100;
+		cursor_x = front_gate->end_1[0];
+		cursor_y = front_gate->end_1[1];
+		FVector2D probe_location = { cursor_x, cursor_y };
+		FVector2D next_location = { cursor_x, cursor_y };
+		while (searching) {
+			limit--;
+			points_1.Add({ cursor_x, cursor_y });
+
+			FVector2D direction_to_end = { end_point[0] - cursor_x, end_point[1] - cursor_y };
+			direction_to_end.Normalize();
+
+
+
+
+
+			FVector2D delta_location = probe_location - next_location;
+			delta_location.Normalize();
+
+			float distance_to_end = 1;
+			float attenuation = 3;
+			probe_location = {
+							(cursor_x)+
+							(direction[0] * ((step_size * distance_to_end) / (attenuation))) +
+							(direction_to_end[0] * ((step_size) / (attenuation * distance_to_end))) +
+							(delta_location[0] * ((step_size) / (attenuation))),
+
+							(cursor_y)+
+							(direction[1] * ((step_size * distance_to_end) / (attenuation))) +
+							(direction_to_end[1] * ((step_size) / (attenuation * distance_to_end))) +
+							(delta_location[1] * ((step_size) / (attenuation))), };
+			bool target_found = false;
+			int i = 1;
+			while (!target_found) {
+				i++;
+				for (int x = -i; x <= i; x++) {
+					for (int y = -i; y <= i; y++) {
+
+						FVector2D check_tile = { probe_location[0] + x,probe_location[1] + y };
+						if (parent->GetTile(check_tile[0], check_tile[1])->GetTileIndex() == parent->floor_info->void_material) {
+
+							for (int xx = -1; xx <= 1; xx++) {
+								for (int yy = -1; yy <= 1; yy++) {
+
+									if (parent->GetTile(check_tile[0] + xx, check_tile[1] + yy)->GetTileIndex() == parent->floor_info->wall_material) {
+										target_found = true;
+										next_location = check_tile;
+									}
+
+
+
+
+								}
+							}
+
+
+
+
+
+						}
+
+
+					}
+				}
+
+				if (i >= 5) {
+					target_found = true;
+				}
+
+			}
+
+
+			cursor_x = next_location[0];
+			cursor_y = next_location[1];
+
+
+
+
+			distance_to_end = FVector2D::Distance({ cursor_x, cursor_y }, end_point);
+
+			if (distance_to_end < (step_size)) {
+				points_1.Add({ cursor_x, cursor_y });
+				searching = false;
+			} if (limit <= 0) {
+				searching = false;
+			}
+		}
+
+	}
+
+	for (int i = 0; i < points_1.Num(); i++) {
+		parent->SetTile(points_1[i][0], points_1[i][1], 38, 1, false);
+	}
 
 
 
