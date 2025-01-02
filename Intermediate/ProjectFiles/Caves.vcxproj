@@ -563,6 +563,22 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPSite.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPTomb.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPTraps.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPTrapsOffshoot.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -618,6 +634,10 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPFrontGate.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnALine.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPSite.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPTomb.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPTraps.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPTrapsOffshoot.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\Remains.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\TerrainGenerator.h"/>
