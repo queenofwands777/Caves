@@ -281,6 +281,35 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 
 }
 
+void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float size, float variance) {
+
+	float size_variance = FMath::FRandRange(-variance, variance);
+
+	int actual_size = size + size_variance;
+
+	for (int x = -floor(actual_size / 2) - 1; x < floor(actual_size / 2) + (actual_size % 2) + 1; x++) {
+		for (int y = -floor(actual_size / 2) - 1; y < floor(actual_size / 2) + (actual_size % 2) + 1; y++) {
+			SetTile(center_x + x, center_y + y, floor_info->wall_material, 1, false);
+		}
+	}
+
+	for (int x = -floor(actual_size / 2); x < floor(actual_size / 2) + (actual_size % 2); x++) {
+		for (int y = -floor(actual_size / 2); y < floor(actual_size / 2) + (actual_size % 2); y++) {
+			SetTile(center_x + x, center_y + y, floor_info->floor_material, 1, false);
+		}
+	}
+
+
+
+	FVector marker_location;
+	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE) };
+	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
+	rooms.push_back(marker);
+
+
+
+}
+
 void ATerrainGenerator::MakeRegularRoom(float center_x, float center_y, float width, float height, float variance) {
 
 	float width_variance = FMath::FRandRange(-variance, variance);

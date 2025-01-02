@@ -14,11 +14,13 @@ class CAVES_API UGPHousesOnALine : public UGeneratorPattern
 {
 	GENERATED_BODY()
 
-
 	UGPHousesOnALine() {
 
 	}
 
 	void GenerateLevel() override;
 	
+
+public:
+	TArray<FVector2D> points;
 };

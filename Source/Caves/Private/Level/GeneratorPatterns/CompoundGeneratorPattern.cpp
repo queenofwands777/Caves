@@ -4,6 +4,7 @@
 #include "CompoundGeneratorPattern.h"
 #include"TerrainGenerator.h"
 #include"GPFrontGate.h"
+#include"GPHousesOnALine.h"
 
 
 void UCompoundGeneratorPattern::GenerateLevel() {
@@ -38,10 +39,14 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 	cursor_x += new_direction[0]*5;
 	cursor_y += new_direction[1]*5;
 
+	FVector2D inside_middle;
 
 	for (int i = 0; i < 20; i++) {
 		cursor_x += new_direction[0];
 		cursor_y += new_direction[1];
+		if (i == 10) { inside_middle = { cursor_x, cursor_y }; }
+
+
 		for (int p = -2; p <= 2; p++) {
 			FVector2D perp = { -new_direction[1], new_direction[0] };
 			perp *= p;
@@ -162,12 +167,19 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 				searching = false;
 			}
 		}
+		//for (int i = 0; i < points_0.Num(); i++) {
+		//	parent->SetTile(points_0[i][0], points_0[i][1], 6, 1, false);
+		//}
 
+
+
+
+
+		UGPHousesOnALine* string_0 = NewObject<UGPHousesOnALine>(this);
+		string_0->points = points_0;
+		string_0->Init(lifetime, 3, cursor_x, cursor_y, heading, parent);
 	}
 
-	for (int i = 0; i < points_0.Num(); i++) {
-		parent->SetTile(points_0[i][0], points_0[i][1], 6, 1, false);
-	}
 
 
 
@@ -267,13 +279,20 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 				searching = false;
 			}
 		}
+		//for (int i = 0; i < points_1.Num(); i++) {
+		//	parent->SetTile(points_1[i][0], points_1[i][1], 38, 1, false);
+		//}
+
+
+
+
+
+
+		UGPHousesOnALine* string_1 = NewObject<UGPHousesOnALine>(this);
+		string_1->points = points_1;
+		string_1->Init(lifetime, 3, cursor_x, cursor_y, heading, parent);
 
 	}
-
-	for (int i = 0; i < points_1.Num(); i++) {
-		parent->SetTile(points_1[i][0], points_1[i][1], 38, 1, false);
-	}
-
 
 
 
