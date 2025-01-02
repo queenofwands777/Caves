@@ -221,9 +221,9 @@ ATerrainGenerator::ATerrainGenerator()
 
 
 	//load overlay tileset
-	LevelOverlayTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/TerrainOverlay1_TileSet"));
+LevelOverlayTileSet = LoadObject<UPaperTileSet>(nullptr, TEXT("/Game/Assets/Level/TerrainOverlay1_TileSet"));
 
-	
+
 
 
 }
@@ -241,7 +241,7 @@ void ATerrainGenerator::BeginPlay()
 
 	int floor_or_shop = (floor_num % (floors_per_shop + 1));
 
-	
+
 
 
 	int shops_so_far = (floor_num - floor_or_shop) / (floors_per_shop + 1);
@@ -257,9 +257,9 @@ void ATerrainGenerator::BeginPlay()
 	}
 
 	//dont forget to delete!!
-	
 
-	
+
+
 
 	GenerateMap();
 
@@ -300,6 +300,63 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 	}
 
 
+
+
+	TArray<FVector2D> directions = {
+		{1,0},
+		{0,1},
+		{-1,0},
+		{0,-1}
+	};
+
+	for (int i = 0; i < directions.Num(); i++) {
+		FVector2D active_direction = directions[i];
+		FVector2D original_direction = active_direction;
+		FVector2D probe_loc = { center_x, center_y };
+		FVector2D secondary_direction = directions[(i + 1) % 4];
+		FVector2D tertiary_direction= directions[(i + 3) % 4];
+
+		bool searching = true;
+		while (searching) {
+
+
+
+			probe_loc += active_direction;
+
+			
+
+
+
+
+			//check if door can be placed, if so, place door
+			if (GetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1])->GetTileIndex() == floor_info->wall_material) {
+				if (GetTile(probe_loc[0] + (original_direction[0] * 2), probe_loc[1] + (original_direction[1] * 2))->GetTileIndex() == floor_info->floor_material){
+
+
+					if (GetTile(probe_loc[0] + (original_direction[0] * 2) + secondary_direction[0], probe_loc[1] + (original_direction[1] * 2) + secondary_direction[1])->GetTileIndex() == floor_info->floor_material) {
+						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], floor_info->floor_material, 1, true);
+						return;
+					}
+					else if (GetTile(probe_loc[0] + (original_direction[0] * 2) + tertiary_direction[0], probe_loc[1] + (original_direction[1] * 2)+tertiary_direction[1])->GetTileIndex() == floor_info->floor_material) {
+						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], floor_info->floor_material, 1, true);
+						return;
+					}
+					else {
+						searching = false;
+					}
+				}
+				else {
+					searching = false;
+				}
+			}
+
+
+
+
+		}
+	}
 
 	FVector marker_location;
 	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE) };
