@@ -316,9 +316,21 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 		FVector2D secondary_direction = directions[(i + 1) % 4];
 		FVector2D tertiary_direction= directions[(i + 3) % 4];
 
+		bool found_door = false;
 		bool searching = true;
 		while (searching) {
 
+			if (active_direction == secondary_direction) {
+				if (GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex() == floor_info->wall_material) {
+					active_direction = tertiary_direction;
+				}
+
+			} else if (active_direction == tertiary_direction) {
+				if (GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex() == floor_info->wall_material) {
+					searching = false;
+				}
+
+			}
 
 
 			probe_loc += active_direction;
@@ -336,25 +348,33 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 					if (GetTile(probe_loc[0] + (original_direction[0] * 2) + secondary_direction[0], probe_loc[1] + (original_direction[1] * 2) + secondary_direction[1])->GetTileIndex() == floor_info->floor_material) {
 						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
 						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], floor_info->floor_material, 1, true);
-						return;
+						found_door = true;
 					}
 					else if (GetTile(probe_loc[0] + (original_direction[0] * 2) + tertiary_direction[0], probe_loc[1] + (original_direction[1] * 2)+tertiary_direction[1])->GetTileIndex() == floor_info->floor_material) {
 						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
 						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], floor_info->floor_material, 1, true);
-						return;
+						found_door = true;
 					}
 					else {
-						searching = false;
+						if (active_direction == original_direction) {
+							active_direction = secondary_direction;
+						}
 					}
 				}
 				else {
-					searching = false;
+					if (active_direction == original_direction) {
+						active_direction = secondary_direction;
+					}
 				}
 			}
 
 
 
 
+		}
+
+		if (found_door) {
+			break;
 		}
 	}
 
