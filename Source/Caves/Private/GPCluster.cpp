@@ -19,9 +19,10 @@ void UGPCluster::GenerateLevel() {
 
 	float room_size = 10;
 	float variance = 1;
-	float room_spacing = 2;
+	float room_spacing = 4;
+	float radius_attenuator = 4;
 
-	float radius = (num_rooms * (room_size))/8.0;
+	float radius = (num_rooms * (room_size))/radius_attenuator;
 
 
 	float start_x = cursor_x;
