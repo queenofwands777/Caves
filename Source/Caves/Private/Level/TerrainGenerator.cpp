@@ -39,13 +39,13 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 	//input_x and input_y are in terms of the world coordinates on a tile level
 
 	//probably inefficient, make tileset a member of TerrainGenerator and initialize on startup
-	FPaperTileInfo TileInfo;
-	TileInfo.TileSet = floor_info->LevelTileSet;
+
 
 	//set tiles according to brush size
 	for (int xx = floor( - size / 2); xx < floor(size / 2) + (size % 2); xx++) {
 		for (int yy = floor( - size / 2); yy < floor(size / 2) + (size % 2); yy++) {
-
+			FPaperTileInfo TileInfo;
+			TileInfo.TileSet = floor_info->LevelTileSet;
 
 			TileInfo.PackedTileIndex = terrain;
 
@@ -76,10 +76,25 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 					}
 				}
 			}
+			
+			//switch ((int)FMath::RandRange(0,3)) {
+			//case 0: 			TileInfo.ToggleFlag(EPaperTileFlags::FlipHorizontal); break;
+			//case 1:	TileInfo.ToggleFlag(EPaperTileFlags::FlipVertical); break;
+			//case 2: TileInfo.ToggleFlag(EPaperTileFlags::FlipDiagonal); break;
+			//case 3: break;
+			//}
+
+			
+
 
 			//set the tile
 			UPaperTileMapComponent* host_tile = GetTileMap(tilemap_x, tilemap_y);
 			host_tile->TileMap->TileLayers[0]->SetCell(target_x, MAP_SIZE - (target_y)-1, TileInfo);
+
+			//TileInfo.SetFlagValue(EPaperTileFlags::FlipHorizontal, false);
+			//TileInfo.SetFlagValue(EPaperTileFlags::FlipVertical, false);
+			//TileInfo.SetFlagValue(EPaperTileFlags::FlipDiagonal, false);
+
 
 			if (generating_floor) {
 				TileInfo.PackedTileIndex = floor_info->wall_material;

@@ -8,7 +8,7 @@
 void UGPTomb::GenerateLevel() {
 
 
-	heading = 90 * FMath::RandHelper(3);
+	heading = 90 * FMath::RandHelper(4);
 	float rotation_radians = FMath::DegreesToRadians(heading);
 	FVector2D new_direction = {
 		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
