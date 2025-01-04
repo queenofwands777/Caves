@@ -36,7 +36,7 @@ void UGPDwarvenIndustry::GenerateLevel() {
 	for (int x = -radius; x <= radius; x++ ) {
 		for (int y = -radius; y <= radius; y++) {
 
-			if (FVector2D::Distance({cursor_x, cursor_y},{cursor_x + x, cursor_y + y}) <= radius) {
+			if (FVector2D::Distance({cursor_x, cursor_y},{cursor_x + x, cursor_y + y}) < radius) {
 				parent->SetTile(cursor_x + x, cursor_y + y, parent->floor_info->floor_material, 1, true);
 			}
 

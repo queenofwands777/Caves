@@ -78,6 +78,7 @@ enum Material {
 	cobblestone = 54,
 	shingles = 55,
 	siding = 56,
+	magma = 57,
 
 
 };
@@ -150,6 +151,7 @@ const TMap<int, int> MaterialTypes = {
 	{Material::cobblestone,Abstract::type_floor},
 	{Material::shingles,Abstract::type_wall},
 	{Material::siding,Abstract::type_wall},
+	{Material::magma,Abstract::type_void},
 	
 };
 
