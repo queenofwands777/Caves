@@ -3,21 +3,120 @@
 
 #include "GPGreatHall.h"
 #include"TerrainGenerator.h"
+#include"GPDwarvenBedrooms.h"
+#include"GPDwarvenIndustry.h"
 
 
 
 void UGPGreatHall::GenerateLevel() {
 
+	heading = 90 * FMath::RandHelper(4);
+	float rotation_radians = FMath::DegreesToRadians(heading);
+	FVector2D new_direction = {
+		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
+		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
+	};
+	direction = new_direction;
+
+	FVector2D perp = { -direction[1], direction[0] };
+	FVector2D other_perp = -perp;
+
+
+	for (int i = 0; i < 20; i++) {
+		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material,3,true);
+		cursor_x += direction[0];
+		cursor_y += direction[1];
+	}
+
+	TArray<FVector2D> points;
+
+	float room_size = 16;
+	float step_size = (room_size/2);
+	for (int i = 0; i < 5; i++) {
+		if (i % 2 == 0) { points.Add({ cursor_x, cursor_y }); }
+		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, room_size, true);
+		cursor_x += direction[0] * (step_size);
+		cursor_y += direction[1] * (step_size);
+
+	}
+
+
+	int num_offshoots = points.Num() * 2;
+	int num_industry = 1;
+	int num_bedrooms = num_offshoots - num_industry;
+	int industry_remaining = num_industry;
+	float industry_chance = 1.0 / 6.0;
+	float industry_percent = 100 - (100 * industry_chance);
+
+	for (int p = 0; p < points.Num(); p++) {
+
+
+		if (industry_remaining > 0) {
+			if (p <= industry_remaining) {
+				UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
+				industry_offshoot->Init(lifetime, 6, points[p][0] + (perp[0] * (step_size)), points[p][1] + (perp[1] * step_size), heading + 90, parent);
+				industry_remaining--;
+			}
+			else {
+				float industry_roll = FMath::FRand() * 100;
+				if (industry_roll >= industry_percent) {
+					UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
+					industry_offshoot->Init(lifetime, 6, points[p][0] + (perp[0] * step_size), points[p][1] + (perp[1] * step_size), heading + 90, parent);
+					industry_remaining--;
+
+				}
+				else {
+					UGPDwarvenBedrooms* offshoot = NewObject<UGPDwarvenBedrooms>(this);
+					offshoot->Init(lifetime, 6, points[p][0] + (perp[0] * step_size), points[p][1] + (perp[1] * step_size), heading + 90, parent);
+				}
+			}
+		}
+		else {
+			UGPDwarvenBedrooms* offshoot = NewObject<UGPDwarvenBedrooms>(this);
+			offshoot->Init(lifetime, 6, points[p][0] + (perp[0] * step_size), points[p][1] + (perp[1] * step_size), heading + 90, parent);
+		}
+
+
+		if (industry_remaining > 0) {
+			if (p <= industry_remaining) {
+				UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
+				industry_offshoot->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading + 90, parent);
+				industry_remaining--;
+
+			}
+			else {
+				float industry_roll = FMath::FRand() * 100;
+				if (industry_roll >= industry_percent) {
+					UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
+					industry_offshoot->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading + 90, parent);
+					industry_remaining--;
+
+				}
+				else {
+					UGPDwarvenBedrooms* offshoot_0 = NewObject<UGPDwarvenBedrooms>(this);
+					offshoot_0->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading - 90, parent);
+				}
+			}
+		}
+		else {
+			UGPDwarvenBedrooms* offshoot_0 = NewObject<UGPDwarvenBedrooms>(this);
+			offshoot_0->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading - 90, parent);
+		}
 
 
 
 
 
+	}
 
 
+	for (int i = 0; i < 20; i++) {
+		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
+		cursor_x += direction[0];
+		cursor_y += direction[1];
+	}
 
-
-
+	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 16, true);
 
 
 

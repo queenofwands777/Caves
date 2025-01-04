@@ -547,6 +547,14 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPDwarvenBedrooms.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPDwarvenIndustry.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -688,6 +696,8 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPCluster.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPDiocese.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPDwarvenBedrooms.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPDwarvenIndustry.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPFrontGate.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPGreatHall.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPGreedyDeep.h"/>
