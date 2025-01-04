@@ -86,6 +86,12 @@
     <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPGreatHall.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPGreedyDeep.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -105,6 +111,9 @@
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPTrapsOffshoot.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPWarrens.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
@@ -194,6 +203,12 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPFrontGate.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPGreatHall.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPGreedyDeep.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnALine.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
@@ -213,6 +228,9 @@
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPTrapsOffshoot.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPWarrens.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\LightningBolt.h">
