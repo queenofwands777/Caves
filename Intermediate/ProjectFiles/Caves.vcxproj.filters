@@ -71,6 +71,12 @@
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPAntarctica.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPArtifact.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPChapel.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -98,10 +104,22 @@
     <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnAStreet.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPLabyrinth.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPMarket.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPResearchStation.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPSewers.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPSite.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPSpirits.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPTomb.cpp">
@@ -188,6 +206,12 @@
     <ClInclude Include="..\..\Source\Caves\Public\GeneratorPattern.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPAntarctica.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPArtifact.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPChapel.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
@@ -215,10 +239,22 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnAStreet.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPLabyrinth.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPMarket.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPResearchStation.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPSewers.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPSite.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPSpirits.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPTomb.h">
