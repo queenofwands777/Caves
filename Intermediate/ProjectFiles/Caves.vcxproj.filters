@@ -71,69 +71,6 @@
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPAntarctica.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPArtifact.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPChapel.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPCluster.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPClusterWalls.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPDiocese.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPFrontGate.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPGreatHall.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPGreedyDeep.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnALine.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPHousesOnAStreet.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPLabyrinth.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPMarket.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPResearchStation.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPSewers.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPSite.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPSpirits.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPTomb.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPTraps.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPTrapsOffshoot.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Caves\Private\GPWarrens.cpp">
-      <Filter>Source\Caves\Private</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -165,6 +102,69 @@
       <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GeneratorPattern.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPAntarctica.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPArtifact.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPChapel.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPCluster.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPClusterWalls.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPDiocese.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPFrontGate.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPGreatHall.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPGreedyDeep.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPHousesOnALine.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPHousesOnAStreet.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPLabyrinth.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPMarket.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPResearchStation.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPSewers.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPSite.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPSpirits.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPTomb.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPTraps.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPTrapsOffshoot.cpp">
+      <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\GPWarrens.cpp">
       <Filter>Source\Caves\Private\Level\GeneratorPatterns</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\Level\GeneratorPatterns\WorshipGeneratorPattern.cpp">
