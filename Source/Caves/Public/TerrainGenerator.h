@@ -71,7 +71,7 @@ struct RoomMarker {
 
 
 #include"FloorInfo.h"
-
+#include"GeneratorPattern.h"
 #include "DrawDebugHelpers.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -186,7 +186,7 @@ public:
 
 							//check if that tile is a certain kind
 							FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
-							if (target_tile.PackedTileIndex == floor_info->floor_material) {
+							if (MaterialTypes[target_tile.PackedTileIndex] == Abstract::type_floor) {
 
 								int world_x = ((tilemap_x * MAP_SIZE) + (x_within_tilemap));
 								//int world_y = ((tilemap_y * MAP_SIZE) + (y_within_tilemap));

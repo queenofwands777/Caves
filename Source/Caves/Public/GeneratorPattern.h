@@ -73,7 +73,11 @@ enum Material {
 	wood = 49,
 	light_dirt = 50,
 	stone = 51,
-	asphalt = 52
+	asphalt = 52,
+	dirt_cliff = 53,
+	cobblestone = 54,
+	shingles = 55,
+	siding = 56,
 
 
 };
@@ -94,7 +98,7 @@ const TMap<int, int> MaterialTypes = {
 	{Material::sandstone_brick,Abstract::type_wall},
 	{Material::dark_sandstone_brick,Abstract::type_void},
 	{Material::dirt,Abstract::type_floor},
-	{Material::wood_planks,Abstract::type_wall},
+	{Material::wood_planks,Abstract::type_floor},
 	{Material::grass,Abstract::type_void},
 
 	{Material::dwarven_stone_brick,Abstract::type_floor},
@@ -137,11 +141,16 @@ const TMap<int, int> MaterialTypes = {
 	{Material::cosmos,Abstract::type_void},
 
 	{Material::vegetation,Abstract::type_void},
-	{Material::wood,Abstract::type_void},
-	{Material::light_dirt,Abstract::type_void},
-	{Material::stone,Abstract::type_void},
-	{Material::asphalt,Abstract::type_void},
+	{Material::wood,Abstract::type_floor},
+	{Material::light_dirt,Abstract::type_floor},
+	{Material::stone,Abstract::type_wall },
+	{Material::asphalt,Abstract::type_floor},
 
+	{Material::dirt_cliff,Abstract::type_wall},
+	{Material::cobblestone,Abstract::type_floor},
+	{Material::shingles,Abstract::type_wall},
+	{Material::siding,Abstract::type_wall},
+	
 };
 
 #include "GameFramework/Actor.h"

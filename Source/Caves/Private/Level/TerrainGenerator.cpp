@@ -111,7 +111,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 
 						if ((neighbor_x < MAP_SIZE) && (neighbor_y < MAP_SIZE) && (neighbor_x >= 0) && (neighbor_y >= 0)) {
 							FPaperTileInfo neighbor_cell = host_tile->TileMap->TileLayers[0]->GetCell(neighbor_x, neighbor_y);
-							if (neighbor_cell.PackedTileIndex == floor_info->void_material) {
+							if (MaterialTypes[neighbor_cell.PackedTileIndex] == Abstract::type_void) {
 								host_tile->TileMap->TileLayers[0]->SetCell(neighbor_x, neighbor_y, TileInfo);
 							}
 						}
@@ -139,7 +139,7 @@ void ATerrainGenerator::SetTile(int input_x, int input_y, int terrain, int size,
 							UPaperTileMapComponent* target_tile = GetTileMap(tilemap_x + nudge_x, tilemap_y + nudge_y);
 							FPaperTileInfo neighbor_cell = target_tile->TileMap->TileLayers[0]->GetCell(relative_x, relative_y);
 
-							if (neighbor_cell.PackedTileIndex == floor_info->void_material) {
+							if (MaterialTypes[neighbor_cell.PackedTileIndex] == Abstract::type_void) {
 								target_tile->TileMap->TileLayers[0]->SetCell(relative_x, relative_y, TileInfo);
 							}
 
@@ -304,13 +304,13 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 
 	for (int x = -floor(actual_size / 2) - 1; x < floor(actual_size / 2) + (actual_size % 2) + 1; x++) {
 		for (int y = -floor(actual_size / 2) - 1; y < floor(actual_size / 2) + (actual_size % 2) + 1; y++) {
-			SetTile(center_x + x, center_y + y, floor_info->wall_material, 1, false);
+			SetTile(center_x + x, center_y + y, Material::siding, 1, false);
 		}
 	}
 
 	for (int x = -floor(actual_size / 2); x < floor(actual_size / 2) + (actual_size % 2); x++) {
 		for (int y = -floor(actual_size / 2); y < floor(actual_size / 2) + (actual_size % 2); y++) {
-			SetTile(center_x + x, center_y + y, floor_info->floor_material, 1, false);
+			SetTile(center_x + x, center_y + y, Material::wood_planks, 1, false);
 		}
 	}
 
@@ -334,14 +334,17 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 		bool found_door = false;
 		bool searching = true;
 		while (searching) {
-
+			int tile_index;
 			if (active_direction == secondary_direction) {
-				if (GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex() == floor_info->wall_material) {
+				tile_index = GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex();
+				if ( MaterialTypes[tile_index] == Abstract::type_wall) {
 					active_direction = tertiary_direction;
 				}
 
 			} else if (active_direction == tertiary_direction) {
-				if (GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex() == floor_info->wall_material) {
+				tile_index = GetTile(probe_loc[0] + active_direction[0], probe_loc[1] + active_direction[1])->GetTileIndex();
+
+				if (MaterialTypes[tile_index] == Abstract::type_wall) {
 					searching = false;
 				}
 
@@ -354,20 +357,23 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 
 
 
-
+			int tile_type = GetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1])->GetTileIndex();
 			//check if door can be placed, if so, place door
-			if (GetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1])->GetTileIndex() == floor_info->wall_material) {
-				if (GetTile(probe_loc[0] + (original_direction[0] * 2), probe_loc[1] + (original_direction[1] * 2))->GetTileIndex() == floor_info->floor_material){
+			if ( MaterialTypes[tile_type] == Abstract::type_wall) {
+				int beyond_wall_type = GetTile(probe_loc[0] + (original_direction[0] * 2), probe_loc[1] + (original_direction[1] * 2))->GetTileIndex();
+				if ( MaterialTypes[beyond_wall_type] == Abstract::type_floor) {
 
+					int beyond_wall_neighbor_type = GetTile(probe_loc[0] + (original_direction[0] * 2) + secondary_direction[0], probe_loc[1] + (original_direction[1] * 2) + secondary_direction[1])->GetTileIndex();
+					int other_beyond_wall_neighbor_type = GetTile(probe_loc[0] + (original_direction[0] * 2) + tertiary_direction[0], probe_loc[1] + (original_direction[1] * 2) + tertiary_direction[1])->GetTileIndex();
 
-					if (GetTile(probe_loc[0] + (original_direction[0] * 2) + secondary_direction[0], probe_loc[1] + (original_direction[1] * 2) + secondary_direction[1])->GetTileIndex() == floor_info->floor_material) {
-						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
-						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], floor_info->floor_material, 1, true);
+					if ( MaterialTypes[beyond_wall_neighbor_type] == Abstract::type_floor) {
+						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], Material::wood_planks, 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], Material::wood_planks, 1, true);
 						found_door = true;
 					}
-					else if (GetTile(probe_loc[0] + (original_direction[0] * 2) + tertiary_direction[0], probe_loc[1] + (original_direction[1] * 2)+tertiary_direction[1])->GetTileIndex() == floor_info->floor_material) {
+					else if (MaterialTypes[other_beyond_wall_neighbor_type] == Abstract::type_floor) {
 						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
-						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], floor_info->floor_material, 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], Material::wood_planks, 1, true);
 						found_door = true;
 					}
 					else {
@@ -741,7 +747,7 @@ void ATerrainGenerator::GenerateMap() {
 
 						//check if that tile is a certain kind
 						FPaperTileInfo target_tile = GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
-						if (target_tile.PackedTileIndex == floor_info->wall_material) {
+						if (MaterialTypes[target_tile.PackedTileIndex] == Abstract::type_wall) {
 
 
 
@@ -766,25 +772,25 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 								
-									if (GetTile(world_x, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
+									if (MaterialTypes[GetTile(world_x, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
 										num_neighboring_floors++;
 										neighbor_flags[0] = true;
 									}
 								
 
-									if (GetTile(world_x + 1, world_y)->PackedTileIndex == floor_info->floor_material) {
+									if (MaterialTypes[GetTile(world_x + 1, world_y)->PackedTileIndex] == Abstract::type_floor) {
 										num_neighboring_floors++;
 										neighbor_flags[1] = true;
 									}
 								
 
-									if (GetTile(world_x, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
+									if (MaterialTypes[GetTile(world_x, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
 										num_neighboring_floors++;
 										neighbor_flags[2] = true;
 									}
 								
 
-									if (GetTile(world_x - 1, world_y)->PackedTileIndex == floor_info->floor_material) {
+									if (MaterialTypes[GetTile(world_x - 1, world_y)->PackedTileIndex] == Abstract::type_floor) {
 										num_neighboring_floors++;
 										neighbor_flags[3] = true;
 									}
@@ -865,25 +871,25 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 
-								if (GetTile(world_x - 1, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
+								if (MaterialTypes[GetTile(world_x - 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
 									num_neighboring_floors++;
 									neighbor_flags[0] = true;
 								}
 
 
-								if (GetTile(world_x + 1, world_y + 1)->PackedTileIndex == floor_info->floor_material) {
+								if (MaterialTypes[GetTile(world_x + 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
 									num_neighboring_floors++;
 									neighbor_flags[1] = true;
 								}
 
 
-								if (GetTile(world_x + 1, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
+								if (MaterialTypes[GetTile(world_x + 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
 									num_neighboring_floors++;
 									neighbor_flags[2] = true;
 								}
 
 
-								if (GetTile(world_x - 1, world_y - 1)->PackedTileIndex == floor_info->floor_material) {
+								if (MaterialTypes[GetTile(world_x - 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
 									num_neighboring_floors++;
 									neighbor_flags[3] = true;
 								}
