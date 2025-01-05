@@ -21,12 +21,7 @@ void UGPGreatHall::GenerateLevel() {
 	FVector2D perp = { -direction[1], direction[0] };
 	FVector2D other_perp = -perp;
 
-
-	for (int i = 0; i < 20; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material,3,true);
-		cursor_x += direction[0];
-		cursor_y += direction[1];
-	}
+	DrawLineF(direction, 20, 3);
 
 	TArray<FVector2D> points;
 
@@ -34,10 +29,7 @@ void UGPGreatHall::GenerateLevel() {
 	float step_size = (room_size/2);
 	for (int i = 0; i < 5; i++) {
 		if (i % 2 == 0) { points.Add({ cursor_x, cursor_y }); }
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, room_size, true);
-		cursor_x += direction[0] * (step_size);
-		cursor_y += direction[1] * (step_size);
-
+		DrawLineF(direction, step_size, room_size);
 	}
 
 
@@ -110,11 +102,8 @@ void UGPGreatHall::GenerateLevel() {
 	}
 
 
-	for (int i = 0; i < 20; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
-		cursor_x += direction[0];
-		cursor_y += direction[1];
-	}
+
+	DrawLineF(direction, 20, 3);
 
 	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 16, true);
 

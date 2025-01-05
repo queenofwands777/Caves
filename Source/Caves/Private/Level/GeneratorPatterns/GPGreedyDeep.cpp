@@ -21,30 +21,15 @@ void UGPGreedyDeep::GenerateLevel() {
 	FVector2D perp = { -direction[1], direction[0] };
 	FVector2D other_perp = -perp;
 
-	for (int i = 0; i < 30; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
-		cursor_x += direction[0];
-		cursor_y += direction[1];
-	}
+	DrawLineF(direction, 30, 2);
 
+	DrawLineF(direction, 25, 8);
 
+	MoveCursor(direction, -10);
 
-	for (int i = 0; i < 5; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 8, true);
-		cursor_x += direction[0] * 5;
-		cursor_y += direction[1] * 5;
-	}
+	MoveCursor(perp, 5);
 
-	cursor_x -= direction[0] * 10;
-	cursor_y -= direction[1] * 10;
-
-	cursor_x += perp[0] * 5;
-	cursor_y += perp[1] * 5;
-	for (int i = 0; i < 30; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
-		cursor_x += direction[0];
-		cursor_y += direction[1];
-	}
+	DrawLineF(direction, 30, 2);
 
 	TArray<FVector2D> mineshaft_ends;
 

@@ -79,6 +79,7 @@ enum Material {
 	shingles = 55,
 	siding = 56,
 	magma = 57,
+	sewer_water = 58,
 
 
 };
@@ -152,8 +153,17 @@ const TMap<int, int> MaterialTypes = {
 	{Material::shingles,Abstract::type_wall},
 	{Material::siding,Abstract::type_wall},
 	{Material::magma,Abstract::type_void},
+	{Material::sewer_water,Abstract::type_floor},
 	
 };
+
+
+#define DefaultFloorType parent->floor_info->floor_material
+#define DefaultWallType parent->floor_info->wall_material
+#define DefaultVoidType parent->floor_info->void_material
+
+
+
 
 #include "GameFramework/Actor.h"
 #include "GeneratorPattern.generated.h"
@@ -195,5 +205,21 @@ public:
 		GenerateLevel();
 	}
 
+	FVector2D CurrentLocation() {
+		return { cursor_x, cursor_y };
+	}
+
+	void MoveCursor(FVector2D input_direction, float distance) {
+		cursor_x += input_direction[0] * distance;
+		cursor_y += input_direction[1] * distance;
+	}
+
+	void SetCursor(FVector2D input_location) {
+		cursor_x = input_location[0];
+		cursor_y = input_location[1];
+	}
+
+	void DrawLineF(FVector2D input_direction, float distance, float width);
+	void DrawLineA(FVector2D input_direction, float distance, float width, Material material);
 
 };
