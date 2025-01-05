@@ -10,16 +10,8 @@
 
 void UGPGreatHall::GenerateLevel() {
 
-	heading = 90 * FMath::RandHelper(4);
-	float rotation_radians = FMath::DegreesToRadians(heading);
-	FVector2D new_direction = {
-		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-	};
-	direction = new_direction;
+	SetHeading(90 * FMath::RandHelper(4));
 
-	FVector2D perp = { -direction[1], direction[0] };
-	FVector2D other_perp = -perp;
 
 	DrawLineF(direction, 20, 3);
 
@@ -72,7 +64,7 @@ void UGPGreatHall::GenerateLevel() {
 		if (industry_remaining > 0) {
 			if (p <= industry_remaining) {
 				UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
-				industry_offshoot->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading + 90, parent);
+				industry_offshoot->Init(lifetime, 6, points[p][0] + (-perp[0] * step_size), points[p][1] + (-perp[1] * step_size), heading + 90, parent);
 				industry_remaining--;
 
 			}
@@ -80,19 +72,19 @@ void UGPGreatHall::GenerateLevel() {
 				float industry_roll = FMath::FRand() * 100;
 				if (industry_roll >= industry_percent) {
 					UGPDwarvenIndustry* industry_offshoot = NewObject<UGPDwarvenIndustry>(this);
-					industry_offshoot->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading + 90, parent);
+					industry_offshoot->Init(lifetime, 6, points[p][0] + (-perp[0] * step_size), points[p][1] + (-perp[1] * step_size), heading + 90, parent);
 					industry_remaining--;
 
 				}
 				else {
 					UGPDwarvenBedrooms* offshoot_0 = NewObject<UGPDwarvenBedrooms>(this);
-					offshoot_0->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading - 90, parent);
+					offshoot_0->Init(lifetime, 6, points[p][0] + (-perp[0] * step_size), points[p][1] + (-perp[1] * step_size), heading - 90, parent);
 				}
 			}
 		}
 		else {
 			UGPDwarvenBedrooms* offshoot_0 = NewObject<UGPDwarvenBedrooms>(this);
-			offshoot_0->Init(lifetime, 6, points[p][0] + (other_perp[0] * step_size), points[p][1] + (other_perp[1] * step_size), heading - 90, parent);
+			offshoot_0->Init(lifetime, 6, points[p][0] + (-perp[0] * step_size), points[p][1] + (-perp[1] * step_size), heading - 90, parent);
 		}
 
 

@@ -6,16 +6,8 @@
 
 
 void UGPWarrens::GenerateLevel() {
-	heading = 90 * FMath::RandHelper(4);
-	float rotation_radians = FMath::DegreesToRadians(heading);
-	FVector2D new_direction = {
-		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-	};
-	direction = new_direction;
-
-	FVector2D perp = { -direction[1], direction[0] };
-	FVector2D other_perp = -perp;
+	SetHeading(90 * FMath::RandHelper(4));
+	
 
 	FVector2D start_loc = { cursor_x, cursor_y };
 	FVector2D start_dir = direction;

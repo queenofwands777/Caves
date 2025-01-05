@@ -37,11 +37,6 @@ enum Material {
 	hell_wall = 22,
 	hell_void = 23,
 
-
-
-
-
-
 	snow = 24,
 	ice = 25,
 	deep_frost = 26,
@@ -54,7 +49,6 @@ enum Material {
 	spaceship_tile = 33,
 	spaceship_wall = 34,
 	space = 35,
-
 
 	white_flag = 36,
 	red_flag = 37,
@@ -80,8 +74,6 @@ enum Material {
 	siding = 56,
 	magma = 57,
 	sewer_water = 58,
-
-
 };
 
 
@@ -187,7 +179,8 @@ public:
 	float cursor_x;
 	float cursor_y;
 	float heading;
-	FVector2d direction = {0,1};
+	FVector2D direction = {0,1};
+	FVector2D perp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATerrainGenerator* parent = nullptr;
@@ -200,7 +193,7 @@ public:
 		heading = _heading;
 		parent = _parent;
 
-		direction = { 1, 0 };
+		SetHeading(heading);
 
 		GenerateLevel();
 	}
@@ -222,4 +215,6 @@ public:
 	void DrawLineF(FVector2D input_direction, float distance, float width);
 	void DrawLineA(FVector2D input_direction, float distance, float width, Material material);
 
+	void SetHeading(float new_heading);
+	void ChangeHeading(float delta_degrees);
 };

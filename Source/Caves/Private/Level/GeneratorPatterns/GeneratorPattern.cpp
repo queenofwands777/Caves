@@ -27,3 +27,23 @@ void UGeneratorPattern::DrawLineA(FVector2D input_direction, float distance, flo
 		MoveCursor(input_direction, 1);
 	}
 }
+
+void UGeneratorPattern::SetHeading(float new_heading) {
+	heading = new_heading;
+	float rotation_radians = FMath::DegreesToRadians(heading);
+
+	FVector2D unit_vec = {1,0};
+
+	FVector2D new_direction = {
+		(unit_vec[0] * FMath::Cos(rotation_radians)) - (unit_vec[1] * FMath::Sin(rotation_radians)),
+		(unit_vec[0] * FMath::Sin(rotation_radians)) + (unit_vec[1] * FMath::Cos(rotation_radians))
+	};
+	direction = new_direction;
+	perp = { -direction[1], direction[0] };
+
+}
+
+void UGeneratorPattern::ChangeHeading(float delta_heading) {
+	heading += delta_heading;
+	SetHeading(heading);
+}

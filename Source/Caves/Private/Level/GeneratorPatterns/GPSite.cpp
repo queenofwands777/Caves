@@ -22,16 +22,10 @@ void UGPSite::GenerateLevel() {
 
 
 	for (int i = 0; i < 10; i++) {
-		heading += FMath::RandRange(-5, 5);
-		float rotation_radians = FMath::DegreesToRadians(heading);
-		FVector2D new_direction = {
-			(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-			(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-		};
+		ChangeHeading(FMath::RandRange(-5, 5));
 
 
-		cursor_x += new_direction[0];
-		cursor_y += new_direction[1];
+		MoveCursor(direction, 1);
 
 		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
 	}
@@ -46,18 +40,11 @@ void UGPSite::GenerateLevel() {
 	while (active) {
 
 		time_since_room++;
+		ChangeHeading(FMath::RandRange(-10, 10));
+		
 
-		heading += FMath::RandRange(-10, 10);
-		float rotation_radians = FMath::DegreesToRadians(heading);
-		FVector2D new_direction = {
-			(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-			(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-		};
+		MoveCursor(direction, 1);
 
-
-
-		cursor_x += new_direction[0];
-		cursor_y += new_direction[1];
 
 		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
 
@@ -65,11 +52,10 @@ void UGPSite::GenerateLevel() {
 			time_since_room = 0;
 			remaining_rooms--;
 			for (int i = 0; i < area_size; i++) {
-				cursor_x += new_direction[0];
-				cursor_y += new_direction[1];
+				cursor_x += direction[0];
+				cursor_y += direction[1];
 				if (i == area_size / 2) { parent->MakeRoom(cursor_x, cursor_y);  }
 				for (int p = -5; p <= 5; p++) {
-					FVector2D perp = { -new_direction[1], new_direction[0] };
 					perp *= p;
 					float rand_x = FMath::FRandRange(-5.0, 5.0);
 					float rand_y = FMath::FRandRange(-5.0, 5.0);

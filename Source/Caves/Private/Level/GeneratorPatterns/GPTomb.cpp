@@ -8,16 +8,8 @@
 void UGPTomb::GenerateLevel() {
 
 
-	heading = 90 * FMath::RandHelper(4);
-	float rotation_radians = FMath::DegreesToRadians(heading);
-	FVector2D new_direction = {
-		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-	};
-	direction = new_direction;
+	SetHeading(90 * FMath::RandHelper(4));
 
-	FVector2D perp = { -direction[1], direction[0] };
-	FVector2D other_perp = -perp;
 
 
 	for (int i = 0; i < 50; i++) {
@@ -41,8 +33,8 @@ void UGPTomb::GenerateLevel() {
 			cursor_y = start[1];
 
 			for (int ii = 0; ii < 20; ii++) {
-				cursor_x += other_perp[0];
-				cursor_y += other_perp[1];
+				cursor_x += -perp[0];
+				cursor_y += -perp[1];
 				parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
 
 			}
@@ -62,8 +54,8 @@ void UGPTomb::GenerateLevel() {
 	float area_size = 10;
 
 	for (int i = 0; i < area_size; i++) {
-		cursor_x += new_direction[0];
-		cursor_y += new_direction[1];
+		cursor_x += direction[0];
+		cursor_y += direction[1];
 		for (int p = -area_size; p <= area_size; p++) {
 			FVector2D local_perp = perp * p;
 			float rand_x = FMath::FRandRange(-area_size, area_size);

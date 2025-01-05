@@ -9,21 +9,13 @@
 
 void UCompoundGeneratorPattern::GenerateLevel() {
 
-	float rotation_radians = FMath::DegreesToRadians(heading);
 
-	FVector2D new_direction = {
-		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-	};
-	direction = new_direction;
 
 
 
 	for (int i = 0; i < 5; i++) {
-		cursor_x += new_direction[0];
-		cursor_y += new_direction[1];
+		MoveCursor(direction, 1);
 		for (int p = -5; p <= 5; p++) {
-			FVector2D perp = { -new_direction[1], new_direction[0] };
 			perp *= p;
 			float rand_x = FMath::FRandRange(-5.0, 5.0);
 			float rand_y = FMath::FRandRange(-5.0, 5.0);
@@ -36,19 +28,16 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 
 	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 10, true);
 
-	cursor_x += new_direction[0]*5;
-	cursor_y += new_direction[1]*5;
+	MoveCursor(direction, 5);
 
 	FVector2D inside_middle;
 
 	for (int i = 0; i < 20; i++) {
-		cursor_x += new_direction[0];
-		cursor_y += new_direction[1];
+		MoveCursor(direction, 1);
 		if (i == 10) { inside_middle = { cursor_x, cursor_y }; }
 
 
 		for (int p = -2; p <= 2; p++) {
-			FVector2D perp = { -new_direction[1], new_direction[0] };
 			perp *= p;
 			float rand_x = FMath::FRandRange(-5.0, 5.0);
 			float rand_y = FMath::FRandRange(-5.0, 5.0);
@@ -57,7 +46,7 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		}
 	}
 
-	FVector2D end_point = { cursor_x + (new_direction[0] * 10), cursor_y + (new_direction[1] * 10)};
+	FVector2D end_point = { cursor_x + (direction[0] * 10), cursor_y + (direction[1] * 10)};
 
 	cursor_x = wall_position[0];
 	cursor_y = wall_position[1];
