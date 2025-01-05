@@ -15,6 +15,8 @@ void UGPSpirits::GenerateLevel() {
 	direction = new_direction;
 	FVector2D perp = { -direction[1], direction[0] };
 
+	DrawLineF(direction, 30, 3);
 
+	parent->MakeIrregularRoom(cursor_x, cursor_y, 30,30,4);
 
 }
