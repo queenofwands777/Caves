@@ -3,6 +3,7 @@
 #include "TerrainGenerator.h"
 #include"GeneratorPattern.h"
 
+#include"Pathfinding.h"
 #include "PaperTileSet.h"
 #include "PaperTileMap.h"
 #include"PaperTileLayer.h"
@@ -274,7 +275,8 @@ void ATerrainGenerator::BeginPlay()
 	//dont forget to delete!!
 
 
-
+	pathfinder = NewObject<APathfinding>(this);
+	pathfinder->parent = this;
 
 	GenerateMap();
 
@@ -1002,7 +1004,7 @@ void ATerrainGenerator::GenerateMap() {
 
 
 
-	InitializeTerrainNodes();
+
 
 
 
@@ -1014,6 +1016,9 @@ void ATerrainGenerator::GenerateMap() {
 			target->TileMap->RebuildCollision();
 		}
 	}
+
+	//if mysterious error, place before rebuild terrain map loop above
+	pathfinder->InitializeTerrainNodes();
 }
 
 void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {

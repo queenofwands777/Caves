@@ -9,13 +9,14 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"CoreUObject"
 			]
 		},
 		{
 			"Name": "BeccasMod",
 			"Type": "Editor",
-			"LoadingPhase":  "Default"
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
