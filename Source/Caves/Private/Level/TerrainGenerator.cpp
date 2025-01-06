@@ -772,28 +772,43 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 								
-									if (MaterialTypes[GetTile(world_x, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
-										num_neighboring_floors++;
-										neighbor_flags[0] = true;
-									}
-								
+								FPaperTileInfo* target;
 
-									if (MaterialTypes[GetTile(world_x + 1, world_y)->PackedTileIndex] == Abstract::type_floor) {
-										num_neighboring_floors++;
-										neighbor_flags[1] = true;
+									target = GetTile(world_x, world_y + 1);
+									if (target != nullptr) {
+										if (MaterialTypes[target->PackedTileIndex] == Abstract::type_floor) {
+											num_neighboring_floors++;
+											neighbor_flags[0] = true;
+										}
 									}
-								
 
-									if (MaterialTypes[GetTile(world_x, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
-										num_neighboring_floors++;
-										neighbor_flags[2] = true;
-									}
 								
-
-									if (MaterialTypes[GetTile(world_x - 1, world_y)->PackedTileIndex] == Abstract::type_floor) {
-										num_neighboring_floors++;
-										neighbor_flags[3] = true;
+									target = GetTile(world_x + 1, world_y);
+									if (target != nullptr) {
+										if (MaterialTypes[target->PackedTileIndex] == Abstract::type_floor) {
+											num_neighboring_floors++;
+											neighbor_flags[1] = true;
+										}
 									}
+
+								
+									target = GetTile(world_x, world_y - 1);
+									if (target != nullptr) {
+										if (MaterialTypes[target->PackedTileIndex] == Abstract::type_floor) {
+											num_neighboring_floors++;
+											neighbor_flags[2] = true;
+										}
+									}
+
+								
+									target = GetTile(world_x - 1, world_y);
+									if (target != nullptr) {
+										if (MaterialTypes[target->PackedTileIndex] == Abstract::type_floor) {
+											num_neighboring_floors++;
+											neighbor_flags[3] = true;
+										}
+									}
+
 								
 
 								//set overlay tile
@@ -871,28 +886,43 @@ void ATerrainGenerator::GenerateMap() {
 								//check if neighbor is relevant material
 								//might want to swap world_y order if we get flipped 
 
-								if (MaterialTypes[GetTile(world_x - 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
-									num_neighboring_floors++;
-									neighbor_flags[0] = true;
+								FPaperTileInfo* target;
+								
+								target = GetTile(world_x - 1, world_y + 1);
+								if (target != nullptr) {
+									if (MaterialTypes[GetTile(world_x - 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
+										num_neighboring_floors++;
+										neighbor_flags[0] = true;
+									}
 								}
 
 
-								if (MaterialTypes[GetTile(world_x + 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
-									num_neighboring_floors++;
-									neighbor_flags[1] = true;
+								target = GetTile(world_x + 1, world_y + 1);
+								if (target != nullptr) {
+									if (MaterialTypes[GetTile(world_x + 1, world_y + 1)->PackedTileIndex] == Abstract::type_floor) {
+										num_neighboring_floors++;
+										neighbor_flags[1] = true;
+									}
 								}
 
 
-								if (MaterialTypes[GetTile(world_x + 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
-									num_neighboring_floors++;
-									neighbor_flags[2] = true;
+								target = GetTile(world_x + 1, world_y - 1);
+								if (target != nullptr) {
+									if (MaterialTypes[GetTile(world_x + 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
+										num_neighboring_floors++;
+										neighbor_flags[2] = true;
+									}
 								}
 
 
-								if (MaterialTypes[GetTile(world_x - 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
-									num_neighboring_floors++;
-									neighbor_flags[3] = true;
+								target = GetTile(world_x - 1, world_y - 1);
+								if (target != nullptr) {
+									if (MaterialTypes[GetTile(world_x - 1, world_y - 1)->PackedTileIndex] == Abstract::type_floor) {
+										num_neighboring_floors++;
+										neighbor_flags[3] = true;
+									}
 								}
+
 
 
 								//set overlay tile

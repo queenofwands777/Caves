@@ -26,7 +26,7 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 
 	FVector2D wall_position = { cursor_x, cursor_y };
 
-	parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 10, true);
+	/*parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 10, true);*/
 
 	MoveCursor(direction, 5);
 
