@@ -176,12 +176,12 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 
 
 
-	TerrainNode* target_node = nullptr;
+	TerrainNode* destination_node = nullptr;
 
 	if (TerrainNodeMap.Contains(end_tile_x)) {
 		if (TerrainNodeMap[end_tile_x].Contains(end_tile_y)) {
 			TerrainNode* destination = TerrainNodeMap[end_tile_x][end_tile_y];
-			target_node = destination;
+			destination_node = destination;
 		}
 	}
 
@@ -202,7 +202,7 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 				target_neighbor->parent = selected_node;
 				target_neighbor->visited = true;
 				queue.Enqueue(target_neighbor);
-				if (target_neighbor == target_node) {
+				if (target_neighbor == destination_node) {
 					queue.Empty();
 				}
 			}
@@ -217,11 +217,11 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 
 
 
-	while ((target_node != nullptr) && (target_node->parent != nullptr)) {
-		FVector target_location = { float(target_node->X * parent->TILE_SIZE), 10, float(target_node->Y * parent->TILE_SIZE) };
+	while ((destination_node != nullptr)) {
+		FVector target_location = { float(destination_node->X * parent->TILE_SIZE), 2, float(destination_node->Y * parent->TILE_SIZE) };
 		//DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.1, 255, 4);
-		result.Add({ float(target_node->X * parent->TILE_SIZE) , 0, float(target_node->Y * parent->TILE_SIZE) });
-		target_node = target_node->parent;
+		result.Add(target_location);
+		destination_node = destination_node->parent;
 	}
 
 	for (int i = 0; i < TerrainNodeMap.Array().Num(); i++) {
