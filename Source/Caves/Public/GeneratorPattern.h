@@ -74,6 +74,7 @@ enum Material {
 	siding = 56,
 	magma = 57,
 	sewer_water = 58,
+	rusty_metal = 59
 };
 
 
@@ -146,6 +147,7 @@ const TMap<int, int> MaterialTypes = {
 	{Material::siding,Abstract::type_wall},
 	{Material::magma,Abstract::type_void},
 	{Material::sewer_water,Abstract::type_floor},
+	{Material::rusty_metal, Abstract::type_wall}
 	
 };
 

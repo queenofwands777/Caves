@@ -22,7 +22,7 @@ void UGPFrontGate::GenerateLevel() {
 		if (parent->GetTile(cursor_x + (perp[0] * wall_thickness), cursor_y + (perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->void_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); end_0 = { cursor_x + (perp[0]) , cursor_y + (perp[1]) }; break; }
 
 
-		parent->SetTile(cursor_x, cursor_y, Material::stone, wall_thickness, false);
+		parent->SetTile(cursor_x, cursor_y, Material::rusty_metal, wall_thickness, false);
 		cursor_x += perp[0];
 		cursor_y += perp[1];
 	}
@@ -40,7 +40,7 @@ void UGPFrontGate::GenerateLevel() {
 		if (parent->GetTile(cursor_x + (-perp[0] * wall_thickness), cursor_y + (-perp[1] * wall_thickness))->GetTileIndex() == parent->floor_info->void_material) { parent->SetTile(cursor_x, cursor_y, parent->floor_info->wall_material, wall_thickness, false); end_1 = { cursor_x + (-perp[0]) , cursor_y + (-perp[1]) }; break; }
 
 
-		parent->SetTile(cursor_x, cursor_y, Material::stone, wall_thickness, false);
+		parent->SetTile(cursor_x, cursor_y, Material::rusty_metal, wall_thickness, false);
 		MoveCursor(-perp, 1);
 	}
 
