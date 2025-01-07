@@ -2,7 +2,7 @@
 
 #include "TerrainGenerator.h"
 #include"GeneratorPattern.h"
-
+#include"GPElevator.h"
 #include"Pathfinding.h"
 #include "PaperTileSet.h"
 #include "PaperTileMap.h"
@@ -491,156 +491,44 @@ void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
 
 void ATerrainGenerator::GenerateMap() {
 
-#pragma region init
-	PRINT("Generating Map");
 
-	FRotator spawn_rotation = { 0,0,0 };
+	PRINT("Generating Map");
 
 	//set start location
 	float cursor_x = (LEVEL_SIZE * MAP_SIZE) / 2;
 	float cursor_y = (LEVEL_SIZE * MAP_SIZE) / 2;
 
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
-	FVector elevator_location = { float((cursor_x - 2) * TILE_SIZE) + (1.5 * TILE_SIZE), 0.1, float((cursor_y) * TILE_SIZE) - (15.5 * TILE_SIZE) };
-	FVector spawn_location = { float((cursor_x - 2) * TILE_SIZE) + (1.5 * TILE_SIZE), 4, float((cursor_y)*TILE_SIZE) - (15.5 * TILE_SIZE) };
 
-	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Elevator], elevator_location, { 0,0,0 });
-	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::PlayerSpawn], spawn_location, { 0,0,0 });
-	//GetWorld()->SpawnActor<AActor>(Player, spawn_location, { 0,0,0 });
+
 
 	float heading = FMath::RandRange(0, 360);
-	float heading_radians = FMath::DegreesToRadians(heading);
-
-	FVector direction = { 1,0,0 };
-
-
-	FVector new_direction = {
-		(direction[0] * FMath::Cos(heading_radians)) - (direction[2] * FMath::Sin(heading_radians)),
-		0,
-		(direction[0] * FMath::Sin(heading_radians)) + (direction[2] * FMath::Cos(heading_radians))
-	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	int x_mod = (FMath::Cos(new_direction[0]) > FMath::Sin(new_direction[2]));
-	int y_mod = (FMath::Sin(new_direction[0]) >= FMath::Cos(new_direction[2]));
-
-
-
-
-
-	FVector new_direction_trunc = {
-		x_mod * FMath::Sign(new_direction[0]),
-		0,
-		y_mod * FMath::Sign(new_direction[2])
-	};
-
-	cursor_x += (new_direction_trunc[0] * 3);
-	cursor_y += ( new_direction_trunc[2] * 3 );
-
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
-
-	FVector elevator_door_location = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE/2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8};
-	FRotator elevator_door_rotation = { FMath::Sign(new_direction[0]) * 90,0,0};
-	GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::ElevatorDoor], elevator_door_location, elevator_door_rotation);
-
-
-	cursor_x += (new_direction_trunc[0] * 5);
-	cursor_y += (new_direction_trunc[2] * 5);
-	
-
-	
-
-	if (floor_info->is_store) {
-
-
-		//build shop
-
-
-		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
-
-		//cursor_x += (new_direction_trunc[0] * 5);
-		//cursor_y += (new_direction_trunc[2] * 5);
-
-		FVector new_direction_perp = { new_direction_trunc[2], new_direction_trunc[1], new_direction_trunc[0] };
-
-
-
-
-		cursor_x += (new_direction_trunc[0] * 5);
-		cursor_y += (new_direction_trunc[2] * 5);
-
-		int num_rows = 7;
-		for (int i = 0; i < num_rows; i++) {
-
-			cursor_x += (new_direction_trunc[0] * 1);
-			cursor_y += (new_direction_trunc[2] * 1);
-
-			FRotator shelf_rotation = { 0,0,0 };
-
-
-
-
-
-
-
-
-			FVector shelf_location_1 = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE / 2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8 };
-			shelf_location_1 = { shelf_location_1[0] + (new_direction_perp[0] * 3 * TILE_SIZE), shelf_location_1[1], shelf_location_1[2] + (new_direction_perp[2] * 3 * TILE_SIZE) };
-			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_1, shelf_rotation);
-
-			FVector shelf_location_2 = { float(cursor_x * TILE_SIZE) - (FMath::Sign(new_direction[0]) * TILE_SIZE / 2) - 8, 1, float(cursor_y * TILE_SIZE) - (16 * TILE_SIZE) + 8 };
-			shelf_location_2 = { shelf_location_2[0] + (new_direction_perp[0] * -3 * TILE_SIZE), shelf_location_2[1], shelf_location_2[2] + (new_direction_perp[2] * -3 * TILE_SIZE) };
-			GetWorld()->SpawnActor<AActor>(floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_2, shelf_rotation);
-
-
-			cursor_x += (new_direction_trunc[0] * 2);
-			cursor_y += (new_direction_trunc[2] * 2);
-			SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
-
-
-		}
-
-		//cursor_x += (new_direction_trunc[0] * 1);
-		//cursor_y += (new_direction_trunc[2] * 1);
-		//SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
-
-
-
-
-		
-	}
-	else {
-
-
-		//create spawn area
-		SetTile(cursor_x, cursor_y, floor_info->floor_material, 10);
-
 
 		int num_chests = 2 + ((true_floor - (true_floor % 3)) / 3);
 		int num_altars = 1;
 		int num_encounters =((true_floor - (true_floor % 3)) / 2);
-
 		int num_rooms = num_chests + num_altars + num_encounters;
 
+		UGeneratorPattern* new_floor = NewObject<UGeneratorPattern>(this, floor_info->generator);
+		new_floor->Init(CURSOR_LIFETIME, num_rooms,cursor_x, cursor_y,heading, this);
 
-		
-		UGeneratorPattern* new_offshoot = NewObject<UGeneratorPattern>(this, floor_info->generator);
-		new_offshoot->Init(CURSOR_LIFETIME, num_rooms,cursor_x, cursor_y,heading, this);
-#pragma endregion	
+		if (!new_floor->has_exit) {
+			cursor_x = (LEVEL_SIZE * MAP_SIZE) / 2;
+			cursor_y = (LEVEL_SIZE * MAP_SIZE) / 2;
 
-#pragma region populate
+			UGPElevator* elevator = NewObject<UGPElevator>(this);
+			elevator->Init(10, 1, cursor_x, cursor_y, heading, this);
+		}
+
+
+
+
+
+
+
+
+
+
+
 
 
 		for (int i = 0; i < num_encounters; i++) {
@@ -689,45 +577,12 @@ void ATerrainGenerator::GenerateMap() {
 				rooms.erase(rooms.begin() + rand_room);
 			}
 		}
-#pragma endregion
 
-
-
-	}
-
-
-
-
-
-	//rebuild elevator shaft
-
-	cursor_x = (LEVEL_SIZE * MAP_SIZE) / 2;
-	cursor_y = (LEVEL_SIZE * MAP_SIZE) / 2;
-
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 12);
-	SetTile(cursor_x, cursor_y, floor_info->wall_material, 6, false);
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 4);
-
-
-	cursor_x += (new_direction_trunc[0] * 3);
-	cursor_y += (new_direction_trunc[2] * 3);
-
-	SetTile(cursor_x, cursor_y, floor_info->floor_material, 2);
-	
-
-
-	//give border to floor tiles
-
-	//loop through every individual tile
-		//check if that tile is a floor tile
-			//if it is, count how many neighbors it has
-			//depending on how may neighbors are wall, switch the texture
 
 
 
 	
 
-	//loop through every individual tile
 
 
 
@@ -1000,14 +855,6 @@ void ATerrainGenerator::GenerateMap() {
 		}
 	}
 	
-
-
-
-
-
-
-
-
 	//rebuild terrain map
 	for (int i = 0; i < TerrainMapData.Num(); i++) {
 		UPaperTileMapComponent* target = TerrainMapData[i];

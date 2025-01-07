@@ -29,7 +29,7 @@ enum OVERLAY {
 
 
 enum OBJECTS {
-	Portal = 0,
+	Exit = 0,
 	Chest = 1,
 	Altar = 2,
 	Elevator = 3,

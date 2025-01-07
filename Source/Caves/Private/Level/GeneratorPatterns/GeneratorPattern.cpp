@@ -14,17 +14,44 @@ UGeneratorPattern::UGeneratorPattern()
 
 void UGeneratorPattern::DrawLineF(FVector2D input_direction, float distance, float width) {
 	for (float i = 0; i < distance; i += 1) {
-		parent->SetTile(cursor_x, cursor_y, DefaultFloorType, width, true);
+		parent->SetTile(cursor_x, cursor_y, DefaultFloorMaterial(), width, true);
 		MoveCursor(input_direction, 1);
 	}
 }
 
 
 
-void UGeneratorPattern::DrawLineA(FVector2D input_direction, float distance, float width, Material material) {
+void UGeneratorPattern::DrawLine(FVector2D input_direction, float distance, float width, Material material) {
 	for (float i = 0; i < distance; i += 1) {
 		parent->SetTile(cursor_x, cursor_y, material, width, true);
 		MoveCursor(input_direction, 1);
+	}
+}
+
+void UGeneratorPattern::DrawDot(int size, Material material, FVector2D input_location) {
+	int is_odd = size % 2;
+	int is_even = 1 - is_odd;
+	float offset_x = ((size - is_odd)/2) - is_even;
+	float offset_y = ((size - is_odd) / 2) - is_even;
+	
+	for (int x = 0; x < size; x++) {
+		for (int y = 0; y < size; y++) {
+			parent->SetTile(input_location[0] + offset_x + x, input_location[1] + offset_y + y, material, 1, MaterialTypes[material] == Abstract::type_floor);
+		}
+	}
+}
+
+
+void UGeneratorPattern::DrawDot(int size, Material material) {
+	int is_odd = size % 2;
+	int is_even = 1 - is_odd;
+	float offset_x = ((size - is_odd) / 2) - is_even;
+	float offset_y = ((size - is_odd) / 2) - is_even;
+
+	for (int x = 0; x < size; x++) {
+		for (int y = 0; y < size; y++) {
+			parent->SetTile(cursor_x + offset_x + x, cursor_y + offset_y + y, material, 1, MaterialTypes[material] == Abstract::type_floor);
+		}
 	}
 }
 
@@ -46,4 +73,28 @@ void UGeneratorPattern::SetHeading(float new_heading) {
 void UGeneratorPattern::ChangeHeading(float delta_heading) {
 	heading += delta_heading;
 	SetHeading(heading);
+}
+
+void UGeneratorPattern::PlaceSpawn(FVector2D location) {
+	FVector spawn_location = { float((location[0] - 2) * parent->TILE_SIZE) + (1.5 * parent->TILE_SIZE), 4, float((location[1]) * parent->TILE_SIZE) - (15.5 * parent->TILE_SIZE)};
+	GetWorld()->SpawnActor<AActor>(parent->floor_info->EssentialObjects[OBJECTS::PlayerSpawn], spawn_location, { 0,0,0 });
+
+}void UGeneratorPattern::PlaceExit(FVector2D location) {
+	FVector exit_location = { float((location[0] - 2) * parent->TILE_SIZE) + (1.5 * parent->TILE_SIZE), 0.1, float((location[1]) * parent->TILE_SIZE) - (15.5 * parent->TILE_SIZE)};
+	GetWorld()->SpawnActor<AActor>(parent->floor_info->EssentialObjects[OBJECTS::Exit], exit_location, { 0,0,0 });
+
+	has_exit = true;
+
+}
+
+Material UGeneratorPattern::DefaultFloorMaterial() {
+	return (Material)parent->floor_info->floor_material;
+}
+
+Material UGeneratorPattern::DefaultWallMaterial() {
+	return (Material)parent->floor_info->wall_material;
+}
+
+Material UGeneratorPattern::DefaultVoidMaterial() {
+	return (Material)parent->floor_info->void_material;
 }

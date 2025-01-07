@@ -10,7 +10,7 @@
 void UCompoundGeneratorPattern::GenerateLevel() {
 
 
-
+	PlaceSpawn(CurrentLocation());
 
 
 	for (int i = 0; i < 5; i++) {
@@ -46,7 +46,12 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		}
 	}
 
+	PlaceExit(CurrentLocation());
+
 	FVector2D end_point = { cursor_x + (direction[0] * 10), cursor_y + (direction[1] * 10)};
+
+
+
 
 	cursor_x = wall_position[0];
 	cursor_y = wall_position[1];
@@ -282,7 +287,6 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		string_1->Init(lifetime, 3, cursor_x, cursor_y, heading, parent);
 
 	}
-
 
 
 

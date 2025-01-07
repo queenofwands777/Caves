@@ -152,9 +152,7 @@ const TMap<int, int> MaterialTypes = {
 };
 
 
-#define DefaultFloorType parent->floor_info->floor_material
-#define DefaultWallType parent->floor_info->wall_material
-#define DefaultVoidType parent->floor_info->void_material
+
 
 
 
@@ -181,8 +179,10 @@ public:
 	float cursor_x;
 	float cursor_y;
 	float heading;
+	bool has_exit = false;
 	FVector2D direction = {0,1};
 	FVector2D perp;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATerrainGenerator* parent = nullptr;
@@ -203,20 +203,29 @@ public:
 	FVector2D CurrentLocation() {
 		return { cursor_x, cursor_y };
 	}
+	Material DefaultFloorMaterial();
+	Material DefaultWallMaterial();
+
+	Material DefaultVoidMaterial();
 
 	void MoveCursor(FVector2D input_direction, float distance) {
 		cursor_x += input_direction[0] * distance;
 		cursor_y += input_direction[1] * distance;
 	}
-
 	void SetCursor(FVector2D input_location) {
 		cursor_x = input_location[0];
 		cursor_y = input_location[1];
 	}
 
 	void DrawLineF(FVector2D input_direction, float distance, float width);
-	void DrawLineA(FVector2D input_direction, float distance, float width, Material material);
+	void DrawLine(FVector2D input_direction, float distance, float width, Material material);
+
+	void DrawDot(int size, Material material, FVector2D input_location);
+	void DrawDot(int size, Material material);
 
 	void SetHeading(float new_heading);
 	void ChangeHeading(float delta_degrees);
+
+	void PlaceSpawn(FVector2D location);
+	void PlaceExit(FVector2D location);
 };
