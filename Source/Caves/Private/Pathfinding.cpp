@@ -3,6 +3,7 @@
 
 #include "Pathfinding.h"
 #include"TerrainGenerator.h"
+#include<queue>
 
 #define ENGINEPRINT(message) GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, TEXT(message));
 
@@ -70,7 +71,7 @@ void APathfinding::InitializeTerrainNodes() {
 			if (TerrainNodeMap.Contains(target_x)) {
 				if (TerrainNodeMap[target_x].Contains(target_y)) {
 					TerrainNode* target = TerrainNodeMap[target_x][target_y];
-					FVector target_location = { float(target->X * parent->TILE_SIZE), 10, float(target->Y * parent->TILE_SIZE) };
+					FVector target_location = { float(target->X * parent->TILE_SIZE), 2, float(target->Y * parent->TILE_SIZE) };
 
 
 
@@ -93,7 +94,7 @@ void APathfinding::InitializeTerrainNodes() {
 							if (TerrainNodeMap.Contains(neighbor_x)) {
 								if (TerrainNodeMap[neighbor_x].Contains(neighbor_y)) {
 									TerrainNode* neighbor = TerrainNodeMap[neighbor_x][neighbor_y];
-									FVector neighbor_location = { float(neighbor->X * parent->TILE_SIZE), 10, float(neighbor->Y * parent->TILE_SIZE) };
+									FVector neighbor_location = { float(neighbor->X * parent->TILE_SIZE), 2, float(neighbor->Y * parent->TILE_SIZE) };
 									target->neighbors.Add(neighbor);
 
 								}
@@ -161,7 +162,11 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 
 	TArray<FVector> result;
 
-	TQueue<TerrainNode*> queue;
+	std::vector<TerrainNode*> modified_nodes;
+
+	std::priority_queue<std::pair<float, TerrainNode*>, 
+			std::vector<std::pair<float, TerrainNode*>>, 
+			std::greater<>> priority_queue;
 
 	TerrainNode* destination_node = nullptr;
 
@@ -174,14 +179,17 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 
 			TerrainNodeMap[start_tile_x][start_tile_y]->visited = true;
 
-			queue.Enqueue(TerrainNodeMap[start_tile_x][start_tile_y]);
 
+
+			priority_queue.push({ 0,TerrainNodeMap[start_tile_x][start_tile_y] });
 
 
 		}
-		else { ENGINEPRINT("map did not recognize start tile"); }
+		else { ENGINEPRINT("map did not recognize start tile"); return {from}; }
 	}
-	else { ENGINEPRINT("map did not recognize start tile"); }
+	else {
+		ENGINEPRINT("map did not recognize start tile"); return {from};
+	}
 
 
 
@@ -196,65 +204,59 @@ TArray<FVector> APathfinding::GetPath(FVector from, FVector to) {
 			destination_node = destination;
 
 		}
-		else { ENGINEPRINT("map did not recognize end tile");  }
+		else {
+			ENGINEPRINT("map did not recognize end tile"); return { from };
+		}
 	}
-	else { ENGINEPRINT("map did not recognize end tile");  }
+	else {
+		ENGINEPRINT("map did not recognize end tile");  return { from };
+	}
 
-
-
-
-
-
-
-
-
-
-
-	while (!queue.IsEmpty()) {
+	bool running = true;
+	while (running) {
 		TerrainNode* selected_node;
+		selected_node = priority_queue.top().second;
+		priority_queue.pop();
 
-		queue.Dequeue(selected_node);
-
-		selected_node->neighbors.Sort([](const TerrainNode& A, const TerrainNode& B) {
-			return A.neighbors.Num() > B.neighbors.Num(); // Prefer nodes farther from walls
-			});
 
 
 		for (int i = 0; i < selected_node->neighbors.Num(); i++) {
 			TerrainNode* target_neighbor = selected_node->neighbors[i];
+
 			if (!target_neighbor->visited) {
+				float cost_to_neighbor = FVector::Distance(target_neighbor->Location(), selected_node->Location());
+				float distance_to_end = FVector::Distance(target_neighbor->Location(), destination_node->Location());
+
 				target_neighbor->parent = selected_node;
 				target_neighbor->visited = true;
-				queue.Enqueue(target_neighbor);
-				if (target_neighbor == destination_node) {
-					queue.Empty();
+				target_neighbor->cost = selected_node->cost + cost_to_neighbor;
+				modified_nodes.push_back(target_neighbor);
+
+				priority_queue.push({target_neighbor->cost + distance_to_end, target_neighbor});
+
+				if (target_neighbor->Location() == destination_node->Location()) {
+					running = false;
 				}
 			}
 		}
 
+		if (priority_queue.empty()) {
+			running = false;
+		}
+
+
 	}
 
-
-
-
-
-
-
-
-	while ((destination_node != nullptr)) {
+	while ((destination_node != nullptr)&&(destination_node->parent != nullptr)) {
 		FVector target_location = { float(destination_node->X * parent->TILE_SIZE), 2, float(destination_node->Y * parent->TILE_SIZE) };
-		DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.5, 255, 4);
+		//DrawDebugLine(GetWorld(), target_location, target_location + 1, FColor::Red, false, 0.5, 255, 4);
 		result.Add(target_location);
 		destination_node = destination_node->parent;
 	}
 
-	for (int i = 0; i < TerrainNodeMap.Array().Num(); i++) {
-		for (int j = 0; j < TerrainNodeMap.Array()[i].Value.Array().Num(); j++) {
-			TerrainNodeMap.Array()[i].Value.Array()[j].Value->Reset();
-		}
+	for (int i = 0; i < modified_nodes.size(); i++) {
+		modified_nodes[i]->Reset();
 	}
-
-
 
 	Algo::Reverse(result);
 	return result;

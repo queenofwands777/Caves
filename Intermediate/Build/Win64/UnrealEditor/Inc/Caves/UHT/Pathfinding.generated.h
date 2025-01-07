@@ -14,11 +14,11 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_Pathfinding_generated_h
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execGetPath);
 
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_INCLASS_NO_PURE_DECLS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAPathfinding(); \
 	friend struct Z_Construct_UClass_APathfinding_Statics; \
@@ -27,7 +27,7 @@ public: \
 	DECLARE_SERIALIZER(APathfinding)
 
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_ENHANCED_CONSTRUCTORS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	APathfinding(APathfinding&&); \
@@ -39,13 +39,13 @@ public: \
 	NO_API virtual ~APathfinding();
 
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_32_PROLOG
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_GENERATED_BODY \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_38_PROLOG
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_INCLASS_NO_PURE_DECLS \
-	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_35_ENHANCED_CONSTRUCTORS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_INCLASS_NO_PURE_DECLS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_Pathfinding_h_41_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

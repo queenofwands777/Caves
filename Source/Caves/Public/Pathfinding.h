@@ -12,6 +12,7 @@ public:
 	TArray<TerrainNode*> neighbors;
 	TerrainNode* parent = nullptr;
 	bool visited = false;
+	float cost = 0;
 
 	TerrainNode(int x, int y) {
 		X = x;
@@ -21,6 +22,11 @@ public:
 	void Reset() {
 		parent = nullptr;
 		visited = false;
+		cost = 0;
+	}
+
+	FVector Location() {
+		return { (float)X,2.0,(float)Y };
 	}
 };
 
