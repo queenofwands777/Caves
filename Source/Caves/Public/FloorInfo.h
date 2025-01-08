@@ -14,6 +14,7 @@ class UGeneratorPattern;
 #include "PaperTileSet.h"
 #include "PaperTileMap.h"
 #include"PaperTileLayer.h"
+#include"GeneratorPattern.h"
 
 #include "FloorInfo.generated.h"
 
@@ -60,11 +61,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int floor_material;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int wall_material;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int void_material;
+
+
+	MaterialType FloorMaterial() { return ((MaterialType)floor_material); }
+	MaterialType WallMaterial() { return ((MaterialType)wall_material); }
+	MaterialType VoidMaterial() { return ((MaterialType)void_material); }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UGeneratorPattern> generator;

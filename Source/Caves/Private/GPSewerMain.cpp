@@ -17,7 +17,7 @@ void UGPSewerMain::GenerateLevel() {
 
 	SetCursor(start_loc);
 
-	DrawLine(direction, lifetime, 4, Material::sewer_water);
+	DrawLine(direction, lifetime, 4, MaterialType::sewer_water);
 
 
 

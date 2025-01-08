@@ -21,14 +21,14 @@ void UGeneratorPattern::DrawLineF(FVector2D input_direction, float distance, flo
 
 
 
-void UGeneratorPattern::DrawLine(FVector2D input_direction, float distance, float width, Material material) {
+void UGeneratorPattern::DrawLine(FVector2D input_direction, float distance, float width, MaterialType material) {
 	for (float i = 0; i < distance; i += 1) {
 		parent->SetTile(cursor_x, cursor_y, material, width, true);
 		MoveCursor(input_direction, 1);
 	}
 }
 
-void UGeneratorPattern::DrawDot(int size, Material material, FVector2D input_location) {
+void UGeneratorPattern::DrawDot(int size, MaterialType material, FVector2D input_location) {
 	int is_odd = size % 2;
 	int is_even = 1 - is_odd;
 	float offset_x = ((size - is_odd)/2) - is_even;
@@ -42,7 +42,7 @@ void UGeneratorPattern::DrawDot(int size, Material material, FVector2D input_loc
 }
 
 
-void UGeneratorPattern::DrawDot(int size, Material material) {
+void UGeneratorPattern::DrawDot(int size, MaterialType material) {
 	int is_odd = size % 2;
 	int is_even = 1 - is_odd;
 	float offset_x = ((size - is_odd) / 2) - is_even;
@@ -87,14 +87,14 @@ void UGeneratorPattern::PlaceSpawn(FVector2D location) {
 
 }
 
-Material UGeneratorPattern::DefaultFloorMaterial() {
-	return (Material)parent->floor_info->floor_material;
+MaterialType UGeneratorPattern::DefaultFloorMaterial() {
+	return (MaterialType)parent->floor_info->floor_material;
 }
 
-Material UGeneratorPattern::DefaultWallMaterial() {
-	return (Material)parent->floor_info->wall_material;
+MaterialType UGeneratorPattern::DefaultWallMaterial() {
+	return (MaterialType)parent->floor_info->wall_material;
 }
 
-Material UGeneratorPattern::DefaultVoidMaterial() {
-	return (Material)parent->floor_info->void_material;
+MaterialType UGeneratorPattern::DefaultVoidMaterial() {
+	return (MaterialType)parent->floor_info->void_material;
 }

@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define CAVES_FloorInfo_generated_h
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_24_INCLASS_NO_PURE_DECLS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_25_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAFloorInfo(); \
 	friend struct Z_Construct_UClass_AFloorInfo_Statics; \
@@ -23,7 +23,7 @@ public: \
 	DECLARE_SERIALIZER(AFloorInfo)
 
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_24_ENHANCED_CONSTRUCTORS \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_25_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	AFloorInfo(AFloorInfo&&); \
@@ -35,12 +35,12 @@ public: \
 	NO_API virtual ~AFloorInfo();
 
 
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_21_PROLOG
-#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_24_GENERATED_BODY \
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_22_PROLOG
+#define FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_25_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_24_INCLASS_NO_PURE_DECLS \
-	FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_24_ENHANCED_CONSTRUCTORS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_25_INCLASS_NO_PURE_DECLS \
+	FID_Users_becca_source_repos_Caves_Source_Caves_Public_FloorInfo_h_25_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

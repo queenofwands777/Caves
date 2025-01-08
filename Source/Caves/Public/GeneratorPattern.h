@@ -4,13 +4,15 @@
 
 class ATerrainGenerator;
 
+
 enum Abstract {
 	type_floor = 0,
 	type_wall = 1,
 	type_void = 2,
 };
 
-enum Material {
+
+enum MaterialType {
 	tile = 0,
 	bark = 1,
 	blackstone = 2,
@@ -83,71 +85,71 @@ enum Material {
 
 
 const TMap<int, int> MaterialTypes = {
-	{Material::tile,Abstract::type_floor},
-	{Material::bark,Abstract::type_wall},
-	{Material::blackstone,Abstract::type_void},	
-	{Material::mossy_stone_brick,Abstract::type_floor},
-	{Material::stone_brick,Abstract::type_wall},
-	{Material::black_stone_brick,Abstract::type_void},
-	{Material::carpet,Abstract::type_floor},
-	{Material::sandstone_brick,Abstract::type_wall},
-	{Material::dark_sandstone_brick,Abstract::type_void},
-	{Material::dirt,Abstract::type_floor},
-	{Material::wood_planks,Abstract::type_floor},
-	{Material::grass,Abstract::type_void},
+	{MaterialType::tile,Abstract::type_floor},
+	{MaterialType::bark,Abstract::type_wall},
+	{MaterialType::blackstone,Abstract::type_void},	
+	{MaterialType::mossy_stone_brick,Abstract::type_floor},
+	{MaterialType::stone_brick,Abstract::type_wall},
+	{MaterialType::black_stone_brick,Abstract::type_void},
+	{MaterialType::carpet,Abstract::type_floor},
+	{MaterialType::sandstone_brick,Abstract::type_wall},
+	{MaterialType::dark_sandstone_brick,Abstract::type_void},
+	{MaterialType::dirt,Abstract::type_floor},
+	{MaterialType::wood_planks,Abstract::type_floor},
+	{MaterialType::grass,Abstract::type_void},
 
-	{Material::dwarven_stone_brick,Abstract::type_floor},
-	{Material::dwarven_stone_wall,Abstract::type_wall},
-	{Material::rock,Abstract::type_void},
-	{Material::lab_tile,Abstract::type_floor},
-	{Material::lab_wall,Abstract::type_wall},
-	{Material::arctic_stone,Abstract::type_void},
-	{Material::catacomb_floor,Abstract::type_floor},
-	{Material::catacomb_wall,Abstract::type_wall},
-	{Material::skull_void,Abstract::type_void},
-	{Material::pentagram_tile,Abstract::type_floor},
-	{Material::hell_wall,Abstract::type_wall},
-	{Material::hell_void,Abstract::type_void},
+	{MaterialType::dwarven_stone_brick,Abstract::type_floor},
+	{MaterialType::dwarven_stone_wall,Abstract::type_wall},
+	{MaterialType::rock,Abstract::type_void},
+	{MaterialType::lab_tile,Abstract::type_floor},
+	{MaterialType::lab_wall,Abstract::type_wall},
+	{MaterialType::arctic_stone,Abstract::type_void},
+	{MaterialType::catacomb_floor,Abstract::type_floor},
+	{MaterialType::catacomb_wall,Abstract::type_wall},
+	{MaterialType::skull_void,Abstract::type_void},
+	{MaterialType::pentagram_tile,Abstract::type_floor},
+	{MaterialType::hell_wall,Abstract::type_wall},
+	{MaterialType::hell_void,Abstract::type_void},
 
-	{Material::snow,Abstract::type_floor},
-	{Material::ice,Abstract::type_wall},
-	{Material::deep_frost,Abstract::type_void},
-	{Material::fungal_grass,Abstract::type_floor},
-	{Material::bamboo,Abstract::type_wall},
-	{Material::leaves,Abstract::type_void},
-	{Material::computer_floor,Abstract::type_floor},
-	{Material::metal_wall,Abstract::type_wall},
-	{Material::gears,Abstract::type_void},
-	{Material::spaceship_tile,Abstract::type_floor},
-	{Material::spaceship_wall,Abstract::type_wall},
-	{Material::space,Abstract::type_void},
+	{MaterialType::snow,Abstract::type_floor},
+	{MaterialType::ice,Abstract::type_wall},
+	{MaterialType::deep_frost,Abstract::type_void},
+	{MaterialType::fungal_grass,Abstract::type_floor},
+	{MaterialType::bamboo,Abstract::type_wall},
+	{MaterialType::leaves,Abstract::type_void},
+	{MaterialType::computer_floor,Abstract::type_floor},
+	{MaterialType::metal_wall,Abstract::type_wall},
+	{MaterialType::gears,Abstract::type_void},
+	{MaterialType::spaceship_tile,Abstract::type_floor},
+	{MaterialType::spaceship_wall,Abstract::type_wall},
+	{MaterialType::space,Abstract::type_void},
 
-	{Material::white_flag,Abstract::type_floor},
-	{Material::red_flag,Abstract::type_wall},
-	{Material::blue_flag,Abstract::type_void},
-	{Material::heaven_cobble,Abstract::type_floor},
-	{Material::heaven_wall,Abstract::type_wall},
-	{Material::clouds,Abstract::type_void},
-	{Material::dark_tile,Abstract::type_floor},
-	{Material::dark_stone,Abstract::type_wall},
-	{Material::eyes,Abstract::type_void},
-	{Material::plasma,Abstract::type_floor},
-	{Material::lattice,Abstract::type_wall},
-	{Material::cosmos,Abstract::type_void},
+	{MaterialType::white_flag,Abstract::type_floor},
+	{MaterialType::red_flag,Abstract::type_wall},
+	{MaterialType::blue_flag,Abstract::type_void},
+	{MaterialType::heaven_cobble,Abstract::type_floor},
+	{MaterialType::heaven_wall,Abstract::type_wall},
+	{MaterialType::clouds,Abstract::type_void},
+	{MaterialType::dark_tile,Abstract::type_floor},
+	{MaterialType::dark_stone,Abstract::type_wall},
+	{MaterialType::eyes,Abstract::type_void},
+	{MaterialType::plasma,Abstract::type_floor},
+	{MaterialType::lattice,Abstract::type_wall},
+	{MaterialType::cosmos,Abstract::type_void},
 
-	{Material::vegetation,Abstract::type_void},
-	{Material::wood,Abstract::type_floor},
-	{Material::light_dirt,Abstract::type_floor},
-	{Material::stone,Abstract::type_wall },
-	{Material::asphalt,Abstract::type_floor},
+	{MaterialType::vegetation,Abstract::type_void},
+	{MaterialType::wood,Abstract::type_floor},
+	{MaterialType::light_dirt,Abstract::type_floor},
+	{MaterialType::stone,Abstract::type_wall },
+	{MaterialType::asphalt,Abstract::type_floor},
 
-	{Material::dirt_cliff,Abstract::type_wall},
-	{Material::cobblestone,Abstract::type_floor},
-	{Material::shingles,Abstract::type_wall},
-	{Material::siding,Abstract::type_wall},
-	{Material::magma,Abstract::type_void},
-	{Material::sewer_water,Abstract::type_floor},
-	{Material::rusty_metal, Abstract::type_wall}
+	{MaterialType::dirt_cliff,Abstract::type_wall},
+	{MaterialType::cobblestone,Abstract::type_floor},
+	{MaterialType::shingles,Abstract::type_wall},
+	{MaterialType::siding,Abstract::type_wall},
+	{MaterialType::magma,Abstract::type_void},
+	{MaterialType::sewer_water,Abstract::type_floor},
+	{MaterialType::rusty_metal, Abstract::type_wall}
 	
 };
 
@@ -203,10 +205,10 @@ public:
 	FVector2D CurrentLocation() {
 		return { cursor_x, cursor_y };
 	}
-	Material DefaultFloorMaterial();
-	Material DefaultWallMaterial();
+	MaterialType DefaultFloorMaterial();
+	MaterialType DefaultWallMaterial();
 
-	Material DefaultVoidMaterial();
+	MaterialType DefaultVoidMaterial();
 
 	void MoveCursor(FVector2D input_direction, float distance) {
 		cursor_x += input_direction[0] * distance;
@@ -218,10 +220,10 @@ public:
 	}
 
 	void DrawLineF(FVector2D input_direction, float distance, float width);
-	void DrawLine(FVector2D input_direction, float distance, float width, Material material);
+	void DrawLine(FVector2D input_direction, float distance, float width, MaterialType material);
 
-	void DrawDot(int size, Material material, FVector2D input_location);
-	void DrawDot(int size, Material material);
+	void DrawDot(int size, MaterialType material, FVector2D input_location);
+	void DrawDot(int size, MaterialType material);
 
 	void SetHeading(float new_heading);
 	void ChangeHeading(float delta_degrees);

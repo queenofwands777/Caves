@@ -306,13 +306,13 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 
 	for (int x = -floor(actual_size / 2) - 1; x < floor(actual_size / 2) + (actual_size % 2) + 1; x++) {
 		for (int y = -floor(actual_size / 2) - 1; y < floor(actual_size / 2) + (actual_size % 2) + 1; y++) {
-			SetTile(center_x + x, center_y + y, Material::siding, 1, false);
+			SetTile(center_x + x, center_y + y, MaterialType::siding, 1, false);
 		}
 	}
 
 	for (int x = -floor(actual_size / 2); x < floor(actual_size / 2) + (actual_size % 2); x++) {
 		for (int y = -floor(actual_size / 2); y < floor(actual_size / 2) + (actual_size % 2); y++) {
-			SetTile(center_x + x, center_y + y, Material::wood_planks, 1, false);
+			SetTile(center_x + x, center_y + y, MaterialType::wood_planks, 1, false);
 		}
 	}
 
@@ -369,13 +369,13 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 					int other_beyond_wall_neighbor_type = GetTile(probe_loc[0] + (original_direction[0] * 2) + tertiary_direction[0], probe_loc[1] + (original_direction[1] * 2) + tertiary_direction[1])->GetTileIndex();
 
 					if ( MaterialTypes[beyond_wall_neighbor_type] == Abstract::type_floor) {
-						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], Material::wood_planks, 1, true);
-						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], Material::wood_planks, 1, true);
+						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], MaterialType::wood_planks, 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + secondary_direction[0], probe_loc[1] + original_direction[1] + secondary_direction[1], MaterialType::wood_planks, 1, true);
 						found_door = true;
 					}
 					else if (MaterialTypes[other_beyond_wall_neighbor_type] == Abstract::type_floor) {
-						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->floor_material, 1, true);
-						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], Material::wood_planks, 1, true);
+						SetTile(probe_loc[0] + original_direction[0], probe_loc[1] + original_direction[1], floor_info->FloorMaterial(), 1, true);
+						SetTile(probe_loc[0] + original_direction[0] + tertiary_direction[0], probe_loc[1] + original_direction[1] + tertiary_direction[1], MaterialType::wood_planks, 1, true);
 						found_door = true;
 					}
 					else {
@@ -420,7 +420,7 @@ void ATerrainGenerator::MakeRegularRoom(float center_x, float center_y, float wi
 
 	for (int x = -actual_width/2; x < actual_width/2; x++) {
 		for (int y = -actual_height/2; y < actual_height/2; y++) {
-			SetTile(center_x + x, center_y + y, floor_info->floor_material, 1);
+			SetTile(center_x + x, center_y + y, floor_info->FloorMaterial(), 1, true);
 		}
 	}
 
@@ -444,7 +444,7 @@ void ATerrainGenerator::MakeIrregularRoom(float center_x, float center_y, float 
 		for (int y = -actual_height / 2; y < actual_height / 2; y++) {
 			float x_var = FMath::FRandRange(-variance/2, variance/2);
 			float y_var = FMath::FRandRange(-variance/2, variance/2);
-			SetTile(center_x + x + x_var, center_y + y + y_var, floor_info->floor_material, 1 + variance);
+			SetTile(center_x + x + x_var, center_y + y + y_var, floor_info->FloorMaterial(), 1 + variance, true);
 		}
 	}
 

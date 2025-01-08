@@ -16,7 +16,7 @@ void UGPWarrens::GenerateLevel() {
 	float radius = 20;
 
 	for (int i = 0; i < radius + 20; i++) {
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
+		parent->SetTile(cursor_x, cursor_y, DefaultFloorMaterial(), 2, true);
 		cursor_x += direction[0];
 		cursor_y += direction[1];
 	}
@@ -32,7 +32,7 @@ void UGPWarrens::GenerateLevel() {
 		for (int y = -radius; y <= radius; y++) {
 
 			if (FVector2D::Distance({ cursor_x, cursor_y }, { cursor_x + x, cursor_y + y }) < radius) {
-				parent->SetTile(cursor_x + x, cursor_y + y, parent->floor_info->floor_material, 1, true);
+				parent->SetTile(cursor_x + x, cursor_y + y, DefaultFloorMaterial(), 1, true);
 			}
 
 
@@ -48,7 +48,7 @@ void UGPWarrens::GenerateLevel() {
 		for (int y = -tube_radius; y <= tube_radius; y++) {
 
 			if (FVector2D::Distance({ cursor_x, cursor_y }, { cursor_x + x, cursor_y + y }) < tube_radius) {
-				parent->SetTile(cursor_x + x, cursor_y + y, parent->floor_info->wall_material, 1, false);
+				parent->SetTile(cursor_x + x, cursor_y + y, DefaultWallMaterial(), 1, false);
 			}
 
 
@@ -63,7 +63,7 @@ void UGPWarrens::GenerateLevel() {
 		for (int y = -magma_radius; y <= magma_radius; y++) {
 
 			if (FVector2D::Distance({ cursor_x, cursor_y }, { cursor_x + x, cursor_y + y }) < magma_radius) {
-				parent->SetTile(cursor_x + x, cursor_y + y, Material::magma, 1, false);
+				parent->SetTile(cursor_x + x, cursor_y + y, MaterialType::magma, 1, false);
 			}
 
 
