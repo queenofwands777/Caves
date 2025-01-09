@@ -11,25 +11,40 @@ void UGPHousesOnAStreet::GenerateLevel() {
 
 	TArray<FVector2D> house_locations;
 
-	for(int i = 0; i < 2; i++){
-		cursor_x += direction[0] * 8;
-		cursor_y += direction[1] * 8;
+	//for(int i = 0; i < 2; i++){
+	//	cursor_x += direction[0] * 8;
+	//	cursor_y += direction[1] * 8;
 
-		parent->SetTile(cursor_x, cursor_y, MaterialType::cobblestone, 32, true);
-	}
+	//	parent->SetTile(cursor_x, cursor_y, MaterialType::cobblestone, 32, true);
+	//}
+
+	FVector2D street_start = CurrentLocation();
 
 	for (int i = 0; i < lifetime; i++) {
 
 		cursor_x += direction[0] * 8;
 		cursor_y += direction[1] * 8;
 
-		parent->SetTile(cursor_x, cursor_y, MaterialType::cobblestone, 32, true);
+		parent->SetTile(cursor_x, cursor_y, MaterialType::stone_bricks, 32, true);
 
 		if (i % 2) {
 			FVector2D startloc = { cursor_x, cursor_y };
 			house_locations.Add(startloc);
 
 		}
+
+	}
+
+	SetCursor(street_start);
+
+	for (int i = 0; i < lifetime; i++) {
+
+		cursor_x += direction[0] * 8;
+		cursor_y += direction[1] * 8;
+
+		parent->SetTile(cursor_x, cursor_y, MaterialType::cobblestone, 8, true);
+
+
 
 	}
 
