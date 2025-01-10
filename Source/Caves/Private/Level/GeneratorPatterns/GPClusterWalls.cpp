@@ -18,7 +18,6 @@ void UGPClusterWalls::GenerateLevel() {
 	int rooms_remaining = num_rooms;
 
 	float room_size = 10;
-	float variance = 0;
 	float room_spacing = 4;
 
 	float radius = (num_rooms * (room_size)) / 8.0;
@@ -56,7 +55,7 @@ void UGPClusterWalls::GenerateLevel() {
 	TArray<FVector2D>displacement;
 	displacement.Init({ 0,0 }, points.Num());
 
-	float distance_between_rooms = room_size + room_spacing + variance;
+	float distance_between_rooms = (room_size / 2) + room_spacing;
 
 
 
@@ -77,7 +76,7 @@ void UGPClusterWalls::GenerateLevel() {
 
 				if (distance < distance_between_rooms) {
 
-					displacement[this_room] += (this_location - other_location)/points.Num(); //if strange behavior exhibited where rooms spawn on top of each other, swap this
+					displacement[this_room] += (this_location - other_location); //if strange behavior exhibited where rooms spawn on top of each other, swap this
 
 				}
 			}
@@ -166,30 +165,93 @@ void UGPClusterWalls::GenerateLevel() {
 	
 
 
-	//for (int tilemap_x = 0; tilemap_x < parent->LEVEL_SIZE; tilemap_x++) {
-	//	for (int tilemap_y = 0; tilemap_y < parent->LEVEL_SIZE; tilemap_y++) {
 
-	//		//check that tilemap is valid
-	//		if (parent->GetTileMap(tilemap_x, tilemap_y) != nullptr) {
+	//make more hallways
 
-	//			//get each individual tile
-	//			for (int x_within_tilemap = 0; x_within_tilemap < parent->MAP_SIZE; x_within_tilemap++) {
-	//				for (int y_within_tilemap = 0; y_within_tilemap < parent->MAP_SIZE; y_within_tilemap++) {
+	float diameter = radius * 2;
+	float search_factor = 4;
+	float search_area = diameter * search_factor;
+
+	TArray<TArray<int>> field;
+	for (int x = 0; x < search_area; x++) {
+		for (int y = 0; y < search_area; y++) {
+			TArray<int> col;
+			col.Init((x* search_area) + y, search_area);
+			field.Push(col);
+		}
+	}
 
 
 
-	//					//check if that tile is a certain kind
-	//					FPaperTileInfo target_tile = parent->GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
-	//					if (target_tile.PackedTileIndex == parent->floor_info->floor_material) {
+	float total_changes = 0;
+	bool running = false;
+	while (running) {
+		total_changes = 0;
 
-	//						int world_x = ((tilemap_x * parent->MAP_SIZE) + (x_within_tilemap));
-	//						int world_y = ((((tilemap_y - 1) * parent->MAP_SIZE)) + ((parent->MAP_SIZE - y_within_tilemap)));
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+		for (int tilemap_x = 0; tilemap_x < search_area; tilemap_x++) {
+			for (int tilemap_y = 0; tilemap_y < search_area; tilemap_y++) {
+
+				float offset_x;
+				float offset_y;
+
+				//check that tilemap is valid
+				if (parent->GetTileMap(tilemap_x + offset_x, tilemap_y + offset_y) != nullptr) {
+
+					//get each individual tile
+					for (int x_within_tilemap = 0; x_within_tilemap < parent->MAP_SIZE; x_within_tilemap++) {
+						for (int y_within_tilemap = 0; y_within_tilemap < parent->MAP_SIZE; y_within_tilemap++) {
+
+
+
+							//check if that tile is a certain kind
+							FPaperTileInfo target_tile = parent->GetTileMap(tilemap_x, tilemap_y)->GetTile(x_within_tilemap, y_within_tilemap, 0);
+							if (target_tile.PackedTileIndex == parent->floor_info->floor_material) {
+
+								//look at all neighbors, take the highest value we see, add one to total_changes
+
+								int world_x = ((tilemap_x * parent->MAP_SIZE) + (x_within_tilemap));
+								int world_y = ((((tilemap_y - 1) * parent->MAP_SIZE)) + ((parent->MAP_SIZE - y_within_tilemap)));
+							}
+							else {
+								//set tile we are looking at (wall) to zero. probably want to do this when initializing the field too.
+							}
+						}
+					}
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+		if (total_changes <= 0) {
+			running = false;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 
 
 
