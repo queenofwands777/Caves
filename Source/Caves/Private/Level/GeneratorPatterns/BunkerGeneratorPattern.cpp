@@ -5,18 +5,13 @@
 
 
 #include"TerrainGenerator.h"
-#include"GPCluster.h"
+#include"GPClusterWalls.h"
 
 void UBunkerGeneratorPattern::GenerateLevel() {
 
 
 
-	float rotation_radians = FMath::DegreesToRadians(heading);
-	FVector2D new_direction = {
-		(direction[0] * FMath::Cos(rotation_radians)) - (direction[1] * FMath::Sin(rotation_radians)),
-		(direction[0] * FMath::Sin(rotation_radians)) + (direction[1] * FMath::Cos(rotation_radians))
-	};
-	direction = new_direction;
+
 
 	int rooms_remaining = num_rooms;
 
@@ -28,8 +23,10 @@ void UBunkerGeneratorPattern::GenerateLevel() {
 		cursor_y += direction[1] * 1;
 	}
 
-	UGPCluster* new_offshoot = NewObject<UGPCluster>(this);
+	UGPClusterWalls* new_offshoot = NewObject<UGPClusterWalls>(this);
+	new_offshoot->room_spacing = 10;
 	new_offshoot->Init(lifetime, num_rooms, cursor_x, cursor_y, heading, parent);
+
 	
 	cursor_x = new_offshoot->cursor_x;
 	cursor_y = new_offshoot->cursor_y;

@@ -16,6 +16,10 @@ class CAVES_API UGPClusterWalls : public UGeneratorPattern
 
 	UGPClusterWalls(){}
 
+public:
+	float room_size = 10;
+	float room_spacing = 10;
+
 	void GenerateLevel() override;
 	
 };
