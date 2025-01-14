@@ -18,7 +18,8 @@ class CAVES_API UGPClusterWalls : public UGeneratorPattern
 
 public:
 	float room_size = 10;
-	float room_spacing = 10;
+	float room_spacing = 0;
+	FVector2D center_loc;
 
 	void GenerateLevel() override;
 	

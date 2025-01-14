@@ -282,6 +282,14 @@ void ATerrainGenerator::BeginPlay()
 
 }
 
+void ATerrainGenerator::MakeOpenRoom(int x, int y) {
+	//spawn marker
+	FVector marker_location;
+	marker_location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
+	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
+	rooms.push_back(marker);
+}
+
 void ATerrainGenerator::MakeRoom(int x, int y) {
 	for (int i = 0; i < 5; i++) {
 		x += FMath::RandRange(-1, 1);

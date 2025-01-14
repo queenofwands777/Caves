@@ -82,6 +82,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void GenerateMap();
 	void MakeRoom(int x, int y);
+	void MakeOpenRoom(int x, int y);
 	void MakeRegularHouse(float x, float y, float size, float variance);
 	void MakeRegularRoom(float x, float y, float width, float height, float variance);
 	void MakeIrregularRoom(float x, float y, float width, float height, float variance);

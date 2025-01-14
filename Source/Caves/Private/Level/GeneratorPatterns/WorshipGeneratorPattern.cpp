@@ -7,8 +7,8 @@
 
 void UWorshipGeneratorPattern::GenerateLevel() {
 
-
-
+	PlaceSpawn(CurrentLocation());
+	DrawDot(6, DefaultFloorMaterial());
 
 	FVector2D level_start = CurrentLocation();
 	MoveCursor(direction, 20);
@@ -25,6 +25,8 @@ void UWorshipGeneratorPattern::GenerateLevel() {
 
 	
 
+
+	PlaceExit(cluster->center_loc);
 
 
 

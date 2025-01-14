@@ -5,66 +5,52 @@
 #include"TerrainGenerator.h"
 
 
+
 void UGPCluster::GenerateLevel() {
-	
 
 
+	float radius = FMath::Sqrt((((float)num_rooms) * (room_size + FMath::Square(room_spacing))));
 
-	int rooms_remaining = num_rooms;
-
-	float room_size = 10;
-	float variance = 1;
-	float room_spacing = 4;
-	float radius_attenuator = 4;
-
-	float radius = (num_rooms * (room_size))/radius_attenuator;
-
-
-	float start_x = cursor_x;
-	float start_y = cursor_y;
-
-	float center_x = cursor_x + (direction[0] * radius);
-	float center_y = cursor_y + (direction[1] * radius);
-
-	float end_x = cursor_x + (direction[0] * radius * 2);
-	float end_y = cursor_y + (direction[1] * radius * 2);
-
+	FVector2D start_loc = { cursor_x, cursor_y };
+	center_loc = { cursor_x + (direction[0] * radius) ,cursor_y + (direction[1] * radius) };
+	FVector2D end_loc = { cursor_x + (direction[0] * radius * 2) ,cursor_y + (direction[1] * radius * 2) };
 
 	TArray<FVector2D>points;
-	//points.Add({ start_x, start_y });
-
-
 	for (int r = 0; r < num_rooms; r++) {
-
 		float rand_x = FMath::FRandRange(-radius, radius);
-		float rand_y= FMath::FRandRange(-radius, radius);
-
-		FVector2D room_location = { center_x + rand_x, center_y + rand_y };
-		
+		float rand_y = FMath::FRandRange(-radius, radius);
+		FVector2D room_location = { center_loc.X + rand_x, center_loc.Y + rand_y };
 		points.Add(room_location);
-
 	}
 
-	//points.Add({ end_x, end_y });
-
-#define DISPLACEMENT
-#ifdef DISPLACEMENT
 	TArray<FVector2D>displacement;
-	displacement.Init({0,0}, points.Num());
-
-	float distance_between_rooms = room_size + room_spacing + variance;
-	
+	displacement.Init({ 0,0 }, points.Num());
 
 
-	for (int i = 0; i < 3; i++) {
+
+
+
+
+
+
+
+
+
+
+	float distance_between_rooms = (room_size)+room_spacing;
+	float center_attraction = (1 / distance_between_rooms);
+	int number_of_cycles = 200;
+
+	for (int i = 0; i < number_of_cycles; i++) {
 		for (int this_room = 0; this_room < points.Num(); this_room++) {
 
 			FVector2D this_location = points[this_room];
-			FVector2D center_location = { center_x, center_y };
-			displacement[this_room] += center_location - this_location;
+			displacement[this_room] += (center_attraction * (center_loc - this_location)); //attract rooms to center
+			int num_times_moved = 1;
 
-			for (int other_room = 0; other_room < points.Num(); other_room++) {
-				if (this_room == other_room) { continue; }
+
+			for (int other_room = 0; other_room < points.Num(); other_room++) { //compare to each other room
+				if (this_room == other_room) { continue; } //don't compare to self
 
 				FVector2D other_location = points[other_room];
 
@@ -72,19 +58,19 @@ void UGPCluster::GenerateLevel() {
 
 				if (distance < distance_between_rooms) {
 
-					displacement[this_room] += (this_location - other_location); //if strange behavior exhibited where rooms spawn on top of each other, swap this
-
+					displacement[this_room] += ((this_location - other_location) / distance); //if strange behavior exhibited where rooms spawn on top of each other, swap this
+					num_times_moved++;
 				}
 			}
 
-			displacement[this_room] /= points.Num();
+			displacement[this_room] /= num_times_moved;
+
+
+
 			points[this_room] += displacement[this_room];
 
 		}
 	}
-	
-
-#endif
 
 
 
@@ -93,25 +79,30 @@ void UGPCluster::GenerateLevel() {
 
 
 
-
-	
 
 
 
 	for (int p = 0; p < points.Num(); p++) {
-		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, variance);
+		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, 0);
+		parent->SetTile(points[p][0], points[p][1], parent->floor_info->wall_material, room_size + 2, false);
+		parent->SetTile(points[p][0], points[p][1], parent->floor_info->floor_material, room_size, false);
 	}
-
+	cursor_x = end_loc.X;
+	cursor_y = end_loc.Y;
 
 	TArray<FVector2D> building_array;
-	building_array.Add({ start_x, start_y });
+	building_array.Add(start_loc);
 	building_array.Append(points);
-	building_array.Add({ end_x, end_y });
+	building_array.Add(end_loc);
 	points = building_array;
 
 
+
+
+
+
 	TArray<FVector2D>closest_points;
-	closest_points.Init({ end_x, end_y }, points.Num());
+	closest_points.Init(center_loc, points.Num());
 
 	for (int p = 0; p < points.Num(); p++) {
 
@@ -136,21 +127,18 @@ void UGPCluster::GenerateLevel() {
 		}
 	}
 
-
-
-	for (int p = 0; p < points.Num();p++) {
+	for (int p = 0; p < points.Num(); p++) {
 		FVector2d start = points[p];
 		FVector2d end = closest_points[p];
 		float distance = FVector2D::Distance(start, end);
-		FVector2d path_direction = end-start;
+		FVector2d path_direction = end - start;
 		path_direction.Normalize();
 
 		cursor_x = start[0];
 		cursor_y = start[1];
 
 
-		
-		
+
 		for (int s = 0; s < distance; s++) {
 			cursor_x += path_direction[0];
 			cursor_y += path_direction[1];
@@ -158,11 +146,11 @@ void UGPCluster::GenerateLevel() {
 		}
 	}
 
-	
+	//make hallways
 
 
-	cursor_x = end_x;
-	cursor_y = end_y;
+	//UGPEnsureConnections* hallways = NewObject<UGPEnsureConnections>(this);
+	//hallways->Init(radius,num_rooms, center_loc.X, center_loc.Y, heading, parent);
 
-
+	SetCursor(end_loc);
 }

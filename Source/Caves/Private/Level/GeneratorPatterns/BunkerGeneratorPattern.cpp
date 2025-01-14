@@ -9,7 +9,8 @@
 
 void UBunkerGeneratorPattern::GenerateLevel() {
 
-
+	DrawDot(6, DefaultFloorMaterial());
+	PlaceSpawn(CurrentLocation());
 
 
 
@@ -39,7 +40,9 @@ void UBunkerGeneratorPattern::GenerateLevel() {
 		cursor_y += direction[1] * 1;
 	}
 
-	
+	parent->MakeRegularRoom(cursor_x, cursor_y, 10, 10, 0);
+
+	PlaceExit(CurrentLocation());
 
 
 }

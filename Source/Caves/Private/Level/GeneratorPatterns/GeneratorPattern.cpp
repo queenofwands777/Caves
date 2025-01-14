@@ -45,8 +45,8 @@ void UGeneratorPattern::DrawDot(int size, MaterialType material, FVector2D input
 void UGeneratorPattern::DrawDot(int size, MaterialType material) {
 	int is_odd = size % 2;
 	int is_even = 1 - is_odd;
-	float offset_x = ((size - is_odd) / 2) - is_even;
-	float offset_y = ((size - is_odd) / 2) - is_even;
+	float offset_x = -(((size - is_odd) / 2) - is_even);
+	float offset_y = -(((size - is_odd) / 2) - is_even);
 
 	for (int x = 0; x < size; x++) {
 		for (int y = 0; y < size; y++) {

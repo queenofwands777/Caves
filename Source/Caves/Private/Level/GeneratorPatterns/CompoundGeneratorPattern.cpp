@@ -9,9 +9,10 @@
 
 void UCompoundGeneratorPattern::GenerateLevel() {
 
-
+	FVector2D start_loc = CurrentLocation();
+	MoveCursor(perp, 5);
 	PlaceSpawn(CurrentLocation());
-
+	SetCursor(start_loc);
 
 	for (int i = 0; i < 5; i++) {
 		MoveCursor(direction, 1);
@@ -36,6 +37,7 @@ void UCompoundGeneratorPattern::GenerateLevel() {
 		MoveCursor(direction, 1);
 		if (i == 10) { inside_middle = { cursor_x, cursor_y }; }
 
+		if (i % 5 == 0) { parent->MakeOpenRoom(cursor_x, cursor_y); }
 
 		for (int p = -2; p <= 2; p++) {
 			perp *= p;
