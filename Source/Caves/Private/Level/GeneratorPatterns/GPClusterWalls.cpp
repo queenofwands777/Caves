@@ -101,7 +101,7 @@ void UGPClusterWalls::GenerateLevel() {
 
 
 	TArray<FVector2D>closest_points;
-	closest_points.Init(end_loc, points.Num());
+	closest_points.Init(center_loc, points.Num());
 
 	for (int p = 0; p < points.Num(); p++) {
 
@@ -151,5 +151,5 @@ void UGPClusterWalls::GenerateLevel() {
 	//UGPEnsureConnections* hallways = NewObject<UGPEnsureConnections>(this);
 	//hallways->Init(radius,num_rooms, center_loc.X, center_loc.Y, heading, parent);
 
-
+	SetCursor(end_loc);
 }

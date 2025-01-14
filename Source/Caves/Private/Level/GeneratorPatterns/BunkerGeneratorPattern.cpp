@@ -24,7 +24,7 @@ void UBunkerGeneratorPattern::GenerateLevel() {
 	}
 
 	UGPClusterWalls* new_offshoot = NewObject<UGPClusterWalls>(this);
-	new_offshoot->room_spacing = 10;
+	new_offshoot->room_spacing = 8;
 	new_offshoot->Init(lifetime, num_rooms, cursor_x, cursor_y, heading, parent);
 
 	
