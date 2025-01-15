@@ -216,6 +216,11 @@ public:
 		cursor_x += input_direction[0] * distance;
 		cursor_y += input_direction[1] * distance;
 	}
+
+	void MoveCursor(float distance) {
+		MoveCursor(direction, distance);
+	}
+
 	void SetCursor(FVector2D input_location) {
 		cursor_x = input_location[0];
 		cursor_y = input_location[1];
@@ -226,10 +231,13 @@ public:
 
 	void DrawDot(int size, MaterialType material, FVector2D input_location);
 	void DrawDot(int size, MaterialType material);
+	void DrawDot(int size) { DrawDot(size, DefaultFloorMaterial()); }
 
 	void SetHeading(float new_heading);
 	void ChangeHeading(float delta_degrees);
 
 	void PlaceSpawn(FVector2D location);
+	void PlaceSpawn() { PlaceSpawn(CurrentLocation()); }
 	void PlaceExit(FVector2D location);
+	void PlaceExit() { PlaceExit(CurrentLocation()); }
 };

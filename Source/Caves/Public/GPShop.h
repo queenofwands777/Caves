@@ -13,5 +13,8 @@ UCLASS()
 class CAVES_API UGPShop : public UGeneratorPattern
 {
 	GENERATED_BODY()
-	
+
+	UGPShop(){}
+
+	void GenerateLevel() override;
 };

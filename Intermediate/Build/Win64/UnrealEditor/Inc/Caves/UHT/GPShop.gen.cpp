@@ -74,7 +74,6 @@ template<> CAVES_API UClass* StaticClass<UGPShop>()
 {
 	return UGPShop::StaticClass();
 }
-UGPShop::UGPShop() {}
 DEFINE_VTABLE_PTR_HELPER_CTOR(UGPShop);
 UGPShop::~UGPShop() {}
 // End Class UGPShop
