@@ -9,6 +9,10 @@
 
 void UGPCompound::GenerateLevel() {
 
+
+	DrawWindyLine(20, 3, 12, DefaultFloorMaterial());
+	start_loc = CurrentLocation();
+
 	//place player
 	MoveCursor(perp, 5);
 	PlaceSpawn(CurrentLocation());
@@ -21,13 +25,15 @@ void UGPCompound::GenerateLevel() {
 	FVector2D gate_position = { cursor_x, cursor_y };
 
 	//make area after gate
-	DrawShakyLine(direction, 20, 8, 5, DefaultFloorMaterial());
+	DrawShakyLine(direction, 24, 12, 5, DefaultFloorMaterial());
 
-	//place exit door
+	MoveCursor(direction, 5);
 	PlaceExit(CurrentLocation());
+	MoveCursor(direction, 5);
+	end_loc = CurrentLocation();
+	//place exit door
 
-	//record end location, for use drawing the houses
-	end_loc = { cursor_x + (direction[0] * 10), cursor_y + (direction[1] * 10) };
+
 
 	//create gate
 	SetCursor(gate_position);
@@ -37,11 +43,11 @@ void UGPCompound::GenerateLevel() {
 	//create one line of houses
 	UGPHousesOnALine* string_0 = NewObject<UGPHousesOnALine>(this);
 	string_0->points = GetPointsAlongWall(front_gate->end_0, end_loc);
-	string_0->Init(lifetime, 3, cursor_x, cursor_y, heading, parent);
+	string_0->Init(lifetime, 2, cursor_x, cursor_y, heading - 90, parent);
 	
 	//create the other line of houses
 	UGPHousesOnALine* string_1 = NewObject<UGPHousesOnALine>(this);
 	string_1->points = GetPointsAlongWall(front_gate->end_1, end_loc);;
-	string_1->Init(lifetime, 3, cursor_x, cursor_y, heading, parent);
+	string_1->Init(lifetime, 2, cursor_x, cursor_y, heading + 90, parent);
 
 }

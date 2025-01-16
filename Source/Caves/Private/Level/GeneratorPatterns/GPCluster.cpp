@@ -83,9 +83,10 @@ void UGPCluster::GenerateLevel() {
 
 
 	for (int p = 0; p < points.Num(); p++) {
-		parent->MakeRegularRoom(points[p][0], points[p][1], room_size, room_size, 0);
-		parent->SetTile(points[p][0], points[p][1], parent->floor_info->wall_material, room_size + 2, false);
-		parent->SetTile(points[p][0], points[p][1], parent->floor_info->floor_material, room_size, false);
+
+		parent->SetTile(points[p][0], points[p][1], DefaultWallMaterial(), room_size + 2, false);
+		parent->SetTile(points[p][0], points[p][1], DefaultFloorMaterial(), room_size, false);
+		parent->MakeOpenRoom(points[p][0], points[p][1]);
 	}
 	cursor_x = end_loc.X;
 	cursor_y = end_loc.Y;
@@ -142,7 +143,7 @@ void UGPCluster::GenerateLevel() {
 		for (int s = 0; s < distance; s++) {
 			cursor_x += path_direction[0];
 			cursor_y += path_direction[1];
-			parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
+			parent->SetTile(cursor_x, cursor_y, DefaultFloorMaterial(), 3, true);
 		}
 	}
 

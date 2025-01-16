@@ -4,6 +4,17 @@
 #include "GeneratorPattern.h"
 #include"TerrainGenerator.h"
 
+
+
+void UGeneratorPattern::Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
+	Init(_lifetime, _num_rooms, _cursor_x, _cursor_y, _heading, _parent, _parent->floor_info->FloorMaterial(), _parent->floor_info->WallMaterial(), _parent->floor_info->VoidMaterial());
+}
+
+void UGeneratorPattern::Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent, MaterialType _floor_material, MaterialType _wall_material) {
+	Init(_lifetime, _num_rooms, _cursor_x, _cursor_y, _heading, _parent, _floor_material, _wall_material, _parent->floor_info->VoidMaterial());
+}
+
+
 // Sets default values
 UGeneratorPattern::UGeneratorPattern()
 {
@@ -190,7 +201,16 @@ void UGeneratorPattern::PopulateLevel(int num_chests, int num_altars, int num_en
 }
 
 
+void UGeneratorPattern::DrawWindyLine(int distance, int width, float max_angle, MaterialType material) {
 
+	float half_angle = max_angle / 2;
+
+	for (int i = 0; i < distance; i++) {
+		ChangeHeading(FMath::FRandRange(-half_angle, half_angle));
+		parent->SetTile(cursor_x, cursor_y, material, width, true);
+		MoveCursor(1);
+	}
+}
 
 void UGeneratorPattern::DrawShakyLine(FVector2D input_direction, int distance, int width, float shakiness, MaterialType material) {
 
@@ -198,7 +218,7 @@ void UGeneratorPattern::DrawShakyLine(FVector2D input_direction, int distance, i
 	int positive_half_width = negative_half_width + (width % 2);
 
 	for (int i = 0; i < distance; i++) {
-		MoveCursor(direction, 1);
+		MoveCursor(1);
 		for (int p = -negative_half_width; p <= positive_half_width; p++) {
 
 			float rand_x = FMath::FRandRange(-shakiness, shakiness);
@@ -286,13 +306,15 @@ void UGeneratorPattern::PlaceSpawn(FVector2D location) {
 }
 
 MaterialType UGeneratorPattern::DefaultFloorMaterial() {
-	return (MaterialType)parent->floor_info->floor_material;
+	return default_floor_material;
 }
 
 MaterialType UGeneratorPattern::DefaultWallMaterial() {
-	return (MaterialType)parent->floor_info->wall_material;
+	return default_wall_material;
+
 }
 
 MaterialType UGeneratorPattern::DefaultVoidMaterial() {
-	return (MaterialType)parent->floor_info->void_material;
+	return default_void_material;
+
 }

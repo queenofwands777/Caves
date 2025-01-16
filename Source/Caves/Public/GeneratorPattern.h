@@ -198,10 +198,14 @@ public:
 	FVector2D end_loc;
 	FVector2D center_loc;
 
+	MaterialType default_floor_material;
+	MaterialType default_wall_material;
+	MaterialType default_void_material;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATerrainGenerator* parent = nullptr;
 
-	void Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent) {
+	void Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent, MaterialType _floor_material, MaterialType _wall_material, MaterialType _void_material) {
 		num_rooms = _num_rooms;
 		lifetime = _lifetime;
 		cursor_x = _cursor_x;
@@ -210,10 +214,18 @@ public:
 		parent = _parent;
 		start_loc = { cursor_x, cursor_y };
 
+		default_floor_material = _floor_material;
+		default_wall_material = _wall_material;
+		default_void_material = _void_material;
+
 		SetHeading(heading);
 
 		GenerateLevel();
 	}
+
+	void Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent);
+
+	void Init(int _lifetime, int _num_rooms, float _cursor_x, float _cursor_y, float _heading, ATerrainGenerator* _parent, MaterialType _floor_material, MaterialType _wall_material);
 
 	FVector2D CurrentLocation() {
 		return { cursor_x, cursor_y };
@@ -237,6 +249,14 @@ public:
 		MoveCursor(direction, distance);
 	}
 
+	void MoveCursor(FVector2D input_direction) {
+		MoveCursor(input_direction, 1);
+	}
+
+	void MoveCursor() {
+		MoveCursor(direction, 1);
+	}
+
 	void SetCursor(FVector2D input_location) {
 		cursor_x = input_location[0];
 		cursor_y = input_location[1];
@@ -246,6 +266,8 @@ public:
 	void DrawLine(FVector2D input_direction, float distance, float width, MaterialType material);
 
 	void DrawShakyLine(FVector2D input_direction, int distance, int width, float shakiness, MaterialType material);
+	
+	void DrawWindyLine(int distance, int width, float max_angle, MaterialType material);
 
 	void DrawDot(int size, MaterialType material, FVector2D input_location);
 	void DrawDot(int size, MaterialType material);
