@@ -9,7 +9,7 @@
 
 void UCompoundGeneratorPattern::GenerateLevel() {
 
-	FVector2D start_loc = CurrentLocation();
+	start_loc = CurrentLocation();
 	MoveCursor(perp, 5);
 	PlaceSpawn(CurrentLocation());
 	SetCursor(start_loc);

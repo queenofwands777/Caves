@@ -11,7 +11,7 @@ void UGPSewerMain::GenerateLevel() {
 
 
 
-	FVector2D start_loc = CurrentLocation();
+	start_loc = CurrentLocation();
 
 	DrawLineF(direction, lifetime, 10);
 

@@ -17,4 +17,6 @@ class CAVES_API UGPShop : public UGeneratorPattern
 	UGPShop(){}
 
 	void GenerateLevel() override;
+
+	void PopulateLevel(int num_chests, int num_altars, int num_encounters) override;
 };

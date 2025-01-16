@@ -28,15 +28,7 @@ enum OVERLAY {
 };
 
 
-enum OBJECTS {
-	Exit = 0,
-	Chest = 1,
-	Altar = 2,
-	Elevator = 3,
-	ElevatorDoor = 4,
-	Shelf = 5,
-	PlayerSpawn = 6
-};
+
 
 
 
@@ -115,7 +107,9 @@ public:
 	int true_floor;
 
 	UPaperTileSet* LevelOverlayTileSet;
-	std::vector<RoomMarker> rooms;
+
+	TArray<RoomMarker> rooms;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AFloorInfo* floor_info;

@@ -27,7 +27,7 @@ void UGPTraps::GenerateLevel() {
 
 	parent->MakeRegularRoom(cursor_x, cursor_y, 12, 12, 0);
 
-	FVector2D start_loc = { cursor_x, cursor_y };
+	start_loc = { cursor_x, cursor_y };
 
 	for (int i = 0; i < 3; i++) {
 

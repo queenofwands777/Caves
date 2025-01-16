@@ -287,7 +287,7 @@ void ATerrainGenerator::MakeOpenRoom(int x, int y) {
 	FVector marker_location;
 	marker_location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
-	rooms.push_back(marker);
+	rooms.Add(marker);
 }
 
 void ATerrainGenerator::MakeRoom(int x, int y) {
@@ -302,7 +302,7 @@ void ATerrainGenerator::MakeRoom(int x, int y) {
 	FVector marker_location;
 	marker_location = { (float)x * 16, 2.0, (float)((y * 16) - (16 * 15)) };
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
-	rooms.push_back(marker);
+	rooms.Add(marker);
 
 }
 
@@ -412,7 +412,7 @@ void ATerrainGenerator::MakeRegularHouse(float center_x, float center_y, float s
 	FVector marker_location;
 	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE) };
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
-	rooms.push_back(marker);
+	rooms.Add(marker);
 
 
 
@@ -435,7 +435,7 @@ void ATerrainGenerator::MakeRegularRoom(float center_x, float center_y, float wi
 	FVector marker_location;
 	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE)};
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
-	rooms.push_back(marker);
+	rooms.Add(marker);
 
 
 
@@ -459,7 +459,7 @@ void ATerrainGenerator::MakeIrregularRoom(float center_x, float center_y, float 
 	FVector marker_location;
 	marker_location = { (float)center_x * TILE_SIZE, 2.0, (float)center_y * TILE_SIZE - (MAP_SIZE * TILE_SIZE) };
 	RoomMarker marker = RoomMarker(marker_location[0], marker_location[2]);
-	rooms.push_back(marker);
+	rooms.Add(marker);
 }
 
 void ATerrainGenerator::PlaceEncounter(AEncounter* encounter,int x, int y) {
@@ -528,68 +528,15 @@ void ATerrainGenerator::GenerateMap() {
 		}
 
 
+		pathfinder->InitializeTerrainNodes();
+
+
+
+		new_floor->PopulateLevel(num_chests, num_altars, num_encounters);
 
 
 
 
-
-
-
-
-
-
-
-		for (int i = 0; i < num_encounters; i++) {
-			int max_rooms = rooms.size();
-			if (max_rooms > 0) {
-				int rand_room = FMath::RandRange(0, max_rooms - 1);
-				float room_x = rooms[rand_room].x;
-				float room_y = rooms[rand_room].y;
-
-
-				AEncounter* encounter = floor_info->GetEncounter();
-				PlaceEncounter(encounter, room_x, room_y);
-
-				rooms.erase(rooms.begin() + rand_room);
-			}
-		}
-
-		for (int i = 0; i < num_altars; i++) {
-			int max_rooms = rooms.size();
-			if (max_rooms > 0) {
-				int rand_room = FMath::RandRange(0, max_rooms - 1);
-				float room_x = rooms[rand_room].x;
-				float room_y = rooms[rand_room].y;
-
-
-				//place altar here
-				AEncounter* encounter = floor_info->GetEncounter();
-				PlaceEncounter(encounter->AddObject(OBJECTS::Altar), room_x, room_y);
-
-				rooms.erase(rooms.begin() + rand_room);
-			}
-
-		}
-
-		for (int i = 0; i < num_chests; i++) {
-			int max_rooms = rooms.size();
-			if (max_rooms > 0) {
-				int rand_room = FMath::RandRange(0, max_rooms - 1);
-				float room_x = rooms[rand_room].x;
-				float room_y = rooms[rand_room].y;
-
-				//place chest here
-				AEncounter* encounter = floor_info->GetEncounter();
-				PlaceEncounter(encounter->AddObject(OBJECTS::Chest), room_x, room_y);
-
-				rooms.erase(rooms.begin() + rand_room);
-			}
-		}
-
-
-
-
-	
 
 
 
@@ -873,7 +820,7 @@ void ATerrainGenerator::GenerateMap() {
 	}
 
 	//if mysterious error, place before rebuild terrain map loop above
-	pathfinder->InitializeTerrainNodes();
+
 }
 
 void ATerrainGenerator::InitializeTileMap(int grid_x, int grid_y) {

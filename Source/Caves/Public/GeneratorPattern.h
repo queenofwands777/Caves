@@ -4,6 +4,15 @@
 
 class ATerrainGenerator;
 
+enum OBJECTS {
+	Exit = 0,
+	Chest = 1,
+	Altar = 2,
+	Elevator = 3,
+	ElevatorDoor = 4,
+	Shelf = 5,
+	PlayerSpawn = 6
+};
 
 enum Abstract {
 	type_floor = 0,
@@ -160,7 +169,6 @@ const TMap<int, int> MaterialTypes = {
 
 
 
-
 #include "GameFramework/Actor.h"
 #include "GeneratorPattern.generated.h"
 
@@ -176,7 +184,7 @@ public:
 
 	virtual void GenerateLevel(){};
 
-	virtual void PopulateLevel() {};
+	virtual void PopulateLevel(int num_chests, int num_altars, int num_encounters);
 
 	int num_rooms;
 	int lifetime;
@@ -186,7 +194,9 @@ public:
 	bool has_exit = false;
 	FVector2D direction = {0,1};
 	FVector2D perp;
-
+	FVector2D start_loc;
+	FVector2D end_loc;
+	FVector2D center_loc;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ATerrainGenerator* parent = nullptr;
@@ -198,6 +208,7 @@ public:
 		cursor_y = _cursor_y;
 		heading = _heading;
 		parent = _parent;
+		start_loc = { cursor_x, cursor_y };
 
 		SetHeading(heading);
 
@@ -211,6 +222,11 @@ public:
 	MaterialType DefaultWallMaterial();
 
 	MaterialType DefaultVoidMaterial();
+
+	void PlaceObject(FVector2D location, OBJECTS object, FRotator rotation);
+	void PlaceObject(FVector2D location, OBJECTS object) {
+		PlaceObject(location, object, { 0,0,0 });
+	}
 
 	void MoveCursor(FVector2D input_direction, float distance) {
 		cursor_x += input_direction[0] * distance;

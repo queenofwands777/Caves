@@ -9,7 +9,7 @@ void UGPWarrens::GenerateLevel() {
 	SetHeading(90 * FMath::RandHelper(4));
 	
 
-	FVector2D start_loc = { cursor_x, cursor_y };
+	start_loc = { cursor_x, cursor_y };
 	FVector2D start_dir = direction;
 
 

@@ -11,6 +11,79 @@ UGeneratorPattern::UGeneratorPattern()
 
 }
 
+void UGeneratorPattern::PlaceObject(FVector2D location, OBJECTS object, FRotator object_rotation) {
+
+
+	int TILE_SIZE = parent->TILE_SIZE;
+	FVector shelf_location_1 = { float(cursor_x * parent->TILE_SIZE) - (FMath::Sign(direction[0]) * parent->TILE_SIZE / 2) - 8, 1, float(cursor_y * parent->TILE_SIZE) - (16 * parent->TILE_SIZE) + 8 };
+	GetWorld()->SpawnActor<AActor>(parent->floor_info->EssentialObjects[OBJECTS::Shelf], shelf_location_1, object_rotation);
+}
+
+void UGeneratorPattern::PopulateLevel(int num_chests, int num_altars, int num_encounters) {
+
+
+
+
+
+	for (int i = 0; i < num_encounters; i++) {
+		int max_rooms = parent->rooms.Num();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
+			float room_x = parent->rooms[rand_room].x;
+			float room_y = parent->rooms[rand_room].y;
+
+
+			AEncounter* encounter = parent->floor_info->GetEncounter();
+			parent->PlaceEncounter(encounter, room_x, room_y);
+
+			parent->rooms.RemoveAt(rand_room);
+
+		}
+	}
+
+	for (int i = 0; i < num_altars; i++) {
+		int max_rooms = parent->rooms.Num();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
+			float room_x = parent->rooms[rand_room].x;
+			float room_y = parent->rooms[rand_room].y;
+
+
+			//place altar here
+			AEncounter* encounter = parent->floor_info->GetEncounter();
+			parent->PlaceEncounter(encounter->AddObject(OBJECTS::Altar), room_x, room_y);
+
+			parent->rooms.RemoveAt(rand_room);
+		}
+
+	}
+
+	for (int i = 0; i < num_chests; i++) {
+		int max_rooms = parent->rooms.Num();
+		if (max_rooms > 0) {
+			int rand_room = FMath::RandRange(0, max_rooms - 1);
+			float room_x = parent->rooms[rand_room].x;
+			float room_y = parent->rooms[rand_room].y;
+
+			//place chest here
+			AEncounter* encounter = parent->floor_info->GetEncounter();
+			parent->PlaceEncounter(encounter->AddObject(OBJECTS::Chest), room_x, room_y);
+
+			parent->rooms.RemoveAt(rand_room);
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+}
 
 void UGeneratorPattern::DrawLineF(FVector2D input_direction, float distance, float width) {
 	for (float i = 0; i < distance; i += 1) {

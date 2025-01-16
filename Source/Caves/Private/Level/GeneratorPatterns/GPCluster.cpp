@@ -11,9 +11,9 @@ void UGPCluster::GenerateLevel() {
 
 	float radius = FMath::Sqrt((((float)num_rooms) * (room_size + FMath::Square(room_spacing))));
 
-	FVector2D start_loc = { cursor_x, cursor_y };
+	start_loc = { cursor_x, cursor_y };
 	center_loc = { cursor_x + (direction[0] * radius) ,cursor_y + (direction[1] * radius) };
-	FVector2D end_loc = { cursor_x + (direction[0] * radius * 2) ,cursor_y + (direction[1] * radius * 2) };
+	end_loc = { cursor_x + (direction[0] * radius * 2) ,cursor_y + (direction[1] * radius * 2) };
 
 	TArray<FVector2D>points;
 	for (int r = 0; r < num_rooms; r++) {
