@@ -17,4 +17,5 @@ class CAVES_API UCompoundGeneratorPattern : public UGeneratorPattern
 	UCompoundGeneratorPattern(){}
 	
 	void GenerateLevel() override;
+
 };

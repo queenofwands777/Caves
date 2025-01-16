@@ -547,6 +547,14 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPCompound.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPDrugLab.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPDwarvenBedrooms.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -564,6 +572,10 @@
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPMineshaft.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPRevelry.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
@@ -723,7 +735,9 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPChapel.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPCluster.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPCompound.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPDiocese.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPDrugLab.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPDwarvenBedrooms.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPDwarvenIndustry.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPElevator.h"/>
@@ -737,6 +751,7 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPMarket.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPMineshaft.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPResearchStation.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPRevelry.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPSewerMain.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPSewers.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPShop.h"/>

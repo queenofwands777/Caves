@@ -245,9 +245,14 @@ public:
 	void DrawLineF(FVector2D input_direction, float distance, float width);
 	void DrawLine(FVector2D input_direction, float distance, float width, MaterialType material);
 
+	void DrawShakyLine(FVector2D input_direction, int distance, int width, float shakiness, MaterialType material);
+
 	void DrawDot(int size, MaterialType material, FVector2D input_location);
 	void DrawDot(int size, MaterialType material);
 	void DrawDot(int size) { DrawDot(size, DefaultFloorMaterial()); }
+
+	TArray<FVector2D> GetPointsAlongWall(FVector2D start, FVector2D end);
+
 
 	void SetHeading(float new_heading);
 	void ChangeHeading(float delta_degrees);

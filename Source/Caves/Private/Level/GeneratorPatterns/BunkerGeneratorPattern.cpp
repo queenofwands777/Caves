@@ -13,9 +13,7 @@ void UBunkerGeneratorPattern::GenerateLevel() {
 	PlaceSpawn(CurrentLocation());
 
 
-
-	int rooms_remaining = num_rooms;
-
+	
 
 	for (int i = 0; i < 20; i++) {
 		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 3, true);
@@ -23,6 +21,11 @@ void UBunkerGeneratorPattern::GenerateLevel() {
 		cursor_x += direction[0] * 1;
 		cursor_y += direction[1] * 1;
 	}
+
+
+
+
+
 
 	UGPClusterWalls* new_offshoot = NewObject<UGPClusterWalls>(this);
 	new_offshoot->room_spacing = 8;

@@ -71,6 +71,12 @@
     <ClCompile Include="..\..\Source\Caves\Private\EnemyList.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPCompound.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPDrugLab.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPDwarvenBedrooms.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -84,6 +90,9 @@
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPMineshaft.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPRevelry.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPSewerMain.cpp">
@@ -248,7 +257,13 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPClusterWalls.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPCompound.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPDiocese.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPDrugLab.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPDwarvenBedrooms.h">
@@ -288,6 +303,9 @@
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPResearchStation.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPRevelry.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPSewerMain.h">
