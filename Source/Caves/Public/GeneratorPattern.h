@@ -48,7 +48,7 @@ enum MaterialType {
 	hell_wall = 22,
 	hell_void = 23,
 
-	snow = 24,
+	fresh_snow = 24,
 	ice = 25,
 	deep_frost = 26,
 	fungal_grass = 27,
@@ -78,7 +78,7 @@ enum MaterialType {
 	wood = 49,
 	light_dirt = 50,
 	stone = 51,
-	asphalt = 52,
+	gravel = 52,
 	dirt_cliff = 53,
 	cobblestone = 54,
 	shingles = 55,
@@ -87,6 +87,10 @@ enum MaterialType {
 	sewer_water = 58,
 	rusty_metal = 59,
 	stone_bricks = 60,
+	trampled_snow = 61,
+	forest_snow = 62,
+	mud = 63,
+	bushes = 64,
 };
 
 
@@ -121,7 +125,7 @@ const TMap<int, int> MaterialTypes = {
 	{MaterialType::hell_wall,Abstract::type_wall},
 	{MaterialType::hell_void,Abstract::type_void},
 
-	{MaterialType::snow,Abstract::type_floor},
+	{MaterialType::fresh_snow,Abstract::type_floor},
 	{MaterialType::ice,Abstract::type_wall},
 	{MaterialType::deep_frost,Abstract::type_void},
 	{MaterialType::fungal_grass,Abstract::type_floor},
@@ -151,7 +155,7 @@ const TMap<int, int> MaterialTypes = {
 	{MaterialType::wood,Abstract::type_floor},
 	{MaterialType::light_dirt,Abstract::type_floor},
 	{MaterialType::stone,Abstract::type_wall },
-	{MaterialType::asphalt,Abstract::type_floor},
+	{MaterialType::gravel,Abstract::type_floor},
 
 	{MaterialType::dirt_cliff,Abstract::type_wall},
 	{MaterialType::cobblestone,Abstract::type_floor},
@@ -161,6 +165,10 @@ const TMap<int, int> MaterialTypes = {
 	{MaterialType::sewer_water,Abstract::type_floor},
 	{MaterialType::rusty_metal, Abstract::type_wall},
 	{MaterialType::stone_bricks, Abstract::type_floor},
+	{MaterialType::trampled_snow, Abstract::type_floor},
+	{MaterialType::forest_snow, Abstract::type_void},
+	{MaterialType::mud, Abstract::type_floor},
+	{MaterialType::bushes, Abstract::type_wall},
 	
 };
 

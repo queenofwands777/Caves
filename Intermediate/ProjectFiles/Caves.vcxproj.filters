@@ -101,6 +101,9 @@
     <ClCompile Include="..\..\Source\Caves\Private\GPShop.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPSiberia.cpp">
+      <Filter>Source\Caves\Private</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <Filter>Source\Caves\Private</Filter>
     </ClCompile>
@@ -300,6 +303,9 @@
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPShop.h">
+      <Filter>Source\Caves\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Caves\Public\GPSiberia.h">
       <Filter>Source\Caves\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Caves\Public\GPSite.h">

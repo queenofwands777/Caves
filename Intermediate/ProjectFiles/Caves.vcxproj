@@ -587,6 +587,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPSiberia.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\LightningBolt.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -741,6 +745,7 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPSewerMain.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPSewers.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPShop.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPSiberia.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPSite.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPSpirits.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPTomb.h"/>
