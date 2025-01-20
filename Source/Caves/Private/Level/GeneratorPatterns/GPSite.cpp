@@ -9,27 +9,24 @@ void UGPSite::GenerateLevel() {
 
 
 
+	DrawShakyLine(direction, 4, 4, 2, DefaultFloorMaterial());
+	PlaceSpawn();
+
+	DrawWindyLine(40,3,30,DefaultFloorMaterial());
+
+	DrawShakyLine(direction, 12, 6, 4, DefaultFloorMaterial());
 
 
+	DrawWindyLine(40, 3, 30, DefaultFloorMaterial());
+
+	DrawShakyLine(direction, 12, 6, 4, DefaultFloorMaterial());
 
 
+	DrawWindyLine(40, 3, 30, DefaultFloorMaterial());
 
+	DrawShakyLine(direction, 12, 6, 4, DefaultFloorMaterial());
 
-	for (int i = 0; i < 10; i++) {
-		ChangeHeading(FMath::RandRange(-5, 5));
-
-
-		MoveCursor(direction, 1);
-
-		parent->SetTile(cursor_x, cursor_y, parent->floor_info->floor_material, 2, true);
-	}
-
-	
-
-
-
-
-
+	PlaceExit();
 
 
 
