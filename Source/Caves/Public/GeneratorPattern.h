@@ -39,7 +39,7 @@ enum MaterialType {
 	dwarven_stone_wall = 13,
 	rock = 14,
 	lab_tile = 15,
-	lab_wall = 16, 
+	lab_wall = 16,
 	arctic_stone = 17,
 	catacomb_floor = 18,
 	catacomb_wall = 19,
@@ -52,7 +52,7 @@ enum MaterialType {
 	ice = 25,
 	deep_frost = 26,
 	fungal_grass = 27,
-	bamboo = 28, 
+	bamboo = 28,
 	leaves = 29,
 	computer_floor = 30,
 	metal_wall = 31,
@@ -70,7 +70,7 @@ enum MaterialType {
 	dark_tile = 42,
 	dark_stone = 43,
 	eyes = 44,
-	plasma= 45,
+	plasma = 45,
 	lattice = 46,
 	cosmos = 47,
 
@@ -91,6 +91,9 @@ enum MaterialType {
 	forest_snow = 62,
 	mud = 63,
 	bushes = 64,
+	gem_floor = 65,
+	gem_wall = 66,
+	gem_void = 67,
 };
 
 
@@ -169,6 +172,9 @@ const TMap<int, int> MaterialTypes = {
 	{MaterialType::forest_snow, Abstract::type_void},
 	{MaterialType::mud, Abstract::type_floor},
 	{MaterialType::bushes, Abstract::type_wall},
+		{MaterialType::gem_floor,Abstract::type_floor},
+	{MaterialType::gem_wall ,Abstract::type_wall},
+	{MaterialType::gem_void,Abstract::type_void},
 	
 };
 
