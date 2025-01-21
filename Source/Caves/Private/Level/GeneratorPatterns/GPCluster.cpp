@@ -11,7 +11,7 @@ void UGPCluster::GenerateLevel() {
 
 	float radius = FMath::Sqrt((((float)num_rooms) * (room_size + FMath::Square(room_spacing))));
 
-	start_loc = { cursor_x, cursor_y };
+	
 	center_loc = { cursor_x + (direction[0] * radius) ,cursor_y + (direction[1] * radius) };
 	end_loc = { cursor_x + (direction[0] * radius * 2) ,cursor_y + (direction[1] * radius * 2) };
 
@@ -148,10 +148,13 @@ void UGPCluster::GenerateLevel() {
 	}
 
 	//make hallways
-
+	SetCursor(start_loc);
+	DrawDot(10);
 
 	//UGPEnsureConnections* hallways = NewObject<UGPEnsureConnections>(this);
 	//hallways->Init(radius,num_rooms, center_loc.X, center_loc.Y, heading, parent);
 
 	SetCursor(end_loc);
+	DrawDot(10);
+
 }

@@ -277,6 +277,13 @@ public:
 	
 	void DrawWindyLine(int distance, int width, float max_angle, MaterialType material);
 
+
+	void DrawCircle(int radius, MaterialType material, FVector2D input_location);
+
+	void DrawCircle(int radius) {
+		DrawCircle(radius, DefaultFloorMaterial(), CurrentLocation());
+	}
+
 	void DrawDot(int size, MaterialType material, FVector2D input_location);
 	void DrawDot(int size, MaterialType material);
 	void DrawDot(int size) { DrawDot(size, DefaultFloorMaterial()); }

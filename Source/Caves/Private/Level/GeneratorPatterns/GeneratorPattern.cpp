@@ -22,7 +22,21 @@ UGeneratorPattern::UGeneratorPattern()
 
 }
 
+void UGeneratorPattern::DrawCircle(int radius, MaterialType material, FVector2D input_location) {
+	for (float x = -radius; x <= radius; x+= 1) {
+		for (float y = -radius; y <= radius;y+=1) {
 
+			FVector2D placement_location = { input_location.X + x, input_location.Y + y };
+			if (FVector2D::Distance(input_location, placement_location) > radius) {
+				continue;
+			}
+
+
+			parent->SetTile(placement_location.X, placement_location.Y, material, 1, true);
+
+		}
+	}
+}
 
 TArray<FVector2D> UGeneratorPattern::GetPointsAlongWall(FVector2D start, FVector2D end) {
 
