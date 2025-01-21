@@ -9,16 +9,17 @@
 void UGPCluster::GenerateLevel() {
 
 
-	float radius = FMath::Sqrt((((float)num_rooms) * (room_size + FMath::Square(room_spacing))));
+	float radius = FMath::Sqrt((((float)num_rooms) * (FMath::Square(room_size) + FMath::Square(room_spacing))));
 
 	
 	center_loc = { cursor_x + (direction[0] * radius) ,cursor_y + (direction[1] * radius) };
 	end_loc = { cursor_x + (direction[0] * radius * 2) ,cursor_y + (direction[1] * radius * 2) };
 
 	TArray<FVector2D>points;
+	float rand_offset = radius;
 	for (int r = 0; r < num_rooms; r++) {
-		float rand_x = FMath::FRandRange(-radius, radius);
-		float rand_y = FMath::FRandRange(-radius, radius);
+		float rand_x = FMath::FRandRange(-rand_offset, rand_offset);
+		float rand_y = FMath::FRandRange(-rand_offset, rand_offset);
 		FVector2D room_location = { center_loc.X + rand_x, center_loc.Y + rand_y };
 		points.Add(room_location);
 	}
@@ -88,8 +89,13 @@ void UGPCluster::GenerateLevel() {
 		parent->SetTile(points[p][0], points[p][1], DefaultFloorMaterial(), room_size, false);
 		parent->MakeOpenRoom(points[p][0], points[p][1]);
 	}
-	cursor_x = end_loc.X;
-	cursor_y = end_loc.Y;
+
+
+
+
+
+
+
 
 	TArray<FVector2D> building_array;
 	building_array.Add(start_loc);
@@ -148,13 +154,13 @@ void UGPCluster::GenerateLevel() {
 	}
 
 	//make hallways
-	SetCursor(start_loc);
-	DrawDot(10);
+	//SetCursor(start_loc);
+	//DrawDot(10);
 
 	//UGPEnsureConnections* hallways = NewObject<UGPEnsureConnections>(this);
 	//hallways->Init(radius,num_rooms, center_loc.X, center_loc.Y, heading, parent);
 
 	SetCursor(end_loc);
-	DrawDot(10);
+	//DrawDot(10);
 
 }

@@ -17,4 +17,6 @@ class CAVES_API UGPLabyrinth : public UGeneratorPattern
 	UGPLabyrinth(){}
 
 	void GenerateLevel() override;
+
+	bool first = true;
 };

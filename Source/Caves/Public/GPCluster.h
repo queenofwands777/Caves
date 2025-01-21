@@ -20,5 +20,5 @@ class CAVES_API UGPCluster : public UGeneratorPattern
 public:
 	float room_size = 10;
 	float room_spacing = 10;
-	FVector2D center_loc;
+
 };

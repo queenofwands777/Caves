@@ -4,6 +4,7 @@
 #include "GPHousesOnALine.h"
 #include "TerrainGenerator.h"
 #include "GPClusterWalls.h"
+#include"GPHouse.h"
 
 
 void UGPHousesOnALine::GenerateLevel() {
@@ -23,20 +24,14 @@ void UGPHousesOnALine::GenerateLevel() {
 
 		//parent->MakeRegularHouse(house_location[0], house_location[1], 7,0);
 
-		UGPClusterWalls* cluster = NewObject<UGPClusterWalls>(this);
-		cluster->room_size = 6;
-		cluster->Init(lifetime, 3, house_location[0], house_location[1], heading, parent, MaterialType::wood_planks, MaterialType::siding);
+		//UGPClusterWalls* cluster = NewObject<UGPClusterWalls>(this);
+		//cluster->room_size = 6;
+		//cluster->Init(lifetime, 3, house_location[0], house_location[1], heading, parent, MaterialType::wood_planks, MaterialType::siding);
+		//SetCursor(cluster->end_loc);
 
-
-
-
-
-
-
-
-
-		SetCursor(cluster->end_loc);
-
+		UGPHouse* house = NewObject<UGPHouse>(this);
+		house->Init(lifetime, 3, house_location[0], house_location[1], heading, parent, MaterialType::wood_planks, MaterialType::siding);
+		SetCursor(house->end_loc);
 
 
 
@@ -52,7 +47,7 @@ void UGPHousesOnALine::GenerateLevel() {
 		for (int i = 0; i < directions.Num(); i++) {
 			FVector2D active_direction = directions[i];
 			FVector2D original_direction = active_direction;
-			FVector2D probe_loc = cluster->end_loc;
+			FVector2D probe_loc = house->end_loc;
 			FVector2D secondary_direction = directions[(i + 1) % 4];
 			FVector2D tertiary_direction = directions[(i + 3) % 4];
 
