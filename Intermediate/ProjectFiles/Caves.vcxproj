@@ -583,6 +583,14 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPIntrusionCaves.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Caves\Private\GPIntrusionMines.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Caves\Private\GPMineshaft.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories_1)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ClCompile_ForcedIncludeFiles_1)</ForcedIncludeFiles>
@@ -760,6 +768,8 @@
     <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnALine.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPHousesOnAStreet.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPIntrusion.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPIntrusionCaves.h"/>
+    <ClInclude Include="..\..\Source\Caves\Public\GPIntrusionMines.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPLabyrinth.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPMarket.h"/>
     <ClInclude Include="..\..\Source\Caves\Public\GPMineshaft.h"/>

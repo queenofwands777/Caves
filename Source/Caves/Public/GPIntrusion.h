@@ -17,5 +17,6 @@ class CAVES_API UGPIntrusion : public UGeneratorPattern
 	void GenerateLevel() override;
 
 	//void PopulateLevel(int num_chests, int num_altars, int num_encounters) override;
+	bool first = true;
 
 };
